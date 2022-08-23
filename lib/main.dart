@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
+import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/category_screen.dart';
-
 import 'package:provider/provider.dart';
 
 void main() {
@@ -40,12 +40,16 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-          theme: ThemeData.light().copyWith(primaryColor: Color(0xff94B49F)),
+          theme: ThemeData.light().copyWith(
+            scaffoldBackgroundColor: Color(0xffF8FAFC),
+            primaryColor: Color(0xff3DB8EF),
+          ),
           darkTheme: ThemeData.dark().copyWith(
-            primaryColor: Color(0xff94B49F),
+            scaffoldBackgroundColor: Color(0xFF1F1F1F),
+            primaryColor: Color(0xff3DB8EF),
           ),
           themeMode: themeChangeProvider.themeMode,
-          home: CategoryPage(),
+          home: LoadingPage(),
         );
       }),
     );
