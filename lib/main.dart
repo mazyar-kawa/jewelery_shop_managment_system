@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
+import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
+import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
+import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/category_screen.dart';
 import 'package:provider/provider.dart';
@@ -41,15 +44,18 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData.light().copyWith(
-            scaffoldBackgroundColor: Color(0xffF8FAFC),
-            primaryColor: Color(0xff3DB8EF),
+            scaffoldBackgroundColor: Color(0xffFFFFFF),
+            primaryColor: Color(0xff455A64),
           ),
           darkTheme: ThemeData.dark().copyWith(
             scaffoldBackgroundColor: Color(0xFF1F1F1F),
             primaryColor: Color(0xff3DB8EF),
           ),
           themeMode: themeChangeProvider.themeMode,
-          home: LoadingPage(),
+          home: LayoutScreen(
+            mobilescreen: MobileScreenLayout(),
+            webscreen: WebScreenLayout(),
+          ),
         );
       }),
     );
