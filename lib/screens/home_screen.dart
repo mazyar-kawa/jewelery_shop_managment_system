@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 20),
-            height: 260,
+            height: 270,
             child: PageView.builder(
               itemCount: items.length,
               onPageChanged: ((value) {
@@ -122,12 +122,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: child!);
                   },
                   child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        )),
                     child: Column(
                       children: [
                         Container(
                           height: 160,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
                               color: Color(0xffEDEDED)),
                           child: Column(
                             children: [
@@ -186,8 +194,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 10),
-                          height: 60,
+                          width: double.infinity,
+                          height: 65,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(items[index].name,
                                   style: TextStyle(
@@ -200,6 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontSize: 20,
                                     color: Theme.of(context).primaryColor,
                                   )),
+                              SizedBox(
+                                height: 1,
+                              )
                             ],
                           ),
                         ),
@@ -307,9 +320,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
               ],
             ),
           ),
-
           Container(
-            // padding: EdgeInsets.symmetric(vertical: 15),
             height: 260,
             width: double.infinity,
             child: PageView.builder(
@@ -446,17 +457,6 @@ class _HorizantleListViewState extends State<HorizantleListView> {
               },
             ),
           ),
-
-          // AspectRatio(
-          //   aspectRatio: 1.9,
-          //   child: PageView.builder(
-          //       itemCount: items.length,
-          //       controller: _pageController,
-          //       physics: BouncingScrollPhysics(),
-          //       itemBuilder: (context, index) {
-          //         return carousleView(index);
-          //       }),
-          // )
         ],
       ),
     );
