@@ -31,10 +31,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^1.1.4
+  hovering: ^1.0.4
   http: ^0.13.5
+  lottie: ^1.4.0
   provider: ^6.0.3
   shared_preferences: ^2.0.15
-  hovering: ^1.0.4
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -71,6 +72,5 @@ flutter:
     - family: RobotoB
       fonts:
         - asset: assets/fonts/Roboto-Bold.ttf
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

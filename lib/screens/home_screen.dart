@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/model/items.dart';
+import 'package:jewelery_shop_managmentsystem/provider/items.dart';
+import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/home_small_card.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/home_card_category.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,12 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _pageController = PageController(
-        initialPage: _current, viewportFraction: 0.6, keepPage: true);
+        initialPage: _current, viewportFraction: 0.8, keepPage: true);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final products = Provider.of<ItemProvider>(context).item;
     final boredrUser = OutlineInputBorder(
       borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),
       borderRadius: BorderRadius.circular(15),
@@ -35,24 +41,35 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Welcome back,',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'RobotoR',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome back,',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'RobotoR',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
+                    ),
+                    Text(
+                      'Mazyar!👋',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontFamily: 'RobotoB',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Mazyar!👋',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontFamily: 'RobotoB',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                Container(
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/images/profile.jpg'),
                   ),
                 ),
               ],
@@ -101,9 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 20),
-            height: 270,
+            height: 240,
             child: PageView.builder(
-              itemCount: items.length,
+              itemCount: products.length,
               onPageChanged: ((value) {
                 setState(() {
                   _current = value;
@@ -111,116 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
               physics: BouncingScrollPhysics(),
               controller: _pageController,
-              itemBuilder: (context, index) {
-                return AnimatedBuilder(
-                  animation: _pageController,
-                  builder: (context, child) {
-                    return AnimatedScale(
-                        curve: Curves.fastOutSlowIn,
-                        scale: _current == index ? 1 : 0.8,
-                        duration: Duration(milliseconds: 500),
-                        child: child!);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        )),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 160,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
-                              ),
-                              color: Color(0xffEDEDED)),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Text(
-                                        'Size: ${items[index].size}',
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontFamily: 'RobotoB',
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 30,
-                                      width: 30,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(1000),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(5),
-                                        child: items[index].isFavorite
-                                            ? SvgPicture.asset(
-                                                'assets/images/heart-solid.svg',
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              )
-                                            : SvgPicture.asset(
-                                                'assets/images/heart-regular.svg',
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                height: 90,
-                                width: 90,
-                                child: Image.network(items[index].image),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 10),
-                          width: double.infinity,
-                          height: 65,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(items[index].name,
-                                  style: TextStyle(
-                                    fontFamily: 'RobotoB',
-                                    fontSize: 20,
-                                  )),
-                              Text('${items[index].price}\$',
-                                  style: TextStyle(
-                                    fontFamily: 'RobotoB',
-                                    fontSize: 20,
-                                    color: Theme.of(context).primaryColor,
-                                  )),
-                              SizedBox(
-                                height: 1,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+              itemBuilder: (context, index) => ChangeNotifierProvider.value(
+                value: products[index],
+                child: HomeCardCategory(
+                    pageController: _pageController,
+                    current: _current,
+                    index: index),
+              ),
             ),
           ),
 
@@ -298,6 +212,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
 
   @override
   Widget build(BuildContext context) {
+    final products = Provider.of<ItemProvider>(context).item;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
@@ -324,138 +239,22 @@ class _HorizantleListViewState extends State<HorizantleListView> {
             height: 260,
             width: double.infinity,
             child: PageView.builder(
-              itemCount: items.length,
-              onPageChanged: ((value) {
-                setState(() {
-                  _current = value;
-                });
-              }),
-              physics: BouncingScrollPhysics(),
-              controller: _pageController,
-              itemBuilder: (context, index) {
-                return AnimatedBuilder(
-                  animation: _pageController,
-                  builder: (context, child) {
-                    return AnimatedScale(
-                        curve: Curves.fastOutSlowIn,
-                        scale: _current == index ? 1 : 0.8,
-                        duration: Duration(milliseconds: 500),
-                        child: child!);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    height: 250,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5,
-                              spreadRadius: 0.5)
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: Text(
-                                  'Size: ${items[index].size}',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontFamily: 'RobotoB',
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(1000),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: items[index].isFavorite
-                                      ? SvgPicture.asset(
-                                          'assets/images/heart-solid.svg',
-                                          color: Theme.of(context).primaryColor,
-                                        )
-                                      : SvgPicture.asset(
-                                          'assets/images/heart-regular.svg',
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 90,
-                          width: 90,
-                          child: Image.network(items[index].image),
-                        ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                child: Text(
-                                  items[index].name,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: 'RobotoB',
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                  '${items[index].price}\$',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'RobotoB',
-                                      color: Theme.of(context).primaryColor),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          height: 31,
-                          width: 111,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Add to Bag',
-                              style: TextStyle(
-                                fontFamily: 'RobotoB',
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                itemCount: products.length,
+                onPageChanged: ((value) {
+                  setState(() {
+                    _current = value;
+                  });
+                }),
+                physics: BouncingScrollPhysics(),
+                controller: _pageController,
+                itemBuilder: (context, index) => ChangeNotifierProvider.value(
+                      value: products[index],
+                      child: HomeSmallCard(
+                        pageController: _pageController,
+                        current: _current,
+                        index: index,
+                      ),
+                    )),
           ),
         ],
       ),

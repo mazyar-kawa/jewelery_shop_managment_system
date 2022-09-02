@@ -14,36 +14,6 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Category'),
-        centerTitle: true,
-        actions: [
-          Consumer<ThemeChangeProvider>(
-              builder: (context, providerTheme, child) {
-            return DropdownButton(
-                value: providerTheme.currentTheme,
-                underline: Container(),
-                icon: Icon(Icons.more_vert),
-                items: [
-                  DropdownMenuItem(
-                    child: Text('Light'),
-                    value: 'light',
-                  ),
-                  DropdownMenuItem(
-                    child: Text('Dark'),
-                    value: 'dark',
-                  ),
-                  DropdownMenuItem(
-                    child: Text('System'),
-                    value: 'system',
-                  ),
-                ],
-                onChanged: (String? value) {
-                  providerTheme.setThemeProvider(value!);
-                });
-          }),
-        ],
-      ),
       body: Center(
         child: Text(
           'Category Page',
