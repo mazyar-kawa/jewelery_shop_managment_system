@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class HomeCardCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Items>(context, listen: false);
+    final basket = Provider.of<BasketItemProvider>(context);
     return AnimatedBuilder(
       animation: _pageController,
       builder: (context, child) {
@@ -174,13 +176,19 @@ class HomeCardCategory extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Center(
-                        child: Text(
-                          'Add to Bag',
-                          style: TextStyle(
-                            fontFamily: 'RobotoM',
-                            fontSize: 13,
-                            color: Theme.of(context).scaffoldBackgroundColor,
+                      child: InkWell(
+                        onTap: () {
+                          basket.addToBasket(
+                              DateTime.now().toString(), product.id, 1);
+                        },
+                        child: Center(
+                          child: Text(
+                            'Add to Bag',
+                            style: TextStyle(
+                              fontFamily: 'RobotoM',
+                              fontSize: 13,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
                           ),
                         ),
                       ),

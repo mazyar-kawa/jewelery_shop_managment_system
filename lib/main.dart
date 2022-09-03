@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
@@ -39,6 +40,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => _themeChangeProvider),
         ChangeNotifierProvider.value(value: ItemProvider()),
+        ChangeNotifierProvider.value(value: BasketItemProvider()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {

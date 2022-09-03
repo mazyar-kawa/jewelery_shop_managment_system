@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jewelery_shop_managmentsystem/model/card_items.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 
 class ItemProvider with ChangeNotifier {
@@ -209,4 +210,8 @@ class ItemProvider with ChangeNotifier {
 
   List<Items> get favorite =>
       items.where((element) => element.isFavorite).toList();
+
+  getById(id) {
+    return items.where((element) => element.isFavorite).toList();
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/basket_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/category_screen.dart';
@@ -115,28 +116,32 @@ class _LoadingPageState extends State<LoadingPage> {
                 children: [
                   navBarItem('assets/images/home.svg', 33, 33, 0),
                   navBarItem('assets/images/category.svg', 30, 30, 1),
-                  Stack(
-                    children: [
-                      navBarItem(
-                          'assets/images/basket-shopping-solid.svg', 30, 30, 2),
-                      Positioned(
-                        right: 0,
-                        height: 18,
-                        width: 18,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(1000),
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          child: Center(
-                            child: Text('3',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold)),
+                  Consumer<BasketItemProvider>(
+                      builder: (context, basket, child) {
+                    return Stack(
+                      children: [
+                        navBarItem('assets/images/basket-shopping-solid.svg',
+                            30, 30, 2),
+                        Positioned(
+                          right: 0,
+                          height: 18,
+                          width: 18,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor),
+                            child: Center(
+                              child: Text('${basket.countItem()}',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.bold)),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    );
+                  }),
                   Stack(
                     children: [
                       Container(

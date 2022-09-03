@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
 
@@ -119,24 +120,33 @@ class HomeSmallCard extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(bottom: 10),
-              height: 31,
-              width: 111,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Center(
-                child: Text(
-                  'Add to Bag',
-                  style: TextStyle(
-                    fontFamily: 'RobotoB',
-                    color: Theme.of(context).scaffoldBackgroundColor,
+            Consumer<BasketItemProvider>(builder: (context, basket, _) {
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                height: 31,
+                width: 85,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    basket.addToBasket(
+                        DateTime.now().toString(), product.id, 1);
+                  },
+                  child: Center(
+                    child: Text(
+                      'Add to Bag',
+                      style: TextStyle(
+                        fontFamily: 'RobotoM',
+                        fontSize: 13,
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            )
+              );
+            })
           ],
         ),
       ),

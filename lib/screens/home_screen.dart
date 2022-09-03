@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +14,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
   int _current = 2;
+  int _selectedIndex = 0;
 
   PageController _pageController = PageController();
+
+  DateTime now = DateTime.now();
+  String? time;
+  getTiem() {
+    if (now.hour >= 1 && now.hour <= 12) {
+      time = 'Good Morning';
+    } else if (now.hour >= 12 && now.hour <= 16) {
+      time = 'Good Afternoon';
+    } else if (now.hour >= 16 && now.hour <= 21) {
+      time = 'Good Evening';
+    } else if (now.hour >= 21 && now.hour <= 24) {
+      time = 'Good Night';
+    }
+
+    return time;
+  }
 
   @override
   void initState() {
@@ -48,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome back,',
+                      getTiem(),
                       style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'RobotoR',
@@ -68,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   child: CircleAvatar(
-                    radius: 30,
+                    radius: 25,
                     backgroundImage: AssetImage('assets/images/profile.jpg'),
                   ),
                 ),
@@ -131,9 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) => ChangeNotifierProvider.value(
                 value: products[index],
                 child: HomeCardCategory(
-                    pageController: _pageController,
-                    current: _current,
-                    index: index),
+                  pageController: _pageController,
+                  current: _current,
+                  index: index,
+                ),
               ),
             ),
           ),
@@ -183,6 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class HorizantleListView extends StatefulWidget {
   final String title;
+
   const HorizantleListView({
     required this.title,
     Key? key,
