@@ -14,43 +14,78 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Category'),
-        centerTitle: true,
-        actions: [
-          Consumer<ThemeChangeProvider>(
-              builder: (context, providerTheme, child) {
-            return DropdownButton(
-                value: providerTheme.currentTheme,
-                underline: Container(),
-                icon: Icon(Icons.more_vert),
-                items: [
-                  DropdownMenuItem(
-                    child: Text('Light'),
-                    value: 'light',
-                  ),
-                  DropdownMenuItem(
-                    child: Text('Dark'),
-                    value: 'dark',
-                  ),
-                  DropdownMenuItem(
-                    child: Text('System'),
-                    value: 'system',
-                  ),
-                ],
-                onChanged: (String? value) {
-                  providerTheme.setThemeProvider(value!);
-                });
-          }),
+        body: Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+            child: Text(
+              'Categories',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
+                  color: Theme.of(context).primaryColor),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CatergoryCard('assets/images/Italy.png', 'italian'),
+              CatergoryCard('assets/images/Turkey.png', 'Turkish')
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CatergoryCard('assets/images/Iraq.png', 'Iraqi'),
+              CatergoryCard('assets/images/Iran.png', 'persian')
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CatergoryCard('assets/images/Dubai.png', 'Dubai'),
+              CatergoryCard('assets/images/France.png', 'French')
+            ],
+          )
         ],
       ),
-      body: Center(
-        child: Text(
-          'Category Page',
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-          ),
-        ),
+    ));
+  }
+
+  Widget CatergoryCard(image, name) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: 160,
+        child: Card(
+            elevation: 20,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Image(
+                    image: AssetImage(image),
+                    height: 100,
+                  ),
+                  Divider(
+                    height: 30,
+                  ),
+                  Text('$name',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold))
+                ],
+              ),
+            )),
       ),
     );
   }
