@@ -132,7 +132,10 @@ class _LoadingPageState extends State<LoadingPage> {
                                 color:
                                     Theme.of(context).scaffoldBackgroundColor),
                             child: Center(
-                              child: Text('${basket.countItem()}',
+                              child: Text(
+                                  basket.countItem() > 9
+                                      ? '9+'
+                                      : '${basket.countItem()}',
                                   style: TextStyle(
                                       color: Theme.of(context).primaryColor,
                                       fontWeight: FontWeight.bold)),

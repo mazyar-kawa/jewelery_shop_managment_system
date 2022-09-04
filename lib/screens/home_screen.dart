@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/home_card_category.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,13 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String? time;
   getTiem() {
     if (now.hour >= 1 && now.hour <= 12) {
-      time = 'Good Morning';
+      time = AppLocalizations.of(context)!.goodMorning;
     } else if (now.hour >= 12 && now.hour <= 16) {
-      time = 'Good Afternoon';
+      time = AppLocalizations.of(context)!.goodAfternoon;
     } else if (now.hour >= 16 && now.hour <= 21) {
-      time = 'Good Evening';
+      time = AppLocalizations.of(context)!.goodEvening;
     } else if (now.hour >= 21 && now.hour <= 24) {
-      time = 'Good Night';
+      time = AppLocalizations.of(context)!.goodNight;
     }
 
     return time;
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _pageController = PageController(
-        initialPage: _current, viewportFraction: 0.8, keepPage: true);
+        initialPage: _current, viewportFraction: 0.81, keepPage: true);
     super.initState();
   }
 
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   border: boredrUser,
                   enabledBorder: boredrUser,
                   disabledBorder: boredrUser,
-                  hintText: 'Search...',
+                  hintText: '${AppLocalizations.of(context)!.search}...',
                   hintStyle:
                       TextStyle(fontFamily: 'RobotoR', color: Colors.grey),
                   prefixIcon: Container(
@@ -121,11 +121,16 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: BouncingScrollPhysics(),
               child: Row(
                 children: [
-                  categoryHorizontal(context, 'All', 0),
-                  categoryHorizontal(context, 'Rings', 1),
-                  categoryHorizontal(context, 'Necklaces', 2),
-                  categoryHorizontal(context, 'Earrings', 3),
-                  categoryHorizontal(context, 'Gold', 4),
+                  categoryHorizontal(
+                      context, AppLocalizations.of(context)!.all, 0),
+                  categoryHorizontal(
+                      context, AppLocalizations.of(context)!.rings, 1),
+                  categoryHorizontal(
+                      context, AppLocalizations.of(context)!.necklaces, 2),
+                  categoryHorizontal(
+                      context, AppLocalizations.of(context)!.earrings, 3),
+                  categoryHorizontal(
+                      context, AppLocalizations.of(context)!.gold, 4),
                 ],
               ),
             ),
@@ -154,11 +159,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          HorizantleListView(title: 'New'),
+          HorizantleListView(title: AppLocalizations.of(context)!.neww),
           // most sale
-          HorizantleListView(title: 'Most Sales'),
+          HorizantleListView(title: AppLocalizations.of(context)!.mostSales),
           // most favorite
-          HorizantleListView(title: 'Most Favorite'),
+          HorizantleListView(
+              title: AppLocalizations.of(context)!.mostFavourite),
         ],
       ),
     );
@@ -245,7 +251,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 Text(
-                  'See more',
+                  AppLocalizations.of(context)!.seeMore,
                   style: TextStyle(
                       fontSize: 14, color: Theme.of(context).primaryColor),
                 ),

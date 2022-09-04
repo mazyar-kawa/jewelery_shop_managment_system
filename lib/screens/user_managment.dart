@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/text_field_user_managment.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserManagmentScreen extends StatefulWidget {
   const UserManagmentScreen({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                         color: Theme.of(context).primaryColor,
                       )),
                   Text(
-                    'User Managment',
+                    AppLocalizations.of(context)!.userManagement,
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'RobotoB',
@@ -79,19 +80,19 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                 children: [
                   TextFieldUserManagment(
                     initialValue: 'Mr.Mazyar',
-                    lable: 'User Name',
+                    lable: AppLocalizations.of(context)!.username,
                   ),
                   TextFieldUserManagment(
                     initialValue: 'password',
-                    lable: 'Password',
+                    lable: AppLocalizations.of(context)!.password,
                   ),
                   TextFieldUserManagment(
                     initialValue: '0770*******',
-                    lable: 'Phone',
+                    lable: AppLocalizations.of(context)!.phone,
                   ),
                   TextFieldUserManagment(
                     initialValue: 'Slemani',
-                    lable: 'Address',
+                    lable: AppLocalizations.of(context)!.address,
                   ),
                 ],
               ),
@@ -111,7 +112,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                     )
                   ]),
               child: Center(
-                child: Text('Save',
+                child: Text(AppLocalizations.of(context)!.save,
                     style: TextStyle(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       fontSize: 20,

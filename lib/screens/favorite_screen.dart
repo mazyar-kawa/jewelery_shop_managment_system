@@ -3,6 +3,7 @@ import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class FavoriteScreen extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   )),
               Text(
-                'Favorite',
+                AppLocalizations.of(context)!.favourite,
                 style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'RobotoB',
@@ -48,7 +49,7 @@ class FavoriteScreen extends StatelessWidget {
                     Container(
                       child: Center(
                           child: Text(
-                        'Your Favorite is empty',
+                        AppLocalizations.of(context)!.yourFavouriteisempty,
                         style: TextStyle(
                           fontSize: 24,
                           fontFamily: 'RobotoB',

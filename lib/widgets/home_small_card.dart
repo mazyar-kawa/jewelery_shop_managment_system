@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeSmallCard extends StatelessWidget {
   const HomeSmallCard({
@@ -32,7 +33,7 @@ class HomeSmallCard extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        height: 250,
+        height: 270,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -52,7 +53,7 @@ class HomeSmallCard extends StatelessWidget {
                 children: [
                   Container(
                     child: Text(
-                      'Size: ${product.size}',
+                      '${AppLocalizations.of(context)!.size}: ${product.size}',
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontFamily: 'RobotoB',
@@ -93,7 +94,10 @@ class HomeSmallCard extends StatelessWidget {
             Container(
               height: 90,
               width: 90,
-              child: Image.network(product.image),
+              child: Image.asset(product.image),
+            ),
+            SizedBox(
+              height: 19,
             ),
             Container(
               child: Row(
@@ -120,11 +124,15 @@ class HomeSmallCard extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(
+              height: 5,
+            ),
             Consumer<BasketItemProvider>(builder: (context, basket, _) {
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 5),
                 height: 31,
-                width: 85,
+                width: 95,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(15),
@@ -136,7 +144,7 @@ class HomeSmallCard extends StatelessWidget {
                   },
                   child: Center(
                     child: Text(
-                      'Add to Bag',
+                      AppLocalizations.of(context)!.addtobag,
                       style: TextStyle(
                         fontFamily: 'RobotoM',
                         fontSize: 13,

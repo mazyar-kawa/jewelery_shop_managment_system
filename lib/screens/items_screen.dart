@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemsScreen extends StatefulWidget {
   const ItemsScreen({Key? key}) : super(key: key);
@@ -107,17 +108,23 @@ class _ItemsScreenState extends State<ItemsScreen>
                       right: 5,
                       height: 18,
                       width: 18,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(1000),
-                            color: Theme.of(context).scaffoldBackgroundColor),
-                        child: Center(
-                          child: Text('3',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
+                      child: Consumer<BasketItemProvider>(
+                          builder: (context, basket, child) {
+                        return Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(1000),
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                          child: Center(
+                            child: Text(
+                                basket.countItem() > 9
+                                    ? '9+'
+                                    : '${basket.countItem()}',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -353,7 +360,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                       border: boredrUser,
                       enabledBorder: boredrUser,
                       disabledBorder: boredrUser,
-                      hintText: 'Search...',
+                      hintText: '${AppLocalizations.of(context)!.search}...',
                       hintStyle:
                           TextStyle(fontFamily: 'RobotoR', color: Colors.grey),
                       prefixIcon: Container(

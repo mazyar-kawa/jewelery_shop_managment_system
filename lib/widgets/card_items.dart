@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CardItems extends StatefulWidget {
   const CardItems({
@@ -89,7 +90,7 @@ class _CardItemsState extends State<CardItems> {
                     Container(
                       child: Center(
                         child: Image(
-                          image: NetworkImage(product.image),
+                          image: AssetImage(product.image),
                           width: 110,
                         ),
                       ),
@@ -114,7 +115,7 @@ class _CardItemsState extends State<CardItems> {
                     ),
                   ),
                   Text(
-                    'Size: ${product.size}',
+                    '${AppLocalizations.of(context)!.size}: ${product.size}',
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5),
                       fontFamily: 'RobotoM',
@@ -162,8 +163,9 @@ class _CardItemsState extends State<CardItems> {
                   ),
                   Consumer<BasketItemProvider>(builder: (context, basket, _) {
                     return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       height: 31,
-                      width: 85,
+                      width: 95,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(15),
@@ -175,7 +177,7 @@ class _CardItemsState extends State<CardItems> {
                         },
                         child: Center(
                           child: Text(
-                            'Add to Bag',
+                            AppLocalizations.of(context)!.addtobag,
                             style: TextStyle(
                               fontFamily: 'RobotoM',
                               fontSize: 13,

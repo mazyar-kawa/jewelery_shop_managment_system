@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
-import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
-import 'package:jewelery_shop_managmentsystem/screens/profile_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:provider/provider.dart';
 
@@ -33,7 +33,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         color: Theme.of(context).primaryColor,
                       )),
                   Text(
-                    'Settings',
+                    AppLocalizations.of(context)!.settings,
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'RobotoB',
@@ -77,7 +77,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Language',
+                                    AppLocalizations.of(context)!.language,
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: 'RobotoB',
@@ -85,8 +85,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                     ),
                                   ),
                                   Container(
-                                    child: DropdownButton(
-                                        underline: Container(),
+                                    child: Consumer<LanguageProvider>(builder:
+                                        (context, providerLanguage, child) {
+                                      return DropdownButton(
+                                        value: providerLanguage.currentLanguage,
                                         items: [
                                           DropdownMenuItem(
                                             child: Text('English'),
@@ -101,7 +103,11 @@ class _SettingScreenState extends State<SettingScreen> {
                                             value: 'ku',
                                           ),
                                         ],
-                                        onChanged: (String? value) {}),
+                                        onChanged: (String? value) {
+                                          providerLanguage.setLanguage(value!);
+                                        },
+                                      );
+                                    }),
                                   ),
                                 ],
                               ),
@@ -154,7 +160,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Mode',
+                                    AppLocalizations.of(context)!.mode,
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: 'RobotoB',
@@ -170,15 +176,21 @@ class _SettingScreenState extends State<SettingScreen> {
                                           underline: Container(),
                                           items: [
                                             DropdownMenuItem(
-                                              child: Text('Light'),
+                                              child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .light),
                                               value: 'light',
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('Dark'),
+                                              child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .dark),
                                               value: 'dark',
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('System'),
+                                              child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .system),
                                               value: 'system',
                                             ),
                                           ],
@@ -202,7 +214,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: Text(
-                'More',
+                AppLocalizations.of(context)!.more,
                 style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'RobotoB',
@@ -214,15 +226,15 @@ class _SettingScreenState extends State<SettingScreen> {
               padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               child: ListTile(
                 title: Text(
-                  'Remember me',
+                  AppLocalizations.of(context)!.rememberMe,
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'RobotoB',
                     color: Theme.of(context).primaryColor,
                   ),
                 ),
-                subtitle: Text(
-                    'If you check this, means you want sing out your account when you left the application'),
+                subtitle: Text(AppLocalizations.of(context)!
+                    .ifYouCheckThisBoxYouWillBeLogoutOnceYouClosedTheApp),
                 trailing: Checkbox(
                   onChanged: (value) {},
                   value: true,

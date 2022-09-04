@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileCards extends StatelessWidget {
   final String title;
@@ -28,7 +29,7 @@ class ProfileCards extends StatelessWidget {
                 child: SvgPicture.asset(
                   image,
                   width: 30,
-                  color: title == 'Log out'
+                  color: title == AppLocalizations.of(context)!.logOut
                       ? Colors.red
                       : Theme.of(context).primaryColor,
                 ),
@@ -40,7 +41,7 @@ class ProfileCards extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'RobotoB',
                     fontSize: 18,
-                    color: title == 'Log out'
+                    color: title == AppLocalizations.of(context)!.logOut
                         ? Colors.red
                         : Theme.of(context).primaryColor,
                   ),
@@ -50,7 +51,7 @@ class ProfileCards extends StatelessWidget {
           ),
           Icon(
             Icons.arrow_forward_ios_rounded,
-            color: title == 'Log out'
+            color: title == AppLocalizations.of(context)!.logOut
                 ? Colors.red
                 : Theme.of(context).primaryColor,
           )

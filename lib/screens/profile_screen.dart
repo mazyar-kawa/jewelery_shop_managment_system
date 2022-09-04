@@ -1,12 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/screens/favorite_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/history_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/settings_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/user_managment.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/settings_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -65,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 ProfileCards(
-                  title: 'Settings',
+                  title: AppLocalizations.of(context)!.settings,
                   image: 'assets/images/settings.svg',
                   onPressed: () {
                     Navigator.of(context).push(
@@ -73,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
                 ProfileCards(
-                  title: 'User Managment',
+                  title: AppLocalizations.of(context)!.userManagement,
                   image: 'assets/images/user-solid.svg',
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -81,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
                 ProfileCards(
-                  title: 'Favorite',
+                  title: AppLocalizations.of(context)!.favourite,
                   image: 'assets/images/heart-solid.svg',
                   onPressed: () {
                     Navigator.of(context).push(
@@ -89,7 +87,7 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
                 ProfileCards(
-                  title: 'History',
+                  title: AppLocalizations.of(context)!.history,
                   image: 'assets/images/history.svg',
                   onPressed: () {
                     Navigator.of(context).push(
@@ -97,12 +95,12 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
                 ProfileCards(
-                  title: 'Admin',
+                  title: AppLocalizations.of(context)!.admin,
                   image: 'assets/images/user-group-solid.svg',
                   onPressed: () {},
                 ),
                 ProfileCards(
-                  title: 'Log out',
+                  title: AppLocalizations.of(context)!.logOut,
                   image: 'assets/images/logout.svg',
                   onPressed: () {},
                 ),

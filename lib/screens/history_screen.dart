@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class HistoryScreen extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   )),
               Text(
-                'History',
+                AppLocalizations.of(context)!.history,
                 style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'RobotoB',
@@ -43,7 +44,7 @@ class HistoryScreen extends StatelessWidget {
               Container(
                 child: Center(
                     child: Text(
-                  'Your History is empty',
+                  AppLocalizations.of(context)!.yourHistoryisempty,
                   style: TextStyle(
                     fontSize: 24,
                     fontFamily: 'RobotoB',
