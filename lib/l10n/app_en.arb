@@ -37,5 +37,8 @@
     "password": "Password",
     "phone": "Phone",
     "address": "Addres",
-    "save": "Save"
+    "save": "Save",
+    "items": "Items",
+    "thisCategoryisempty": "This Category is empty",
+    "categories": "Categories"
 }
