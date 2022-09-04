@@ -3,8 +3,6 @@ import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dar
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
-import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
-import 'package:jewelery_shop_managmentsystem/screens/category_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
