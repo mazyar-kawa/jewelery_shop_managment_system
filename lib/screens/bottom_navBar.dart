@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hovering/hovering.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/basket_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/category_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/home_screen.dart';
+import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/notfication_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/profile_screen.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
@@ -107,71 +108,62 @@ class _LoadingPageState extends State<LoadingPage> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       bottomNavigationBar: MediaQuery.of(context).size.width < websize
           ? Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
-              child: BottomAppBar(
-                elevation: 0,
-                color: Colors.transparent,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 64,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 9, horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+              padding: EdgeInsets.symmetric(vertical: 7),
+              height: 60,
+              color: Theme.of(context).primaryColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  navBarItem('assets/images/home.svg', 33, 33, 0),
+                  navBarItem('assets/images/category.svg', 30, 30, 1),
+                  Consumer<BasketItemProvider>(
+                      builder: (context, basket, child) {
+                    return Stack(
                       children: [
-                        navBarItem('assets/images/home.svg', 33, 33, 0),
-                        navBarItem('assets/images/category.svg', 30, 30, 1),
-                        Stack(
-                          children: [
-                            navBarItem(
-                                'assets/images/basket-shopping-solid.svg',
-                                30,
-                                30,
-                                2),
-                            Positioned(
-                              right: 0,
-                              height: 18,
-                              width: 18,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(1000),
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor),
-                                child: Center(
-                                  child: Text('3',
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                              ),
+                        navBarItem('assets/images/basket-shopping-solid.svg',
+                            30, 30, 2),
+                        Positioned(
+                          right: 0,
+                          height: 18,
+                          width: 18,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor),
+                            child: Center(
+                              child: Text(
+                                  basket.countItem() > 9
+                                      ? '9+'
+                                      : '${basket.countItem()}',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.bold)),
                             ),
-                          ],
+                          ),
                         ),
-                        Stack(
-                          children: [
-                            Container(
-                              child: navBarItem(
-                                  'assets/images/bell-solid.svg', 30, 30, 3),
-                            ),
-                            Positioned(
-                                right: 0,
-                                child: Container(
-                                  width: 12,
-                                  height: 12,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      color: Color(0xffEF4444)),
-                                ))
-                          ],
-                        ),
-                        navBarItem('assets/images/user-solid.svg', 30, 30, 4),
                       ],
-                    ),
+                    );
+                  }),
+                  Stack(
+                    children: [
+                      Container(
+                        child: navBarItem(
+                            'assets/images/bell-solid.svg', 30, 30, 3),
+                      ),
+                      Positioned(
+                          right: 0,
+                          child: Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color: Color(0xffEF4444)),
+                          ))
+                    ],
                   ),
-                ),
+                  navBarItem('assets/images/user-solid.svg', 30, 30, 4),
+                ],
               ),
             )
           : null,
@@ -188,7 +180,7 @@ class _LoadingPageState extends State<LoadingPage> {
               currentPage = HomeScreen();
               break;
             case 1:
-              currentPage = CategoryPage();
+              currentPage = ItemsScreen();
               break;
             case 2:
               currentPage = BasketScreen();

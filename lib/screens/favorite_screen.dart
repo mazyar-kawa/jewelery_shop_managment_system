@@ -1,34 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class BasketScreen extends StatelessWidget {
-  const BasketScreen({Key? key}) : super(key: key);
+class FavoriteScreen extends StatelessWidget {
+  const FavoriteScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final basket = Provider.of<BasketItemProvider>(context).baskets;
+    final product = Provider.of<ItemProvider>(context).favorite;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
             Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
         child: Container(
-          padding: const EdgeInsets.only(left: 25, right: 15, top: 60),
-          child: Text(
-            AppLocalizations.of(context)!.basket,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'RobotoB',
-              color: Theme.of(context).primaryColor,
-            ),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 50),
+          child: Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Theme.of(context).primaryColor,
+                  )),
+              Text(
+                AppLocalizations.of(context)!.favourite,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'RobotoB',
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      body: basket.length == 0
+      body: product.length == 0
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -38,7 +49,7 @@ class BasketScreen extends StatelessWidget {
                     Container(
                       child: Center(
                           child: Text(
-                        AppLocalizations.of(context)!.yourBasketisempty,
+                        AppLocalizations.of(context)!.yourFavouriteisempty,
                         style: TextStyle(
                           fontSize: 24,
                           fontFamily: 'RobotoB',
@@ -60,21 +71,12 @@ class BasketScreen extends StatelessWidget {
             )
           : ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: basket.length,
+              itemCount: product.length,
               shrinkWrap: true,
-              itemBuilder: (context, i) {
-                final product = Provider.of<ItemProvider>(context)
-                    .items
-                    .where((element) => element.id == basket[i].idItem)
-                    .toList();
-                for (var j = 0; j < product.length; j++) {
-                  return ChangeNotifierProvider.value(
-                    value: product[j],
+              itemBuilder: (context, i) => ChangeNotifierProvider.value(
+                    value: product[i],
                     child: CardItems(index: i),
-                  );
-                }
-                return Container();
-              }),
+                  )),
     );
   }
 }

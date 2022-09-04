@@ -30,11 +30,15 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_kurdish_localization: ^0.0.9
+  flutter_localizations:
+    sdk: flutter
   flutter_svg: ^1.1.4
+  hovering: ^1.0.4
   http: ^0.13.5
+  lottie: ^1.4.0
   provider: ^6.0.3
   shared_preferences: ^2.0.15
-  hovering: ^1.0.4
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -45,9 +49,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
+  generate: true
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
@@ -71,6 +73,5 @@ flutter:
     - family: RobotoB
       fonts:
         - asset: assets/fonts/Roboto-Bold.ttf
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
