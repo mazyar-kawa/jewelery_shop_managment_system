@@ -180,7 +180,7 @@ class _LoadingPageState extends State<LoadingPage> {
               currentPage = HomeScreen();
               break;
             case 1:
-              currentPage = ItemsScreen();
+              currentPage = CategoryPage();
               break;
             case 2:
               currentPage = BasketScreen();

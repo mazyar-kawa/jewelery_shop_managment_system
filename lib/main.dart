@@ -8,6 +8,7 @@ import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dar
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
+import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -81,6 +82,9 @@ class _MyAppState extends State<MyApp> {
               mobilescreen: MobileScreenLayout(),
               webscreen: WebScreenLayout(),
             ),
+            routes: {
+              ItemsScreen.routname: (context) => ItemsScreen(),
+            },
           );
         });
       }),

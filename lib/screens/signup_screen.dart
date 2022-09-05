@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 
 class SignUp extends StatelessWidget {
@@ -62,7 +63,10 @@ class SignUp extends StatelessWidget {
                 ButtonTheme(
                     height: 45,
                     child: RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => LoadingPage()));
+                      },
                       child: Text(
                         'Sign Up',
                         style: TextStyle(color: Colors.white, fontSize: 18),
@@ -116,7 +120,8 @@ class SignUp extends StatelessWidget {
 }
 
 void _navigateToNextScreen(BuildContext context) {
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignIn()));
+  Navigator.of(context)
+      .pushReplacement(MaterialPageRoute(builder: (context) => SignIn()));
 }
 
 Widget inputTextField(s) {
