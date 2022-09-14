@@ -35,9 +35,12 @@ class HomeCardCategory extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: index % 2 == 0 ? Color(0xffFFEDED) : Color(0xffECF1F4),
+          color: index % 2 == 0
+              ? Theme.of(context).accentColor
+              : Theme.of(context).primaryColor,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -84,16 +87,17 @@ class HomeCardCategory extends StatelessWidget {
                           width: 110,
                           height: 80,
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 2,
-                                    offset: Offset(2, -5))
-                              ],
-                              borderRadius: BorderRadius.circular(10),
-                              color: index % 2 == 0
-                                  ? Color(0xffFFDAD9)
-                                  : Color(0xffDBE5E7)),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 2,
+                                  offset: Offset(2, -5))
+                            ],
+                            borderRadius: BorderRadius.circular(10),
+                            color: index % 2 == 0
+                                ? Theme.of(context).secondaryHeaderColor
+                                : Theme.of(context).backgroundColor,
+                          ),
                         ),
                       ),
                       Container(
@@ -118,7 +122,7 @@ class HomeCardCategory extends StatelessWidget {
                     Text(
                       product.name,
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
                         fontFamily: 'RobotoB',
                         fontSize: 20,
                       ),
@@ -138,7 +142,7 @@ class HomeCardCategory extends StatelessWidget {
                     Text(
                       product.nameCategory,
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
                         fontFamily: 'RobotoB',
                         fontSize: 16,
                       ),
@@ -161,7 +165,7 @@ class HomeCardCategory extends StatelessWidget {
                       child: Text(
                         '${product.price}\$',
                         style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).primaryColorLight,
                           fontFamily: 'RobotoB',
                           fontSize: 20,
                         ),
@@ -175,7 +179,7 @@ class HomeCardCategory extends StatelessWidget {
                       height: 31,
                       width: 95,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: InkWell(

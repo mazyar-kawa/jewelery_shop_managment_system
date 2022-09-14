@@ -40,5 +40,15 @@
     "save": "Save",
     "items": "Items",
     "thisCategoryisempty": "This Category is empty",
-    "categories": "Categories"
+    "categories": "Categories",
+    "login": "Login",
+    "emailusername": "Email / Username",
+    "password": "Password",
+    "forgotpassword": "Forgot Password?",
+    "newtologistics": "New to logistics?",
+    "register": "Register",
+    "signup": "Sign Up",
+    "email": "Email",
+    "passwordconfirm": "Password confirm",
+    "alreadyhaveanaccount": "Already have an account?"
 }

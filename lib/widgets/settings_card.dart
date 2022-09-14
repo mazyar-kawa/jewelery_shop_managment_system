@@ -31,7 +31,7 @@ class ProfileCards extends StatelessWidget {
                   width: 30,
                   color: title == AppLocalizations.of(context)!.logOut
                       ? Colors.red
-                      : Theme.of(context).primaryColor,
+                      : Theme.of(context).primaryColorLight,
                 ),
               ),
               Container(
@@ -43,7 +43,7 @@ class ProfileCards extends StatelessWidget {
                     fontSize: 18,
                     color: title == AppLocalizations.of(context)!.logOut
                         ? Colors.red
-                        : Theme.of(context).primaryColor,
+                        : Theme.of(context).primaryColorLight,
                   ),
                 ),
               ),
@@ -53,7 +53,7 @@ class ProfileCards extends StatelessWidget {
             Icons.arrow_forward_ios_rounded,
             color: title == AppLocalizations.of(context)!.logOut
                 ? Colors.red
-                : Theme.of(context).primaryColor,
+                : Theme.of(context).primaryColorLight,
           )
         ]),
       ),

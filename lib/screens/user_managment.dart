@@ -30,14 +30,14 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                       },
                       icon: Icon(
                         Icons.arrow_back_ios_rounded,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
                       )),
                   Text(
                     AppLocalizations.of(context)!.userManagement,
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'RobotoB',
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).primaryColorLight,
                     ),
                   ),
                 ],
@@ -102,12 +102,12 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
               height: 50,
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColorLight,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 5,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).primaryColorLight,
                       offset: Offset(0, 3),
                     )
                   ]),

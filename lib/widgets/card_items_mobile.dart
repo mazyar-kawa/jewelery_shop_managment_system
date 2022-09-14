@@ -5,8 +5,8 @@ import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CardItems extends StatefulWidget {
-  const CardItems({
+class CardItemsMobile extends StatefulWidget {
+  const CardItemsMobile({
     Key? key,
     required this.index,
   }) : super(key: key);
@@ -14,10 +14,10 @@ class CardItems extends StatefulWidget {
   final int index;
 
   @override
-  State<CardItems> createState() => _CardItemsState();
+  State<CardItemsMobile> createState() => _CardItemsMobileState();
 }
 
-class _CardItemsState extends State<CardItems> {
+class _CardItemsMobileState extends State<CardItemsMobile> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Items>(context, listen: false);
@@ -27,7 +27,9 @@ class _CardItemsState extends State<CardItems> {
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: widget.index % 2 == 0 ? Color(0xffFFDAD9) : Color(0xffDBE5E7),
+        color: widget.index % 2 == 0
+            ? Theme.of(context).accentColor
+            : Theme.of(context).primaryColor,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -58,7 +60,7 @@ class _CardItemsState extends State<CardItems> {
                             )
                           : SvgPicture.asset(
                               'assets/images/heart-regular.svg',
-                              width: 20,
+                              width: 18,
                             ),
                     ),
                   );
@@ -75,16 +77,17 @@ class _CardItemsState extends State<CardItems> {
                         width: 110,
                         height: 80,
                         decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 2,
-                                  offset: Offset(2, -5))
-                            ],
-                            borderRadius: BorderRadius.circular(10),
-                            color: widget.index % 2 == 0
-                                ? Color(0xffFFDAD9)
-                                : Color(0xffDBE5E7)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 2,
+                                offset: Offset(2, -5))
+                          ],
+                          borderRadius: BorderRadius.circular(10),
+                          color: widget.index % 2 == 0
+                              ? Theme.of(context).secondaryHeaderColor
+                              : Theme.of(context).backgroundColor,
+                        ),
                       ),
                     ),
                     Container(
@@ -109,7 +112,7 @@ class _CardItemsState extends State<CardItems> {
                   Text(
                     product.name,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).primaryColorLight,
                       fontFamily: 'RobotoB',
                       fontSize: 20,
                     ),
@@ -129,7 +132,7 @@ class _CardItemsState extends State<CardItems> {
                   Text(
                     product.nameCategory,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).primaryColorLight,
                       fontFamily: 'RobotoB',
                       fontSize: 16,
                     ),
@@ -152,7 +155,7 @@ class _CardItemsState extends State<CardItems> {
                     child: Text(
                       '${product.price}\$',
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
                         fontFamily: 'RobotoB',
                         fontSize: 22,
                       ),
@@ -167,7 +170,7 @@ class _CardItemsState extends State<CardItems> {
                       height: 31,
                       width: 95,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: InkWell(

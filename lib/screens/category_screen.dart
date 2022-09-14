@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/category_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
@@ -22,16 +23,19 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.2),
+        preferredSize: Size.fromHeight(
+            MediaQuery.of(context).size.width > websize
+                ? MediaQuery.of(context).size.height * 0.3
+                : MediaQuery.of(context).size.height * 0.2),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 50, horizontal: 15),
           child: Text(
             AppLocalizations.of(context)!.categories,
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 28,
-                color: Theme.of(context).primaryColor),
+              fontWeight: FontWeight.bold,
+              fontSize: 28,
+              color: Theme.of(context).primaryColorLight,
+            ),
           ),
         ),
       ),
@@ -46,10 +50,12 @@ class _CategoryPageState extends State<CategoryPage> {
                 physics: BouncingScrollPhysics(),
                 itemCount: category.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount:
+                      MediaQuery.of(context).size.width > websize ? 3 : 2,
                   childAspectRatio: 0.9,
                   crossAxisSpacing: 5,
-                  mainAxisSpacing: 10,
+                  mainAxisSpacing:
+                      MediaQuery.of(context).size.width > websize ? 20 : 10,
                 ),
                 itemBuilder: (context, index) {
                   return GestureDetector(
@@ -63,13 +69,15 @@ class _CategoryPageState extends State<CategoryPage> {
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       width: 120,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       child: Card(
-                          elevation: 20,
+                          elevation: 5,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(25.0),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image(
                                   image: AssetImage(category[index].image),
@@ -80,7 +88,8 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ),
                                 Text(category[index].name,
                                     style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                                        color:
+                                            Theme.of(context).primaryColorLight,
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold))
                               ],

@@ -1,120 +1,409 @@
 import 'package:flutter/material.dart';
+import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
+import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
+import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _passwordConfirmController = TextEditingController();
+
+  @override
+  void initState() {
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 3));
+
+    animationController
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => LoadingPage()));
+        }
+      });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    _emailController.dispose();
+    _nameController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _passwordConfirmController.dispose();
+    super.dispose();
+  }
+
+  final boredruser = OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Color(0xffE9E9E9),
+      width: 2,
+    ),
+    borderRadius: BorderRadius.circular(15),
+  );
+
+  void showdialog(BuildContext context) => showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: LottieBuilder.asset(
+              'assets/images/thank_you.json',
+              controller: animationController,
+              onLoaded: (complet) {
+                animationController.forward();
+              },
+              width: MediaQuery.of(context).size.width > websize ? 200 : 800,
+              fit: BoxFit.cover,
+            ),
+          );
+        },
+      );
+
+  void SignUp(String name, String userName, String email, String password,
+      String passwordconfirm) async {
+    ApiProvider response = await Provider.of<Auth>(context, listen: false)
+        .SignUp(
+            name: name,
+            username: userName,
+            email: email,
+            password: password,
+            passwordconfirm: passwordconfirm);
+    if (response.error == null) {
+      showdialog(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffEDEDED),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            color: Color(0xffEDEDED),
-            child: Center(
-              child: FadeInImage(
-                image: AssetImage('assets/images/signup75.png'),
-                height: 300,
-                placeholder: AssetImage('assets/images/placeholder70.png'),
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                )),
-            padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Sign Up',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                inputTextField('username'),
-                SizedBox(
-                  height: 25,
-                ),
-                inputTextField('email'),
-                SizedBox(
-                  height: 25,
-                ),
-                inputTextField('password'),
-                SizedBox(
-                  height: 25,
-                ),
-                inputTextField('confirm password'),
-                SizedBox(
-                  height: 35,
-                ),
-                ButtonTheme(
-                    height: 45,
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => LoadingPage()));
-                      },
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                      color: Color(0xff455A64),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      splashColor: Color(0xff455A64),
-                      elevation: 5,
-                    ))
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+      body: MediaQuery.of(context).size.width > websize
+          ? Center(
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 3,
+                        spreadRadius: 1,
+                      )
+                    ]),
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
                   children: [
-                    Text(
-                      'Already have an account?  ',
-                      style: TextStyle(
-                          color: Colors.grey[600], fontWeight: FontWeight.bold),
-                    ),
-                    FlatButton(
-                      minWidth: 40,
-                      padding: EdgeInsets.zero,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      onPressed: () {
-                        _navigateToNextScreen(context);
-                      },
+                    Align(
                       child: Text(
-                        'LogIn',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        AppLocalizations.of(context)!.signup,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorLight,
+                          fontFamily: 'RobotoB',
+                          fontSize: 36,
+                        ),
                       ),
-                      height: 5,
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 80),
+                      height: 400,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              hintText: AppLocalizations.of(context)!.email,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              hintText: 'Name',
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _usernameController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              hintText: AppLocalizations.of(context)!.username,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              hintText: AppLocalizations.of(context)!.password,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _passwordConfirmController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              hintText:
+                                  AppLocalizations.of(context)!.passwordconfirm,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              SignUp(
+                                  _nameController.text,
+                                  _usernameController.text,
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  _passwordConfirmController.text);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              height: 55,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColorLight,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Theme.of(context)
+                                          .primaryColorLight
+                                          .withOpacity(0.3),
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3),
+                                    )
+                                  ]),
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)!.signup,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                    fontFamily: 'RobotoB',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(AppLocalizations.of(context)!
+                              .alreadyhaveanaccount),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => SignIn(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.login,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColorLight,
+                                fontFamily: 'RobotoB',
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          : Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              alignment: Alignment.bottomCenter,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Align(
+                      child: Text(
+                        AppLocalizations.of(context)!.signup,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorLight,
+                          fontFamily: 'RobotoB',
+                          fontSize: 36,
+                        ),
+                      ),
+                      alignment:
+                          AppLocalizations.of(context)!.signup == 'Sign Up'
+                              ? Alignment.topLeft
+                              : Alignment.topRight,
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 80),
+                      height: 400,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context)!.email,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              hintText: 'Name',
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _usernameController,
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context)!.username,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context)!.password,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _passwordConfirmController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText:
+                                  AppLocalizations.of(context)!.passwordconfirm,
+                              border: boredruser,
+                              enabledBorder: boredruser,
+                              focusedBorder: boredruser,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              SignUp(
+                                  _nameController.text,
+                                  _usernameController.text,
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  _passwordConfirmController.text);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              height: 55,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColorLight,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Theme.of(context)
+                                          .primaryColorLight
+                                          .withOpacity(0.3),
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3),
+                                    )
+                                  ]),
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)!.signup,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                    fontFamily: 'RobotoB',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(AppLocalizations.of(context)!
+                              .alreadyhaveanaccount),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => SignIn(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.login,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColorLight,
+                                fontFamily: 'RobotoB',
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
             ),
-          )
-        ],
-      ),
     );
   }
 }

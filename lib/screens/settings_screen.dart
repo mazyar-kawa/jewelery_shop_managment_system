@@ -30,14 +30,14 @@ class _SettingScreenState extends State<SettingScreen> {
                       },
                       icon: Icon(
                         Icons.arrow_back_ios_rounded,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
                       )),
                   Text(
                     AppLocalizations.of(context)!.settings,
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'RobotoB',
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).primaryColorLight,
                     ),
                   ),
                 ],
@@ -57,7 +57,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                 child: SvgPicture.asset(
                                   'assets/images/language-solid.svg',
                                   width: 35,
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).primaryColorLight,
                                 ),
                               ),
                             ),
@@ -68,7 +68,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Theme.of(context).primaryColorLight,
                                   ),
                                 ),
                               ),
@@ -81,7 +81,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: 'RobotoB',
-                                      color: Theme.of(context).primaryColor,
+                                      color:
+                                          Theme.of(context).primaryColorLight,
                                     ),
                                   ),
                                   Container(
@@ -131,14 +132,14 @@ class _SettingScreenState extends State<SettingScreen> {
                                         ? SvgPicture.asset(
                                             'assets/images/moon-solid.svg',
                                             width: 35,
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
                                           )
                                         : SvgPicture.asset(
                                             'assets/images/sun-solid.svg',
                                             width: 35,
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
                                           ),
                                   ),
                                 );
@@ -151,7 +152,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Theme.of(context).primaryColorLight,
                                   ),
                                 ),
                               ),
@@ -164,7 +165,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: 'RobotoB',
-                                      color: Theme.of(context).primaryColor,
+                                      color:
+                                          Theme.of(context).primaryColorLight,
                                     ),
                                   ),
                                   Container(
@@ -218,7 +220,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'RobotoB',
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColorLight,
                 ),
               ),
             ),
@@ -230,7 +232,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'RobotoB',
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).primaryColorLight,
                   ),
                 ),
                 subtitle: Text(AppLocalizations.of(context)!

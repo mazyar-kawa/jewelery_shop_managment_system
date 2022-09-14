@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
+import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 
 class WebScreenLayout extends StatefulWidget {
   const WebScreenLayout({Key? key}) : super(key: key);
@@ -11,6 +12,6 @@ class WebScreenLayout extends StatefulWidget {
 class _WebScreenLayoutState extends State<WebScreenLayout> {
   @override
   Widget build(BuildContext context) {
-    return LoadingPage();
+    return SignIn();
   }
 }

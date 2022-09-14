@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/card_items_web.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,14 +19,29 @@ class BasketScreen extends StatelessWidget {
         preferredSize:
             Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
         child: Container(
-          padding: const EdgeInsets.only(left: 25, right: 15, top: 60),
-          child: Text(
-            AppLocalizations.of(context)!.basket,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'RobotoB',
-              color: Theme.of(context).primaryColor,
-            ),
+          padding: EdgeInsets.only(
+              left: 15,
+              right: 15,
+              top: MediaQuery.of(context).size.width > websize ? 10 : 35),
+          child: Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Theme.of(context).primaryColorLight,
+                  )),
+              Text(
+                AppLocalizations.of(context)!.basket,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'RobotoB',
+                  color: Theme.of(context).primaryColorLight,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -42,7 +59,7 @@ class BasketScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontFamily: 'RobotoB',
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).primaryColorLight,
                         ),
                       )),
                     ),
@@ -50,7 +67,10 @@ class BasketScreen extends StatelessWidget {
                       child: Center(
                         child: LottieBuilder.asset(
                           'assets/images/empty-box.json',
-                          width: 350,
+                          width: MediaQuery.of(context).size.width > websize
+                              ? 650
+                              : 350,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     )
@@ -58,23 +78,51 @@ class BasketScreen extends StatelessWidget {
                 ),
               ],
             )
-          : ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: basket.length,
-              shrinkWrap: true,
-              itemBuilder: (context, i) {
-                final product = Provider.of<ItemProvider>(context)
-                    .items
-                    .where((element) => element.id == basket[i].idItem)
-                    .toList();
-                for (var j = 0; j < product.length; j++) {
-                  return ChangeNotifierProvider.value(
-                    value: product[j],
-                    child: CardItems(index: i),
-                  );
-                }
-                return Container();
-              }),
+          : MediaQuery.of(context).size.width > websize
+              ? Container(
+                  width: MediaQuery.of(context).size.width * 0.82,
+                  height: MediaQuery.of(context).size.height,
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: basket.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 0.9,
+                        crossAxisSpacing: 6,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemBuilder: (context, i) {
+                        final product = Provider.of<ItemProvider>(context)
+                            .items
+                            .where((element) => element.id == basket[i].idItem)
+                            .toList();
+                        for (var j = 0; j < product.length; j++) {
+                          return ChangeNotifierProvider.value(
+                            value: product[j],
+                            child: CardItemsWeb(index: i),
+                          );
+                        }
+                        return Container();
+                      }),
+                )
+              : ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: basket.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, i) {
+                    final product = Provider.of<ItemProvider>(context)
+                        .items
+                        .where((element) => element.id == basket[i].idItem)
+                        .toList();
+                    for (var j = 0; j < product.length; j++) {
+                      return ChangeNotifierProvider.value(
+                        value: product[j],
+                        child: CardItemsMobile(index: i),
+                      );
+                    }
+                    return Container();
+                  }),
     );
   }
 }

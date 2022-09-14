@@ -2,17 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kurdish_localization/flutter_kurdish_localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/user_refresh.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
+import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   runApp(const MyApp());
 }
 
@@ -52,6 +61,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => languageProvider),
         ChangeNotifierProvider.value(value: ItemProvider()),
         ChangeNotifierProvider.value(value: BasketItemProvider()),
+        ChangeNotifierProvider.value(value: Auth()),
+        ChangeNotifierProvider.value(value: UserRefresh()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {
@@ -70,12 +81,22 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData.light().copyWith(
-              scaffoldBackgroundColor: Color(0xffFFFFFF),
-              primaryColor: Color(0xff455A64),
+              buttonColor: scaffoldbackgroundLight,
+              primaryColorLight: primaryColorLight,
+              primaryColor: primaryFadeCardLight,
+              accentColor: seconderFadeCardLight,
+              backgroundColor: primaryCardLight,
+              secondaryHeaderColor: seconderCardLight,
+              shadowColor: shadowCardLight,
             ),
             darkTheme: ThemeData.dark().copyWith(
-              scaffoldBackgroundColor: Color(0xFF1F1F1F),
-              primaryColor: Color(0xff3DB8EF),
+              buttonColor: scaffoldbackgroundDark,
+              primaryColorLight: primaryColorDark,
+              primaryColor: primaryFadeCardDark,
+              accentColor: seconderFadeCardDark,
+              backgroundColor: primaryCardDark,
+              secondaryHeaderColor: seconderCardDark,
+              shadowColor: shadowCardDark,
             ),
             themeMode: themeChangeProvider.themeMode,
             home: LayoutScreen(

@@ -40,5 +40,15 @@
     "save": "هەڵگرتن",
     "items": "کاڵاکان",
     "thisCategoryisempty": "ئەم بەشە بەتاڵە",
-    "categories": "بەشەکان"
+    "categories": "بەشەکان",
+    "login": "چونە ژوورەوە",
+    "emailusername": "ئیمەیل / ناوی بەکارهێنەر",
+    "password": "تێپەڕە وشە",
+    "forgotpassword": "تێپەڕە وشەت بیرچۆتەوە؟",
+    "newtologistics": "هەژمار دروست ئەکەیت",
+    "register": "خۆتۆمارکردن",
+    "signup": "دروستکردنی هەژمار",
+    "email": "ئیمەیڵ",
+    "passwordconfirm": "دڵنیا بوون لە تێپەڕەوشە",
+    "alreadyhaveanaccount": "پێشتر هەژمارت هەیە؟"
 }
