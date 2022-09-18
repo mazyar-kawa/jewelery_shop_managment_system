@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
+import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/favorite_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/history_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/settings_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/user_managment.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/settings_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
+  final bool islogin;
+
+  ProfileScreen({required this.islogin});
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool islogin = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: islogin
+        body: widget.islogin
             ? ListView(
                 physics: BouncingScrollPhysics(),
                 children: [
@@ -113,7 +117,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ProfileCards(
                           title: AppLocalizations.of(context)!.logOut,
                           image: 'assets/images/logout.svg',
-                          onPressed: () {},
+                          onPressed: () {
+                            Auth().logOut();
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => LoadingPage(
+                                          islogin: false,
+                                        )));
+                          },
                         ),
                       ],
                     ),
@@ -149,8 +161,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     InkWell(
                       onTap: () {
                         setState(() {
-                          islogin = true;
-                          //  Navigator.push(context, MaterialPageRoute(builder:(_)=>SignIn()));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => SignIn()));
                         });
                       },
                       child: Container(

@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Auth with ChangeNotifier {
+class Auth {
   Future<ApiProvider> login({
     required String email,
     required String password,
@@ -78,44 +78,43 @@ class Auth with ChangeNotifier {
     }
     return apiProvider;
   }
-}
 
-Future<ApiProvider> getUserDetails() async {
-  ApiProvider apiResponse = ApiProvider();
-  try {
-    String token = await getToken();
-    final response = await http.get(Uri.parse(base + 'currentUser'), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    });
+  Future<ApiProvider> getUserDetials() async {
+    ApiProvider apiProvider = ApiProvider();
+    try {
+      String token = await getToken();
 
-    switch (response.statusCode) {
-      case 200:
-        apiResponse.data = User.fromJson(json.decode(response.body));
-        break;
-      default:
-        apiResponse.error = jsonDecode(response.body);
-        break;
+      final response =
+          await http.get(Uri.parse(base + 'currentUser'), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+      switch (response.statusCode) {
+        case 200:
+          apiProvider.data = AuthUser.fromJson(json.decode(response.body));
+          break;
+        default:
+          apiProvider.error = jsonDecode(response.body);
+      }
+    } catch (e) {
+      apiProvider.error = {'message': e.toString()};
     }
-  } catch (e) {
-    print(e.toString());
-    apiResponse.error = {'message': e.toString()};
+    return apiProvider;
   }
-  return apiResponse;
-}
 
-Future<String> getToken() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString('token') ?? '';
-}
+  Future<String> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
 
-Future<int> getUserId() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getInt('id') ?? 0;
-}
+  Future<int> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('userId') ?? 0;
+  }
 
-Future<bool> logOut() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return await prefs.remove('token');
+  Future<bool> logOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.remove('token');
+  }
 }

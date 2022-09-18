@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kurdish_localization/flutter_kurdish_localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/user_refresh.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
-import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -61,8 +62,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => languageProvider),
         ChangeNotifierProvider.value(value: ItemProvider()),
         ChangeNotifierProvider.value(value: BasketItemProvider()),
-        ChangeNotifierProvider.value(value: Auth()),
-        ChangeNotifierProvider.value(value: UserRefresh()),
+        ChangeNotifierProvider.value(value: RefreshUser()),
+        ChangeNotifierProvider.value(value: CountriesProvider()),
+        ChangeNotifierProvider.value(value: ItemProviderORG()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {

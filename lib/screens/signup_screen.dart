@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
@@ -17,6 +17,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
+  final formkey = GlobalKey<FormState>();
   late AnimationController animationController;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
@@ -33,7 +34,11 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => LoadingPage()));
+              context,
+              MaterialPageRoute(
+                  builder: (_) => LoadingPage(
+                        islogin: true,
+                      )));
         }
       });
     super.initState();
@@ -74,19 +79,21 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
           );
         },
       );
-
+  Map<dynamic, dynamic>? error;
   void SignUp(String name, String userName, String email, String password,
       String passwordconfirm) async {
-    ApiProvider response = await Provider.of<Auth>(context, listen: false)
-        .SignUp(
-            name: name,
-            username: userName,
-            email: email,
-            password: password,
-            passwordconfirm: passwordconfirm);
+    ApiProvider response = await Auth().SignUp(
+        name: name,
+        username: userName,
+        email: email,
+        password: password,
+        passwordconfirm: passwordconfirm);
     if (response.error == null) {
       showdialog(context);
+    } else {
+      error = response.error;
     }
+    setState(() {});
   }
 
   @override
@@ -259,148 +266,199 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
               padding: EdgeInsets.symmetric(horizontal: 20),
               alignment: Alignment.bottomCenter,
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Align(
-                      child: Text(
-                        AppLocalizations.of(context)!.signup,
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorLight,
-                          fontFamily: 'RobotoB',
-                          fontSize: 36,
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    children: [
+                      Align(
+                        child: Text(
+                          AppLocalizations.of(context)!.signup,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorLight,
+                            fontFamily: 'RobotoB',
+                            fontSize: 36,
+                          ),
                         ),
+                        alignment:
+                            AppLocalizations.of(context)!.signup == 'Sign Up'
+                                ? Alignment.topLeft
+                                : Alignment.topRight,
                       ),
-                      alignment:
-                          AppLocalizations.of(context)!.signup == 'Sign Up'
-                              ? Alignment.topLeft
-                              : Alignment.topRight,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 80),
-                      height: 400,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFormField(
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!.email,
-                              border: boredruser,
-                              enabledBorder: boredruser,
-                              focusedBorder: boredruser,
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 80),
+                        height: 500,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextFormField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)!.email,
+                                border: boredruser,
+                                enabledBorder: boredruser,
+                                focusedBorder: boredruser,
+                              ),
                             ),
-                          ),
-                          TextFormField(
-                            controller: _nameController,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(10),
-                              hintText: 'Name',
-                              border: boredruser,
-                              enabledBorder: boredruser,
-                              focusedBorder: boredruser,
-                            ),
-                          ),
-                          TextFormField(
-                            controller: _usernameController,
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!.username,
-                              border: boredruser,
-                              enabledBorder: boredruser,
-                              focusedBorder: boredruser,
-                            ),
-                          ),
-                          TextFormField(
-                            controller: _passwordController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!.password,
-                              border: boredruser,
-                              enabledBorder: boredruser,
-                              focusedBorder: boredruser,
-                            ),
-                          ),
-                          TextFormField(
-                            controller: _passwordConfirmController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context)!.passwordconfirm,
-                              border: boredruser,
-                              enabledBorder: boredruser,
-                              focusedBorder: boredruser,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              SignUp(
-                                  _nameController.text,
-                                  _usernameController.text,
-                                  _emailController.text,
-                                  _passwordController.text,
-                                  _passwordConfirmController.text);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              height: 55,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColorLight,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Theme.of(context)
-                                          .primaryColorLight
-                                          .withOpacity(0.3),
-                                      blurRadius: 5,
-                                      offset: Offset(0, 3),
-                                    )
-                                  ]),
-                              child: Center(
+                            for (var _error in error?['errors']?['email'] ?? [])
+                              Align(
+                                alignment: Alignment.topLeft,
                                 child: Text(
-                                  AppLocalizations.of(context)!.signup,
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    fontFamily: 'RobotoB',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                  _error,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            TextFormField(
+                              controller: _nameController,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(10),
+                                hintText: 'Name',
+                                border: boredruser,
+                                enabledBorder: boredruser,
+                                focusedBorder: boredruser,
+                              ),
+                            ),
+                            for (var _error in error?['errors']?['name'] ?? [])
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  _error,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            TextFormField(
+                              controller: _usernameController,
+                              decoration: InputDecoration(
+                                hintText:
+                                    AppLocalizations.of(context)!.username,
+                                border: boredruser,
+                                enabledBorder: boredruser,
+                                focusedBorder: boredruser,
+                              ),
+                            ),
+                            for (var _error
+                                in error?['errors']?['username'] ?? [])
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  _error,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            TextFormField(
+                              controller: _passwordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText:
+                                    AppLocalizations.of(context)!.password,
+                                border: boredruser,
+                                enabledBorder: boredruser,
+                                focusedBorder: boredruser,
+                              ),
+                            ),
+                            for (var _error
+                                in error?['errors']?['password'] ?? [])
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  _error,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            TextFormField(
+                              controller: _passwordConfirmController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)!
+                                    .passwordconfirm,
+                                border: boredruser,
+                                enabledBorder: boredruser,
+                                focusedBorder: boredruser,
+                              ),
+                            ),
+                            for (var _error in error?['errors']
+                                    ?['password_confirmation'] ??
+                                [])
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  _error,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            InkWell(
+                              onTap: () {
+                                if (formkey.currentState!.validate()) {
+                                  SignUp(
+                                      _nameController.text,
+                                      _usernameController.text,
+                                      _emailController.text,
+                                      _passwordController.text,
+                                      _passwordConfirmController.text);
+                                }
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                height: 55,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColorLight,
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context)
+                                            .primaryColorLight
+                                            .withOpacity(0.3),
+                                        blurRadius: 5,
+                                        offset: Offset(0, 3),
+                                      )
+                                    ]),
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context)!.signup,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      fontFamily: 'RobotoB',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(AppLocalizations.of(context)!
-                              .alreadyhaveanaccount),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (_) => SignIn(),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(AppLocalizations.of(context)!
+                                .alreadyhaveanaccount),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => SignIn(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.login,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: 'RobotoB',
                                 ),
-                              );
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.login,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).primaryColorLight,
-                                fontFamily: 'RobotoB',
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

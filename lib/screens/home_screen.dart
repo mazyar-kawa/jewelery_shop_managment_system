@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dart';
@@ -9,7 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/home_card_category.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final bool islogin;
+  const HomeScreen({Key? key, required this.islogin}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -45,12 +49,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _pageControllerWeb = PageController(
         initialPage: _current, viewportFraction: 0.5, keepPage: true);
+    // adduser();
     super.initState();
   }
+
+  // adduser() async {
+  //   String token = await Auth().getToken();
+  //   if (token != '') {
+  //     RefreshUser refresh =
+  //         await Provider.of<RefreshUser>(context, listen: false);
+  //     await refresh.refreshuser();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     final products = Provider.of<ItemProvider>(context).item;
+    late AuthUser user;
+    if (widget.islogin) {
+      user = Provider.of<RefreshUser>(context).currentUser;
+    }
+
     final boredrUser = OutlineInputBorder(
       borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),
       borderRadius: BorderRadius.circular(15),
@@ -78,24 +97,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey),
                           ),
-                          Text(
-                            'Mazyar!👋',
-                            style: TextStyle(
-                              fontSize: 26,
-                              fontFamily: 'RobotoB',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
+                          widget.islogin
+                              ? Text(
+                                  '${user.user!.username}',
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontFamily: 'RobotoB',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
-                      Container(
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundImage:
-                              AssetImage('assets/images/profile.jpg'),
-                        ),
-                      ),
+                      widget.islogin
+                          ? Container(
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundImage:
+                                    AssetImage('assets/images/profile.jpg'),
+                              ),
+                            )
+                          : Container()
                     ],
                   ),
           ),
