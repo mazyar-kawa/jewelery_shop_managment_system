@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/model/category_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
@@ -11,14 +13,6 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  List<CategoryModel> category = [
-    CategoryModel(image: 'assets/images/Italy.png', name: 'Italian', id: 1),
-    CategoryModel(image: 'assets/images/Turkey.png', name: 'Turkish', id: 2),
-    CategoryModel(image: 'assets/images/Iraq.png', name: 'Iraqi', id: 3),
-    CategoryModel(image: 'assets/images/Iran.png', name: 'Persian', id: 4),
-    CategoryModel(image: 'assets/images/Dubai.png', name: 'Dubai', id: 5),
-    CategoryModel(image: 'assets/images/France.png', name: 'French', id: 6),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,68 +33,97 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
         ),
       ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        children: [
-          Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            child: GridView.builder(
+      body: FutureBuilder(
+          future: Provider.of<CountriesProvider>(context).getCountries(),
+          builder: (context, snapshot) {
+            final category = Provider.of<CountriesProvider>(context).countries;
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ListView(
+                shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
-                itemCount: category.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:
-                      MediaQuery.of(context).size.width > websize ? 3 : 2,
-                  childAspectRatio: 0.9,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing:
-                      MediaQuery.of(context).size.width > websize ? 20 : 10,
-                ),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/items',
-                        arguments: category[index].id,
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      width: 120,
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      child: Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(25.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image(
-                                  image: AssetImage(category[index].image),
-                                  height: 100,
-                                ),
-                                Divider(
-                                  height: 30,
-                                ),
-                                Text(category[index].name,
-                                    style: TextStyle(
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold))
-                              ],
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height,
+                    child: GridView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: category.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                              MediaQuery.of(context).size.width > websize
+                                  ? 3
+                                  : 2,
+                          childAspectRatio: 0.9,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing:
+                              MediaQuery.of(context).size.width > websize
+                                  ? 20
+                                  : 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/items',
+                                arguments: category[index].id,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              width: 120,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              child: Card(
+                                  elevation: 5,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(25.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Image(
+                                          image: NetworkImage(category[index]
+                                              .picturecountries!),
+                                          height: 100,
+                                        ),
+                                        Divider(
+                                          height: 30,
+                                        ),
+                                        Container(
+                                          constraints:
+                                              BoxConstraints(maxWidth: 100),
+                                          child: Text(
+                                              category[index].namecountries!,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColorLight,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                        )
+                                      ],
+                                    ),
+                                  )),
                             ),
-                          )),
-                    ),
-                  );
-                }),
-          )
-        ],
-      ),
+                          );
+                        }),
+                  )
+                ],
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                child: Center(
+                  child: Lottie.asset('assets/images/loader_daimond.json',
+                      width: 200),
+                ),
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -20,7 +20,8 @@ class CardItemsMobile extends StatefulWidget {
 class _CardItemsMobileState extends State<CardItemsMobile> {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Items>(context, listen: false);
+    // final product = Provider.of<Items>(context, listen: false);
+    final product = Provider.of<SingleItem>(context);
     return Container(
       width: double.infinity,
       height: 180,
@@ -46,25 +47,25 @@ class _CardItemsMobileState extends State<CardItemsMobile> {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(10000),
                 ),
-                child: Consumer<Items>(builder: (context, products, _) {
-                  return Center(
-                    child: InkWell(
-                      onTap: () {
-                        products.favorite();
-                      },
-                      child: products.isFavorite
-                          ? SvgPicture.asset(
-                              'assets/images/heart-solid.svg',
-                              width: 20,
-                              color: Colors.red,
-                            )
-                          : SvgPicture.asset(
-                              'assets/images/heart-regular.svg',
-                              width: 18,
-                            ),
-                    ),
-                  );
-                }),
+                // child: Consumer<Items>(builder: (context, products, _) {
+                //   return Center(
+                //     child: InkWell(
+                //       onTap: () {
+                //         products.favorite();
+                //       },
+                //       child: products.isFavorite
+                //           ? SvgPicture.asset(
+                //               'assets/images/heart-solid.svg',
+                //               width: 20,
+                //               color: Colors.red,
+                //             )
+                //           : SvgPicture.asset(
+                //               'assets/images/heart-regular.svg',
+                //               width: 18,
+                //             ),
+                //     ),
+                //   );
+                // }),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -93,7 +94,7 @@ class _CardItemsMobileState extends State<CardItemsMobile> {
                     Container(
                       child: Center(
                         child: Image(
-                          image: AssetImage(product.image),
+                          image: NetworkImage(product.img!),
                           width: 110,
                         ),
                       ),
@@ -110,7 +111,7 @@ class _CardItemsMobileState extends State<CardItemsMobile> {
               Column(
                 children: [
                   Text(
-                    product.name,
+                    product.name.toString(),
                     style: TextStyle(
                       color: Theme.of(context).primaryColorLight,
                       fontFamily: 'RobotoB',
@@ -127,28 +128,28 @@ class _CardItemsMobileState extends State<CardItemsMobile> {
                   )
                 ],
               ),
-              Column(
-                children: [
-                  Text(
-                    product.nameCategory,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorLight,
-                      fontFamily: 'RobotoB',
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    product.puring,
-                    style: TextStyle(
-                      color: product.puring == 'Gold'
-                          ? Color(0xffFFD700)
-                          : Color(0xffC0C0C0),
-                      fontFamily: 'RobotoM',
-                      fontSize: 20,
-                    ),
-                  )
-                ],
-              ),
+              // Column(
+              //   children: [
+              //     Text(
+              //       product.nameCategory,
+              //       style: TextStyle(
+              //         color: Theme.of(context).primaryColorLight,
+              //         fontFamily: 'RobotoB',
+              //         fontSize: 16,
+              //       ),
+              //     ),
+              //     Text(
+              //       product.puring,
+              //       style: TextStyle(
+              //         color: product.puring == 'Gold'
+              //             ? Color(0xffFFD700)
+              //             : Color(0xffC0C0C0),
+              //         fontFamily: 'RobotoM',
+              //         fontSize: 20,
+              //       ),
+              //     )
+              //   ],
+              // ),
               Row(
                 children: [
                   Container(
@@ -174,10 +175,10 @@ class _CardItemsMobileState extends State<CardItemsMobile> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: InkWell(
-                        onTap: () {
-                          basket.addToBasket(
-                              DateTime.now().toString(), product.id, 1);
-                        },
+                        // onTap: () {
+                        //   basket.addToBasket(
+                        //       DateTime.now().toString(), product.id, 1);
+                        // },
                         child: Center(
                           child: Text(
                             AppLocalizations.of(context)!.addtobag,

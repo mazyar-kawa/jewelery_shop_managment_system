@@ -12,6 +12,8 @@ class WebScreenLayout extends StatefulWidget {
 class _WebScreenLayoutState extends State<WebScreenLayout> {
   @override
   Widget build(BuildContext context) {
-    return SignIn();
+    return LoadingPage(
+      islogin: false,
+    );
   }
 }

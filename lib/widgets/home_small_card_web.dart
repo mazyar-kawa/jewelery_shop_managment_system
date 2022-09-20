@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
-import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:provider/provider.dart';
 
 class HomeSmallCardweb extends StatelessWidget {
@@ -21,7 +19,7 @@ class HomeSmallCardweb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Items>(context);
+    final product = Provider.of<SingleItem>(context);
     final basket = Provider.of<BasketItemProvider>(context);
     return AnimatedBuilder(
       animation: _pageController,
@@ -64,29 +62,29 @@ class HomeSmallCardweb extends StatelessWidget {
                     right: 10,
                     child: Container(
                       alignment: Alignment.topRight,
-                      child: Consumer<Items>(builder: (context, products, _) {
-                        return InkWell(
-                          onTap: () {
-                            products.favorite();
-                          },
-                          child: products.isFavorite
-                              ? SvgPicture.asset(
-                                  'assets/images/heart-solid.svg',
-                                  width: 20,
-                                  color: Colors.red,
-                                )
-                              : SvgPicture.asset(
-                                  'assets/images/heart-regular.svg',
-                                  width: 18,
-                                ),
-                        );
-                      }),
+                      // child: Consumer<Items>(builder: (context, products, _) {
+                      //   return InkWell(
+                      //     onTap: () {
+                      //       products.favorite();
+                      //     },
+                      //     child: products.isFavorite
+                      //         ? SvgPicture.asset(
+                      //             'assets/images/heart-solid.svg',
+                      //             width: 20,
+                      //             color: Colors.red,
+                      //           )
+                      //         : SvgPicture.asset(
+                      //             'assets/images/heart-regular.svg',
+                      //             width: 18,
+                      //           ),
+                      //   );
+                      // }),
                     ),
                   ),
                   Center(
                     child: Container(
                       child: Image(
-                        image: AssetImage(product.image),
+                        image: AssetImage(product.img!),
                         fit: BoxFit.cover,
                         width: 120,
                       ),
@@ -116,7 +114,7 @@ class HomeSmallCardweb extends StatelessWidget {
                     children: [
                       Container(
                         child: Text(
-                          product.name,
+                          product.name!,
                           style: TextStyle(
                             color: Theme.of(context).primaryColorLight,
                             fontFamily: 'RobotoB',
@@ -124,18 +122,18 @@ class HomeSmallCardweb extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        child: Text(
-                          product.puring,
-                          style: TextStyle(
-                            color: product.puring == 'Gold'
-                                ? Color(0xffFFD700)
-                                : Color(0xffC0C0C0),
-                            fontFamily: 'RobotoM',
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   child: Text(
+                      //     product.puring,
+                      //     style: TextStyle(
+                      //       color: product.puring == 'Gold'
+                      //           ? Color(0xffFFD700)
+                      //           : Color(0xffC0C0C0),
+                      //       fontFamily: 'RobotoM',
+                      //       fontSize: 18,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   Row(
@@ -175,7 +173,7 @@ class HomeSmallCardweb extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               basket.addToBasket(
-                                  DateTime.now().toString(), product.id, 1);
+                                  DateTime.now().toString(), product.id!, 1);
                             },
                             child: Text(
                               '+',

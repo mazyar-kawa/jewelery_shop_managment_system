@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
@@ -10,6 +12,7 @@ import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -17,6 +20,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
+  final formkey = GlobalKey<FormState>();
   late AnimationController animationController;
   TextEditingController _emailcontroller = TextEditingController();
   TextEditingController _passwordcontroller = TextEditingController();
@@ -30,7 +34,11 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => LoadingPage()));
+              context,
+              MaterialPageRoute(
+                  builder: (_) => LoadingPage(
+                        islogin: true,
+                      )));
         }
       });
     super.initState();
@@ -70,12 +78,28 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
 
   bool islogin = false;
 
+  Map<dynamic, dynamic>? error;
   void logIn(String email, String password) async {
-    ApiProvider response = await Provider.of<Auth>(context, listen: false)
-        .login(email: email, password: password);
+    ApiProvider response = await Auth().login(email: email, password: password);
+
     if (response.error == null) {
-      showdialog(context);
+      saveUser(response.data as User);
+    } else {
+      error = response.error;
+      if (error?['message'] == 'The provided credentials are incorrect.') {
+        print(error?['message']);
+      }
     }
+    setState(() {});
+  }
+
+  void saveUser(User user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', user.token ?? '');
+    await prefs.setInt('userId', user.id ?? 0);
+    RefreshUser refresh = Provider.of<RefreshUser>(context, listen: false);
+    await refresh.refreshuser;
+    showdialog(context);
   }
 
   @override
@@ -245,134 +269,168 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
           : Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               alignment: Alignment.bottomCenter,
-              child: SingleChildScrollView(
+              child: SingleChildScrollView(child: Builder(builder: (context) {
+                return Form(
+                  key: formkey,
                   child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 50),
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    child: LottieBuilder.asset(
-                      'assets/images/login.json',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Align(
-                    child: Text(
-                      AppLocalizations.of(context)!.login,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorLight,
-                        fontFamily: 'RobotoB',
-                        fontSize: 36,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 50),
+                        height: MediaQuery.of(context).size.height * 0.35,
+                        child: LottieBuilder.asset(
+                          'assets/images/login.json',
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    alignment: AppLocalizations.of(context)!.login == 'Login'
-                        ? Alignment.topLeft
-                        : Alignment.topRight,
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 50),
-                    height: 250,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextFormField(
-                          controller: _emailcontroller,
-                          decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context)!.emailusername,
-                            border: boredruser,
-                            enabledBorder: boredruser,
-                            focusedBorder: boredruser,
+                      Align(
+                        child: Text(
+                          AppLocalizations.of(context)!.login,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorLight,
+                            fontFamily: 'RobotoB',
+                            fontSize: 36,
                           ),
                         ),
-                        TextFormField(
-                          controller: _passwordcontroller,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.password,
-                            border: boredruser,
-                            enabledBorder: boredruser,
-                            focusedBorder: boredruser,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            AppLocalizations.of(context)!.forgotpassword,
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColorLight,
-                              fontFamily: 'RobotoM',
-                              fontSize: 16,
+                        alignment:
+                            AppLocalizations.of(context)!.login == 'Login'
+                                ? Alignment.topLeft
+                                : Alignment.topRight,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 50),
+                        height: 250,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextFormField(
+                              controller: _emailcontroller,
+                              decoration: InputDecoration(
+                                hintText:
+                                    AppLocalizations.of(context)!.emailusername,
+                                border: boredruser,
+                                enabledBorder: boredruser,
+                                focusedBorder: boredruser,
+                              ),
                             ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            logIn(_emailcontroller.text,
-                                _passwordcontroller.text);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            height: 55,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColorLight,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .primaryColorLight
-                                        .withOpacity(0.3),
-                                    blurRadius: 5,
-                                    offset: Offset(0, 3),
-                                  )
-                                ]),
-                            child: Center(
+                            for (var _error in error?['errors']?['email'] ?? [])
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  _error,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            TextFormField(
+                              controller: _passwordcontroller,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText:
+                                    AppLocalizations.of(context)!.password,
+                                border: boredruser,
+                                enabledBorder: boredruser,
+                                focusedBorder: boredruser,
+                              ),
+                            ),
+                            for (var _error
+                                in error?['errors']?['password'] ?? [])
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  _error,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            Align(
+                              alignment: Alignment.centerRight,
                               child: Text(
-                                AppLocalizations.of(context)!.login,
+                                AppLocalizations.of(context)!.forgotpassword,
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  fontFamily: 'RobotoB',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: 'RobotoM',
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
+                            InkWell(
+                              onTap: () {
+                                if (formkey.currentState!.validate()) {
+                                  logIn(_emailcontroller.text,
+                                      _passwordcontroller.text);
+                                }
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                height: 55,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColorLight,
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context)
+                                            .primaryColorLight
+                                            .withOpacity(0.3),
+                                        blurRadius: 5,
+                                        offset: Offset(0, 3),
+                                      )
+                                    ]),
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context)!.login,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      fontFamily: 'RobotoB',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (error?['message'] ==
+                          'The provided credentials are incorrect.')
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            error?['message'],
+                            style: TextStyle(color: Colors.red),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(AppLocalizations.of(context)!.newtologistics),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (_) => SignUp(),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(AppLocalizations.of(context)!.newtologistics),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => SignUp(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.register,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: 'RobotoB',
+                                ),
                               ),
-                            );
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.register,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).primaryColorLight,
-                              fontFamily: 'RobotoB',
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              )),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              })),
             ),
     );
   }

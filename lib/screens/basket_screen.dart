@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items_web.dart';
@@ -93,7 +93,7 @@ class BasketScreen extends StatelessWidget {
                         mainAxisSpacing: 10,
                       ),
                       itemBuilder: (context, i) {
-                        final product = Provider.of<ItemProvider>(context)
+                        final product = Provider.of<ItemProviderORG>(context)
                             .items
                             .where((element) => element.id == basket[i].idItem)
                             .toList();
@@ -111,7 +111,7 @@ class BasketScreen extends StatelessWidget {
                   itemCount: basket.length,
                   shrinkWrap: true,
                   itemBuilder: (context, i) {
-                    final product = Provider.of<ItemProvider>(context)
+                    final product = Provider.of<ItemProviderORG>(context)
                         .items
                         .where((element) => element.id == basket[i].idItem)
                         .toList();

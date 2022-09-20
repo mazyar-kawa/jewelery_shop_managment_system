@@ -13,6 +13,8 @@ class MobileScreenLayout extends StatefulWidget {
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
-    return SignIn();
+    return LoadingPage(
+      islogin: false,
+    );
   }
 }
