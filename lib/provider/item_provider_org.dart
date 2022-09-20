@@ -11,34 +11,35 @@ class ItemProviderORG with ChangeNotifier {
   List<SingleItem> get items => [..._items];
 
   Future<void> getItems(int country_id) async {
-    print(country_id);
+    final url = 'http://192.168.1.32:8000/api/country_items/$country_id?page=1';
     try {
-      print(base + 'country_items/$country_id?page=1');
-      final response =
-          await http.get(Uri.parse(base + 'country_items/$country_id?page=1'));
-      print(response.statusCode);
+      final response = await http.get(Uri.parse(url));
       switch (response.statusCode) {
         case 200:
-          final data = await Items.fromJson(json.decode(response.body));
-          List<SingleItem> temporaryList = [];
-          for (int i = 0; i < data.items!.data!.length; i++) {
-            temporaryList.add(SingleItem(
-              id: data.items!.data![i].id,
-              name: data.items!.data![i].name,
-              img: data.items!.data![i].img,
-              price: data.items!.data![i].price,
-              size: data.items!.data![i].size,
-              profit: data.items!.data![i].profit,
-              categoryId: data.items!.data![i].categoryId,
-              companyId: data.items!.data![i].companyId,
-              countryId: data.items!.data![i].countryId,
-              description: data.items!.data![i].description,
-              quantity: data.items!.data![i].quantity,
-            ));
-          }
-          _items = temporaryList;
-          print(json.decode(response.body));
+          final data = await json.decode(response.body) as Map<String, dynamic>;
+          final List<dynamic> extradata = data['items']['data'];
+          print(extradata);
+          final List<SingleItem> temporaryList = [];
 
+          extradata.forEach((element) {
+            temporaryList.add(SingleItem(
+              id: element['id'],
+              name: element['name'],
+              img: element['img'],
+              price: element['price'],
+              size: element['size'],
+              profit: element['profit'],
+              categoryId: element['category_id'],
+              companyId: element['company_id'],
+              countryId: element['country_id'],
+              description: element['description'],
+              quantity: element['quantity'],
+            ));
+          });
+          _items = temporaryList;
+          break;
+        default:
+          print(response.body);
           notifyListeners();
       }
     } catch (e) {
