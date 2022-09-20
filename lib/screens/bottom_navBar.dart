@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/basket_screen.dart';
@@ -31,27 +32,24 @@ class _LoadingPageState extends State<LoadingPage> {
   Widget currentPage = HomeScreen(islogin: false);
 
   adduser() async {
-    RefreshUser refreshUser = Provider.of<RefreshUser>(context, listen: false);
-    await refreshUser.refreshuser();
-    checkUser();
-  }
-
-  checkUser() async {
     String token = await Auth().getToken();
     if (token == '') {
       widget.islogin = false;
     } else {
+      RefreshUser refreshUser =
+          Provider.of<RefreshUser>(context, listen: false);
+      await refreshUser.refreshuser();
       ApiProvider response = await Auth().getUserDetials() as ApiProvider;
       if (response.data != null) {
         widget.islogin = true;
         currentPage = HomeScreen(islogin: widget.islogin);
       }
     }
-    setState(() {});
   }
 
   @override
   void initState() {
+    // Provider.of<ItemProviderORG>(context, listen: false).getItems(1);
     adduser();
     Future.delayed(
       Duration(seconds: 3),
@@ -62,12 +60,6 @@ class _LoadingPageState extends State<LoadingPage> {
       },
     );
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() async {
-    await Provider.of<CountriesProvider>(context).getCountries();
-    super.didChangeDependencies();
   }
 
   @override

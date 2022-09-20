@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +54,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Items>(context);
+    final product = Provider.of<SingleItem>(context);
     final basket = Provider.of<BasketItemProvider>(context);
     return AnimatedBuilder(
       animation: widget._pageController,
@@ -72,13 +71,13 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
         child: Stack(
           children: [
             InkWell(
-              onDoubleTap: () {
-                product.favorite();
-                if (product.isFavorite && twitter_favorite == false) {
-                  twitter_favorite = true;
-                  controller.forward();
-                }
-              },
+              // onDoubleTap: () {
+              //   product.favorite();
+              //   if (product.isFavorite && twitter_favorite == false) {
+              //     twitter_favorite = true;
+              //     controller.forward();
+              //   }
+              // },
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                 decoration: BoxDecoration(
@@ -109,38 +108,38 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                             right: 10,
                             child: Container(
                               alignment: Alignment.topRight,
-                              child: Consumer<Items>(
-                                  builder: (context, products, _) {
-                                return InkWell(
-                                  onTap: () {
-                                    products.favorite();
-                                    if (products.isFavorite &&
-                                        twitter_favorite == false) {
-                                      twitter_favorite = true;
-                                      controller.forward();
-                                    } else if (products.isFavorite == false &&
-                                        twitter_favorite == true) {
-                                      twitter_favorite = false;
-                                    }
-                                  },
-                                  child: products.isFavorite
-                                      ? SvgPicture.asset(
-                                          'assets/images/heart-solid.svg',
-                                          width: 20,
-                                          color: Colors.red,
-                                        )
-                                      : SvgPicture.asset(
-                                          'assets/images/heart-regular.svg',
-                                          width: 18,
-                                        ),
-                                );
-                              }),
+                              // child: Consumer<Items>(
+                              //     builder: (context, products, _) {
+                              //   return InkWell(
+                              //     onTap: () {
+                              //       products.favorite();
+                              //       if (products.isFavorite &&
+                              //           twitter_favorite == false) {
+                              //         twitter_favorite = true;
+                              //         controller.forward();
+                              //       } else if (products.isFavorite == false &&
+                              //           twitter_favorite == true) {
+                              //         twitter_favorite = false;
+                              //       }
+                              //     },
+                              //     child: products.isFavorite
+                              //         ? SvgPicture.asset(
+                              //             'assets/images/heart-solid.svg',
+                              //             width: 20,
+                              //             color: Colors.red,
+                              //           )
+                              //         : SvgPicture.asset(
+                              //             'assets/images/heart-regular.svg',
+                              //             width: 18,
+                              //           ),
+                              //   );
+                              // }),
                             ),
                           ),
                           Center(
                             child: Container(
                               child: Image(
-                                image: AssetImage(product.image),
+                                image: NetworkImage(product.img!),
                                 fit: BoxFit.cover,
                                 width: 120,
                               ),
@@ -169,7 +168,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                             children: [
                               Container(
                                 child: Text(
-                                  product.name,
+                                  product.name!,
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColorLight,
                                     fontFamily: 'RobotoB',
@@ -177,18 +176,18 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                                   ),
                                 ),
                               ),
-                              Container(
-                                child: Text(
-                                  product.puring,
-                                  style: TextStyle(
-                                    color: product.puring == 'Gold'
-                                        ? Color(0xffFFD700)
-                                        : Color(0xffC0C0C0),
-                                    fontFamily: 'RobotoM',
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
+                              // Container(
+                              //   child: Text(
+                              //     product.puring,
+                              //     style: TextStyle(
+                              //       color: product.puring == 'Gold'
+                              //           ? Color(0xffFFD700)
+                              //           : Color(0xffC0C0C0),
+                              //       fontFamily: 'RobotoM',
+                              //       fontSize: 18,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           Row(
@@ -230,7 +229,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                                     onTap: () {
                                       basket.addToBasket(
                                           DateTime.now().toString(),
-                                          product.id,
+                                          product.id!,
                                           1);
                                     },
                                     child: Text(

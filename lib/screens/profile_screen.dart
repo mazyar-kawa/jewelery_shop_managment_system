@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/favorite_screen.dart';
@@ -23,6 +25,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    late AuthUser user;
+    if (widget.islogin) {
+      user = Provider.of<RefreshUser>(context).currentUser;
+    }
     return Scaffold(
         body: widget.islogin
             ? ListView(
@@ -36,8 +42,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Container(
                           child: CircleAvatar(
                             radius: 40,
-                            backgroundImage:
-                                AssetImage('assets/images/profile.jpg'),
+                            backgroundImage: user.user!.profilePicture != null
+                                ? NetworkImage(user.user!.profilePicture)
+                                : NetworkImage(
+                                    'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
                           ),
                         ),
                         Container(
@@ -46,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Mazyar',
+                                '${user.user!.name}',
                                 style: TextStyle(
                                   color: Theme.of(context).primaryColorLight,
                                   fontFamily: 'RobotoB',
@@ -54,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               Text(
-                                '@ MR.Mazyar',
+                                '@ ${user.user!.username}',
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontFamily: 'RobotoM',
@@ -109,11 +117,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 builder: (_) => HistoryScreen()));
                           },
                         ),
-                        ProfileCards(
-                          title: AppLocalizations.of(context)!.admin,
-                          image: 'assets/images/user-group-solid.svg',
-                          onPressed: () {},
-                        ),
+                        user.user!.roleId == 1
+                            ? ProfileCards(
+                                title: AppLocalizations.of(context)!.admin,
+                                image: 'assets/images/user-group-solid.svg',
+                                onPressed: () {},
+                              )
+                            : Container(),
                         ProfileCards(
                           title: AppLocalizations.of(context)!.logOut,
                           image: 'assets/images/logout.svg',

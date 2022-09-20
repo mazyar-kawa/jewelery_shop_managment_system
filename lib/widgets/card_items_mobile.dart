@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

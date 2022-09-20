@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items_web.dart';
@@ -62,6 +60,7 @@ class _ItemsScreenState extends State<ItemsScreen>
   @override
   Widget build(BuildContext context) {
     final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
+    final provider = Provider.of<ItemProviderORG>(context, listen: true);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
@@ -418,162 +417,179 @@ class _ItemsScreenState extends State<ItemsScreen>
                 ),
               ],
             ),
-            MediaQuery.of(context).size.width > websize
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        width: MediaQuery.of(context).size.width * 0.18,
-                        height: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorLight,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).shadowColor,
-                                blurRadius: 2,
-                                spreadRadius: 2,
-                              )
-                            ]),
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text('Price:',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    fontSize: 16,
-                                    fontFamily: 'RobotoB',
-                                  )),
-                            ),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: 10,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 20),
-                                    child: Row(
-                                      children: [
-                                        Checkbox(
-                                            value: false,
-                                            onChanged: (value) {}),
-                                        Text('10-100\$',
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
-                                            ))
-                                      ],
-                                    ),
-                                  );
-                                }),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text('Categories:',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    fontSize: 16,
-                                    fontFamily: 'RobotoB',
-                                  )),
-                            ),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 20),
-                                    child: Row(
-                                      children: [
-                                        Checkbox(
-                                            value: false,
-                                            onChanged: (value) {}),
-                                        Text('All',
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
-                                            ))
-                                      ],
-                                    ),
-                                  );
-                                }),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text('Size:',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    fontSize: 16,
-                                    fontFamily: 'RobotoB',
-                                  )),
-                            ),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 20),
-                                    child: Row(
-                                      children: [
-                                        Checkbox(
-                                            value: false,
-                                            onChanged: (value) {}),
-                                        Text('10',
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
-                                            ))
-                                      ],
-                                    ),
-                                  );
-                                }),
-                          ],
-                        ),
-                      ),
-                      // Container(
-                      //   width: MediaQuery.of(context).size.width * 0.82,
-                      //   height: MediaQuery.of(context).size.height,
-                      //   child: GridView.builder(
+//  MediaQuery.of(context).size.width > websize
+//                 ? Row(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Container(
+//                         padding: EdgeInsets.symmetric(vertical: 5),
+//                         width: MediaQuery.of(context).size.width * 0.18,
+//                         height: MediaQuery.of(context).size.height,
+//                         decoration: BoxDecoration(
+//                             color: Theme.of(context).primaryColorLight,
+//                             borderRadius: BorderRadius.only(
+//                               topRight: Radius.circular(15),
+//                               bottomRight: Radius.circular(15),
+//                             ),
+//                             boxShadow: [
+//                               BoxShadow(
+//                                 color: Theme.of(context).shadowColor,
+//                                 blurRadius: 2,
+//                                 spreadRadius: 2,
+//                               )
+//                             ]),
+//                         child: ListView(
+//                           shrinkWrap: true,
+//                           children: [
+//                             Container(
+//                               margin: EdgeInsets.symmetric(horizontal: 10),
+//                               child: Text('Price:',
+//                                   style: TextStyle(
+//                                     color: Theme.of(context)
+//                                         .scaffoldBackgroundColor,
+//                                     fontSize: 16,
+//                                     fontFamily: 'RobotoB',
+//                                   )),
+//                             ),
+//                             ListView.builder(
+//                                 shrinkWrap: true,
+//                                 itemCount: 10,
+//                                 itemBuilder: (context, index) {
+//                                   return Container(
+//                                     margin:
+//                                         EdgeInsets.symmetric(horizontal: 20),
+//                                     child: Row(
+//                                       children: [
+//                                         Checkbox(
+//                                             value: false,
+//                                             onChanged: (value) {}),
+//                                         Text('10-100\$',
+//                                             style: TextStyle(
+//                                               color: Theme.of(context)
+//                                                   .scaffoldBackgroundColor,
+//                                             ))
+//                                       ],
+//                                     ),
+//                                   );
+//                                 }),
+//                             Container(
+//                               margin: EdgeInsets.symmetric(horizontal: 10),
+//                               child: Text('Categories:',
+//                                   style: TextStyle(
+//                                     color: Theme.of(context)
+//                                         .scaffoldBackgroundColor,
+//                                     fontSize: 16,
+//                                     fontFamily: 'RobotoB',
+//                                   )),
+//                             ),
+//                             ListView.builder(
+//                                 shrinkWrap: true,
+//                                 itemCount: 5,
+//                                 itemBuilder: (context, index) {
+//                                   return Container(
+//                                     margin:
+//                                         EdgeInsets.symmetric(horizontal: 20),
+//                                     child: Row(
+//                                       children: [
+//                                         Checkbox(
+//                                             value: false,
+//                                             onChanged: (value) {}),
+//                                         Text('All',
+//                                             style: TextStyle(
+//                                               color: Theme.of(context)
+//                                                   .scaffoldBackgroundColor,
+//                                             ))
+//                                       ],
+//                                     ),
+//                                   );
+//                                 }),
+//                             Container(
+//                               margin: EdgeInsets.symmetric(horizontal: 10),
+//                               child: Text('Size:',
+//                                   style: TextStyle(
+//                                     color: Theme.of(context)
+//                                         .scaffoldBackgroundColor,
+//                                     fontSize: 16,
+//                                     fontFamily: 'RobotoB',
+//                                   )),
+//                             ),
+//                             ListView.builder(
+//                                 shrinkWrap: true,
+//                                 itemCount: 5,
+//                                 itemBuilder: (context, index) {
+//                                   return Container(
+//                                     margin:
+//                                         EdgeInsets.symmetric(horizontal: 20),
+//                                     child: Row(
+//                                       children: [
+//                                         Checkbox(
+//                                             value: false,
+//                                             onChanged: (value) {}),
+//                                         Text('10',
+//                                             style: TextStyle(
+//                                               color: Theme.of(context)
+//                                                   .scaffoldBackgroundColor,
+//                                             ))
+//                                       ],
+//                                     ),
+//                                   );
+//                                 }),
+//                           ],
+//                         ),
+//                       ),
+//                       Container(
+//                         width: MediaQuery.of(context).size.width * 0.82,
+//                         height: MediaQuery.of(context).size.height,
+//                         child: FutureBuilder(
+//                             future: provider.getItems(CategoryId),
+//                             builder: (context, snapshot) {
+//                               if (snapshot.connectionState ==
+//                                   ConnectionState.done) {
+//                                 final product = provider.items;
+//                                 return GridView.builder(
+//                                     shrinkWrap: true,
+//                                     physics: BouncingScrollPhysics(),
+//                                     itemCount: product.length,
+//                                     gridDelegate:
+//                                         SliverGridDelegateWithFixedCrossAxisCount(
+//                                       crossAxisCount: 3,
+//                                       childAspectRatio: 0.9,
+//                                       crossAxisSpacing: 6,
+//                                       mainAxisSpacing: 10,
+//                                     ),
+//                                     itemBuilder: (context, i) {
+//                                       for (int j = 0; i < product.length; i++) {
+//                                         return ChangeNotifierProvider.value(
+//                                           value: product[i],
+//                                           child: CardItemsWeb(index: i),
+//                                         );
+//                                       }
+//                                       return Container();
+//                                     });
+//                               } else if (snapshot.connectionState ==
+//                                   ConnectionState.waiting) {
+//                                 return Center(
+//                                   child: Lottie.asset(
+//                                       'assets/images/loader_daimond.json',
+//                                       width: 200),
+//                                 );
+//                               }
+//                               return Center(
+//                                 child: CircularProgressIndicator(),
+//                               );
+//                             }),
+//                       ),
+//                     ],
+//                   )
+//                 :
 
-                      //       shrinkWrap: true,
-                      //       physics: BouncingScrollPhysics(),
-                      //       itemCount: product.length,
-                      //       gridDelegate:
-                      //           SliverGridDelegateWithFixedCrossAxisCount(
-                      //         crossAxisCount: 3,
-                      //         childAspectRatio: 0.9,
-                      //         crossAxisSpacing: 6,
-                      //         mainAxisSpacing: 10,
-                      //       ),
-                      //       itemBuilder: (context, i) {
-                      //         for (int j = 0; i < product.length; i++) {
-                      //           return ChangeNotifierProvider.value(
-                      //             value: product[i],
-                      //             child: CardItemsWeb(index: i),
-                      //           );
-                      //         }
-                      //         return Container();
-                      //       }),
-                      // ),
-                    ],
-                  )
-                : FutureBuilder(
-                    future: Provider.of<ItemProviderORG>(context, listen: true)
-                        .getItems(CategoryId),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        final product = Provider.of<ItemProviderORG>(
-                          context,
-                        ).items;
-                        return ListView.builder(
+            FutureBuilder(
+                future: provider.getItems(CategoryId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final product = provider.items;
+                    return product.length != 0
+                        ? ListView.builder(
                             itemCount: product.length,
                             physics: BouncingScrollPhysics(),
                             shrinkWrap: true,
@@ -585,13 +601,49 @@ class _ItemsScreenState extends State<ItemsScreen>
                                 );
                               }
                               return Container();
-                            });
-                      } else {
-                        return Container(
-                          child: Text('error'),
-                        );
-                      }
-                    })
+                            })
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                child: Center(
+                                    child: Text(
+                                  AppLocalizations.of(context)!
+                                      .thisCategoryisempty,
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontFamily: 'RobotoB',
+                                    color: Theme.of(context).primaryColorLight,
+                                  ),
+                                )),
+                              ),
+                              Container(
+                                child: Center(
+                                  child: LottieBuilder.asset(
+                                    'assets/images/empty-box.json',
+                                    width: MediaQuery.of(context).size.width >
+                                            websize
+                                        ? 650
+                                        : 350,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Container(
+                      child: Center(
+                        child: Lottie.asset('assets/images/loader_daimond.json',
+                            width: 200),
+                      ),
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                })
           ],
         ),
       ),
@@ -631,30 +683,3 @@ class _ItemsScreenState extends State<ItemsScreen>
     );
   }
 }
-// Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Container(
-//                   child: Center(
-//                       child: Text(
-//                     AppLocalizations.of(context)!.thisCategoryisempty,
-//                     style: TextStyle(
-//                       fontSize: 24,
-//                       fontFamily: 'RobotoB',
-//                       color: Theme.of(context).primaryColorLight,
-//                     ),
-//                   )),
-//                 ),
-//                 Container(
-//                   child: Center(
-//                     child: LottieBuilder.asset(
-//                       'assets/images/empty-box.json',
-//                       width: MediaQuery.of(context).size.width > websize
-//                           ? 650
-//                           : 350,
-//                       fit: BoxFit.cover,
-//                     ),
-//                   ),
-//                 )
-//               ],
-//             )

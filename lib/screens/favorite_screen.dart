@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_web.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -12,7 +6,7 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<ItemProvider>(context).favorite;
+    // final product = Provider.of<ItemProvider>(context).favorite;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
@@ -41,61 +35,61 @@ class FavoriteScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: product.length == 0
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: Center(
-                      child: Text(
-                    AppLocalizations.of(context)!.yourFavouriteisempty,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: 'RobotoB',
-                      color: Theme.of(context).primaryColorLight,
-                    ),
-                  )),
-                ),
-                Container(
-                  child: Center(
-                    child: LottieBuilder.asset(
-                      'assets/images/empty-box.json',
-                      width: MediaQuery.of(context).size.width > websize
-                          ? 650
-                          : 350,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
-              ],
-            )
-          : MediaQuery.of(context).size.width > websize
-              ? Container(
-                  width: MediaQuery.of(context).size.width * 0.82,
-                  height: MediaQuery.of(context).size.height,
-                  child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      itemCount: product.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 0.9,
-                        crossAxisSpacing: 6,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemBuilder: (context, i) => ChangeNotifierProvider.value(
-                            value: product[i],
-                            child: CardItemsWeb(index: i),
-                          )),
-                )
-              : ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: product.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, i) => ChangeNotifierProvider.value(
-                        value: product[i],
-                        child: CardItemsMobile(index: i),
-                      )),
+      // body: product.length == 0
+      //     ? Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           Container(
+      //             child: Center(
+      //                 child: Text(
+      //               AppLocalizations.of(context)!.yourFavouriteisempty,
+      //               style: TextStyle(
+      //                 fontSize: 24,
+      //                 fontFamily: 'RobotoB',
+      //                 color: Theme.of(context).primaryColorLight,
+      //               ),
+      //             )),
+      //           ),
+      //           Container(
+      //             child: Center(
+      //               child: LottieBuilder.asset(
+      //                 'assets/images/empty-box.json',
+      //                 width: MediaQuery.of(context).size.width > websize
+      //                     ? 650
+      //                     : 350,
+      //                 fit: BoxFit.cover,
+      //               ),
+      //             ),
+      //           )
+      //         ],
+      //       )
+      //     : MediaQuery.of(context).size.width > websize
+      //         ? Container(
+      //             width: MediaQuery.of(context).size.width * 0.82,
+      //             height: MediaQuery.of(context).size.height,
+      //             child: GridView.builder(
+      //                 shrinkWrap: true,
+      //                 physics: BouncingScrollPhysics(),
+      //                 itemCount: product.length,
+      //                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      //                   crossAxisCount: 3,
+      //                   childAspectRatio: 0.9,
+      //                   crossAxisSpacing: 6,
+      //                   mainAxisSpacing: 10,
+      //                 ),
+      //                 itemBuilder: (context, i) => ChangeNotifierProvider.value(
+      //                       value: product[i],
+      //                       child: CardItemsWeb(index: i),
+      //                     )),
+      //           )
+      //         : ListView.builder(
+      //             physics: BouncingScrollPhysics(),
+      //             itemCount: product.length,
+      //             shrinkWrap: true,
+      //             itemBuilder: (context, i) => ChangeNotifierProvider.value(
+      //                   value: product[i],
+      //                   child: CardItemsMobile(index: i),
+      //                 )),
     );
   }
 }

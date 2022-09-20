@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kurdish_localization/flutter_kurdish_localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
@@ -60,11 +59,11 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => _themeChangeProvider),
         ChangeNotifierProvider(create: (_) => languageProvider),
-        ChangeNotifierProvider.value(value: ItemProvider()),
         ChangeNotifierProvider.value(value: BasketItemProvider()),
         ChangeNotifierProvider.value(value: RefreshUser()),
         ChangeNotifierProvider.value(value: CountriesProvider()),
         ChangeNotifierProvider.value(value: ItemProviderORG()),
+        ChangeNotifierProvider.value(value: SingleItem()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {

@@ -16,21 +16,21 @@ class CountriesProvider with ChangeNotifier {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       });
-      switch (response.statusCode) {
-        case 200:
-          final data = await Countries.fromJson(json.decode(response.body));
-          List<CountriesModel> temporaryList = [];
 
-          for (int i = 0; i < data.countries.length; i++) {
-            temporaryList.add(CountriesModel(
-              id: data.countries[i].id,
-              namecountries: data.countries[i].namecountries,
-              picturecountries: data.countries[i].picturecountries,
-            ));
-          }
-          _countries = temporaryList;
-          notifyListeners();
-      }
+      final data = await json.decode(response.body) as Map<String, dynamic>;
+
+      final List<dynamic> extradata = data['countries'];
+
+      final List<CountriesModel> temporaryList = [];
+
+      extradata.forEach((element) {
+        temporaryList.add(CountriesModel(
+            id: element['id'],
+            namecountries: element['name'],
+            picturecountries: element['img']));
+      });
+      _countries = temporaryList;
+      notifyListeners();
     } catch (e) {}
   }
 }

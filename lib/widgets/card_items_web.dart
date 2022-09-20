@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,7 +21,7 @@ class CardItemsWeb extends StatefulWidget {
 class _CardItemsWebState extends State<CardItemsWeb> {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Items>(context, listen: false);
+    final product = Provider.of<SingleItem>(context, listen: false);
     final basket = Provider.of<BasketItemProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15),
@@ -49,29 +49,29 @@ class _CardItemsWebState extends State<CardItemsWeb> {
                   right: 10,
                   child: Container(
                     alignment: Alignment.topRight,
-                    child: Consumer<Items>(builder: (context, products, _) {
-                      return InkWell(
-                        onTap: () {
-                          products.favorite();
-                        },
-                        child: products.isFavorite
-                            ? SvgPicture.asset(
-                                'assets/images/heart-solid.svg',
-                                width: 25,
-                                color: Colors.red,
-                              )
-                            : SvgPicture.asset(
-                                'assets/images/heart-regular.svg',
-                                width: 25,
-                              ),
-                      );
-                    }),
+                    // child: Consumer<Items>(builder: (context, products, _) {
+                    //   return InkWell(
+                    //     onTap: () {
+                    //       products.favorite();
+                    //     },
+                    //     child: products.isFavorite
+                    //         ? SvgPicture.asset(
+                    //             'assets/images/heart-solid.svg',
+                    //             width: 25,
+                    //             color: Colors.red,
+                    //           )
+                    //         : SvgPicture.asset(
+                    //             'assets/images/heart-regular.svg',
+                    //             width: 25,
+                    //           ),
+                    //   );
+                    // }),
                   ),
                 ),
                 Center(
                   child: Container(
                     child: Image(
-                      image: AssetImage(product.image),
+                      image: AssetImage(product.img!),
                       fit: BoxFit.cover,
                       width: MediaQuery.of(context).size.width < 800 ? 80 : 180,
                     ),
@@ -109,7 +109,7 @@ class _CardItemsWebState extends State<CardItemsWeb> {
                   children: [
                     Container(
                       child: Text(
-                        product.name,
+                        product.name!,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontFamily: 'RobotoB',
@@ -118,19 +118,19 @@ class _CardItemsWebState extends State<CardItemsWeb> {
                         ),
                       ),
                     ),
-                    Container(
-                      child: Text(
-                        product.puring,
-                        style: TextStyle(
-                          color: product.puring == 'Gold'
-                              ? Color(0xffFFD700)
-                              : Color(0xffC0C0C0),
-                          fontFamily: 'RobotoM',
-                          fontSize:
-                              MediaQuery.of(context).size.width < 800 ? 15 : 20,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   child: Text(
+                    //     product.puring,
+                    //     style: TextStyle(
+                    //       color: product.puring == 'Gold'
+                    //           ? Color(0xffFFD700)
+                    //           : Color(0xffC0C0C0),
+                    //       fontFamily: 'RobotoM',
+                    //       fontSize:
+                    //           MediaQuery.of(context).size.width < 800 ? 15 : 20,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 Row(
@@ -173,7 +173,7 @@ class _CardItemsWebState extends State<CardItemsWeb> {
                       child: InkWell(
                         onTap: () {
                           basket.addToBasket(
-                              DateTime.now().toString(), product.id, 1);
+                              DateTime.now().toString(), product.id!, 1);
                         },
                         child: Text(
                           '+',

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -21,7 +20,7 @@ class HomeCardCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Items>(context, listen: false);
+    final product = Provider.of<SingleItem>(context);
     final basket = Provider.of<BasketItemProvider>(context);
     return AnimatedBuilder(
       animation: _pageController,
@@ -54,26 +53,26 @@ class HomeCardCategory extends StatelessWidget {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.circular(10000),
                   ),
-                  child: Consumer<Items>(builder: (context, product, _) {
-                    return Center(
-                      child: InkWell(
-                        onTap: () {
-                          product.favorite();
-                        },
-                        child: product.isFavorite
-                            ? SvgPicture.asset(
-                                'assets/images/heart-solid.svg',
-                                width: 20,
-                                color: Colors.red,
-                              )
-                            : SvgPicture.asset(
-                                'assets/images/heart-regular.svg',
-                                width: 20,
-                                color: Colors.black,
-                              ),
-                      ),
-                    );
-                  }),
+                  // child: Consumer<Items>(builder: (context, product, _) {
+                  //   return Center(
+                  //     child: InkWell(
+                  //       onTap: () {
+                  //         product.favorite();
+                  //       },
+                  //       child: product.isFavorite
+                  //           ? SvgPicture.asset(
+                  //               'assets/images/heart-solid.svg',
+                  //               width: 20,
+                  //               color: Colors.red,
+                  //             )
+                  //           : SvgPicture.asset(
+                  //               'assets/images/heart-regular.svg',
+                  //               width: 20,
+                  //               color: Colors.black,
+                  //             ),
+                  //     ),
+                  //   );
+                  // }),
                 ),
                 Padding(
                   padding:
@@ -103,7 +102,7 @@ class HomeCardCategory extends StatelessWidget {
                       Container(
                         child: Center(
                           child: Image(
-                            image: AssetImage(product.image),
+                            image: NetworkImage(product.img!),
                             width: 110,
                           ),
                         ),
@@ -113,95 +112,98 @@ class HomeCardCategory extends StatelessWidget {
                 )
               ],
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      product.name,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorLight,
-                        fontFamily: 'RobotoB',
-                        fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      '${AppLocalizations.of(context)!.size}: ${product.size}',
-                      style: TextStyle(
-                        color: Colors.black.withOpacity(0.5),
-                        fontFamily: 'RobotoM',
-                        fontSize: 14,
-                      ),
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(
-                      product.nameCategory,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorLight,
-                        fontFamily: 'RobotoB',
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      product.puring,
-                      style: TextStyle(
-                        color: product.puring == 'Gold'
-                            ? Color(0xffFFD700)
-                            : Color(0xffC0C0C0),
-                        fontFamily: 'RobotoM',
-                        fontSize: 20,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      child: Text(
-                        '${product.price}\$',
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        product.name!,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontFamily: 'RobotoB',
                           fontSize: 20,
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      height: 31,
-                      width: 95,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColorLight,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          basket.addToBasket(
-                              DateTime.now().toString(), product.id, 1);
-                        },
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.of(context)!.addtobag,
-                            style: TextStyle(
-                              fontFamily: 'RobotoM',
-                              fontSize: 13,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
+                      Text(
+                        '${AppLocalizations.of(context)!.size}: ${product.size}',
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(0.5),
+                          fontFamily: 'RobotoM',
+                          fontSize: 14,
+                        ),
+                      )
+                    ],
+                  ),
+                  // Column(
+                  //   children: [
+                  //     Text(
+                  //       product.nameCategory,
+                  //       style: TextStyle(
+                  //         color: Theme.of(context).primaryColorLight,
+                  //         fontFamily: 'RobotoB',
+                  //         fontSize: 16,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       product.puring,
+                  //       style: TextStyle(
+                  //         color: product.puring == 'Gold'
+                  //             ? Color(0xffFFD700)
+                  //             : Color(0xffC0C0C0),
+                  //         fontFamily: 'RobotoM',
+                  //         fontSize: 20,
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
+                  Row(
+                    children: [
+                      Container(
+                        child: Text(
+                          '${product.price}\$',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorLight,
+                            fontFamily: 'RobotoB',
+                            fontSize: 20,
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ],
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        height: 31,
+                        width: 95,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            basket.addToBasket(
+                                DateTime.now().toString(), product.id!, 1);
+                          },
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.addtobag,
+                              style: TextStyle(
+                                fontFamily: 'RobotoM',
+                                fontSize: 13,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),

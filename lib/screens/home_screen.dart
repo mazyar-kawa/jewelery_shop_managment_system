@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_web.dart';
@@ -49,22 +49,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _pageControllerWeb = PageController(
         initialPage: _current, viewportFraction: 0.5, keepPage: true);
-    // adduser();
+
     super.initState();
   }
 
-  // adduser() async {
-  //   String token = await Auth().getToken();
-  //   if (token != '') {
-  //     RefreshUser refresh =
-  //         await Provider.of<RefreshUser>(context, listen: false);
-  //     await refresh.refreshuser();
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<ItemProvider>(context).item;
+    // Provider.of<ItemProviderORG>(context, listen: false).getItems(1);
+    final products = Provider.of<ItemProviderORG>(context).items;
     late AuthUser user;
     if (widget.islogin) {
       user = Provider.of<RefreshUser>(context).currentUser;
@@ -113,10 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       widget.islogin
                           ? Container(
                               child: CircleAvatar(
-                                radius: 25,
-                                backgroundImage:
-                                    AssetImage('assets/images/profile.jpg'),
-                              ),
+                                  radius: 25,
+                                  backgroundImage: user.user!.profilePicture !=
+                                          null
+                                      ? NetworkImage(user.user!.profilePicture)
+                                      : NetworkImage(
+                                          'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
                             )
                           : Container()
                     ],
@@ -173,58 +167,58 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 20,
-            ),
-            height: 260,
-            child: MediaQuery.of(context).size.width > websize
-                ? PageView.builder(
-                    itemCount: products.length,
-                    onPageChanged: ((value) {
-                      setState(() {
-                        _current = value;
-                      });
-                    }),
-                    physics: BouncingScrollPhysics(),
-                    controller: _pageControllerWeb,
-                    itemBuilder: (context, index) =>
-                        ChangeNotifierProvider.value(
-                      value: products[index],
-                      child: HomeCardCategory(
-                        pageController: _pageControllerWeb,
-                        current: _current,
-                        index: index,
-                      ),
-                    ),
-                  )
-                : PageView.builder(
-                    itemCount: products.length,
-                    onPageChanged: ((value) {
-                      setState(() {
-                        _current = value;
-                      });
-                    }),
-                    physics: BouncingScrollPhysics(),
-                    controller: _pageControllerMobile,
-                    itemBuilder: (context, index) =>
-                        ChangeNotifierProvider.value(
-                      value: products[index],
-                      child: HomeCardCategory(
-                        pageController: _pageControllerMobile,
-                        current: _current,
-                        index: index,
-                      ),
-                    ),
-                  ),
-          ),
+          // Container(
+          //   padding: EdgeInsets.symmetric(
+          //     vertical: 20,
+          //   ),
+          //   height: 260,
+          //   child: MediaQuery.of(context).size.width > websize
+          //       ? PageView.builder(
+          //           itemCount: products.length,
+          //           onPageChanged: ((value) {
+          //             setState(() {
+          //               _current = value;
+          //             });
+          //           }),
+          //           physics: BouncingScrollPhysics(),
+          //           controller: _pageControllerWeb,
+          //           itemBuilder: (context, index) =>
+          //               ChangeNotifierProvider.value(
+          //             value: products[index],
+          //             child: HomeCardCategory(
+          //               pageController: _pageControllerWeb,
+          //               current: _current,
+          //               index: index,
+          //             ),
+          //           ),
+          //         )
+          //       : PageView.builder(
+          //           itemCount: products.length,
+          //           onPageChanged: ((value) {
+          //             setState(() {
+          //               _current = value;
+          //             });
+          //           }),
+          //           physics: BouncingScrollPhysics(),
+          //           controller: _pageControllerMobile,
+          //           itemBuilder: (context, index) =>
+          //               ChangeNotifierProvider.value(
+          //             value: products[index],
+          //             child: HomeCardCategory(
+          //               pageController: _pageControllerMobile,
+          //               current: _current,
+          //               index: index,
+          //             ),
+          //           ),
+          //         ),
+          // ),
 
-          HorizantleListView(title: AppLocalizations.of(context)!.neww),
+          // HorizantleListView(title: AppLocalizations.of(context)!.neww),
           // most sale
-          HorizantleListView(title: AppLocalizations.of(context)!.mostSales),
+          // HorizantleListView(title: AppLocalizations.of(context)!.mostSales),
           // most favorite
-          HorizantleListView(
-              title: AppLocalizations.of(context)!.mostFavourite),
+          // HorizantleListView(
+          //     title: AppLocalizations.of(context)!.mostFavourite),
         ],
       ),
     );
@@ -299,7 +293,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
 
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<ItemProvider>(context).item;
+    final products = Provider.of<ItemProviderORG>(context).items;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.symmetric(
