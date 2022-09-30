@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
-import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
-import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
-import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -89,11 +89,20 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
         password: password,
         passwordconfirm: passwordconfirm);
     if (response.error == null) {
-      showdialog(context);
+      saveUser(response.data as User);
     } else {
       error = response.error;
     }
     setState(() {});
+  }
+
+  void saveUser(User user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', user.token ?? '');
+    await prefs.setInt('userId', user.id ?? 0);
+    RefreshUser refresh = Provider.of<RefreshUser>(context, listen: false);
+    await refresh.refreshuser;
+    showdialog(context);
   }
 
   @override

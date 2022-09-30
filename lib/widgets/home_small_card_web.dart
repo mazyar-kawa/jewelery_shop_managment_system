@@ -144,7 +144,7 @@ class HomeSmallCardweb extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Price:',
+                              'Mount:',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontFamily: 'RobotoM',
@@ -152,7 +152,7 @@ class HomeSmallCardweb extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${product.price}\$',
+                              '${product.mount}',
                               style: TextStyle(
                                 color: Theme.of(context).primaryColorLight,
                                 fontFamily: 'RobotoB',

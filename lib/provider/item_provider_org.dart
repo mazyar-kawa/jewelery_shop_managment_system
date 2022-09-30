@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 
 class ItemProviderORG with ChangeNotifier {
@@ -10,38 +11,76 @@ class ItemProviderORG with ChangeNotifier {
 
   List<SingleItem> get items => [..._items];
 
-  Future<void> getItems(int country_id) async {
-    final url = 'http://192.168.1.32:8000/api/country_items/$country_id?page=1';
-    try {
-      final response = await http.get(Uri.parse(url));
-      switch (response.statusCode) {
-        case 200:
-          final data = await json.decode(response.body) as Map<String, dynamic>;
-          final List<dynamic> extradata = data['items']['data'];
-          print(extradata);
-          final List<SingleItem> temporaryList = [];
+  String next_url = '';
 
-          extradata.forEach((element) {
-            temporaryList.add(SingleItem(
-              id: element['id'],
-              name: element['name'],
-              img: element['img'],
-              price: element['price'],
-              size: element['size'],
-              profit: element['profit'],
-              categoryId: element['category_id'],
-              companyId: element['company_id'],
-              countryId: element['country_id'],
-              description: element['description'],
-              quantity: element['quantity'],
-            ));
-          });
-          _items = temporaryList;
-          break;
-        default:
-          print(response.body);
-          notifyListeners();
+  Future<void> getItems(int country_id) async {
+    try {
+      String token = await Auth().getToken();
+      final response = await http
+          .get(Uri.parse(base + 'country_items/$country_id'), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      final data = Items.fromJson(json.decode(response.body));
+      next_url = data.items.nextPageUrl!;
+      final List<SingleItem> temporaryList = [];
+      for (var i = 0; i < data.items.data.length; i++) {
+        temporaryList.add(SingleItem(
+          id: data.items.data[i].id,
+          name: data.items.data[i].name,
+          img: data.items.data[i].img,
+          description: data.items.data[i].description,
+          mount: data.items.data[i].mount,
+          type: data.items.data[i].type,
+          profit: data.items.data[i].profit,
+          quantity: data.items.data[i].quantity,
+          size: data.items.data[i].size,
+          categoryId: data.items.data[i].categoryId,
+          companyId: data.items.data[i].companyId,
+          countryId: data.items.data[i].countryId,
+          isFavourited: data.items.data[i].isFavourited,
+        ));
       }
+      _items = temporaryList;
+
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> refresh() async {
+    try {
+      String token = await Auth().getToken();
+      final response = await http.get(Uri.parse(next_url), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      final data = Items.fromJson(json.decode(response.body));
+      this.next_url = data.items.nextPageUrl!;
+      for (var i = 0; i < data.items.data.length; i++) {
+        _items.add(SingleItem(
+          id: data.items.data[i].id,
+          name: data.items.data[i].name,
+          img: data.items.data[i].img,
+          description: data.items.data[i].description,
+          mount: data.items.data[i].mount,
+          type: data.items.data[i].type,
+          profit: data.items.data[i].profit,
+          quantity: data.items.data[i].quantity,
+          size: data.items.data[i].size,
+          categoryId: data.items.data[i].categoryId,
+          companyId: data.items.data[i].companyId,
+          countryId: data.items.data[i].countryId,
+          isFavourited: data.items.data[i].isFavourited,
+        ));
+      }
+
+      notifyListeners();
     } catch (e) {
       print(e.toString());
     }

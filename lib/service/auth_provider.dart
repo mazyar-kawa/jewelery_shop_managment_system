@@ -117,4 +117,58 @@ class Auth {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return await prefs.remove('token');
   }
+
+  Future<ApiProvider> FavouriteItem(int itemId) async {
+    final body = {'item_id': itemId};
+    ApiProvider apiProvider = ApiProvider();
+    try {
+      String token = await getToken();
+
+      final response = await http.post(Uri.parse(base + 'favorite_item'),
+          body: jsonEncode(body),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          });
+      switch (response.statusCode) {
+        case 200:
+          apiProvider.data = json.decode(response.body);
+          break;
+        default:
+          apiProvider.error = jsonDecode(response.body);
+      }
+    } catch (e) {
+      apiProvider.error = {'message': e.toString()};
+    }
+    print(apiProvider.data);
+    return apiProvider;
+  }
+
+  Future<ApiProvider> UnFavouriteItem(int itemId) async {
+    final body = {'item_id': itemId};
+    ApiProvider apiProvider = ApiProvider();
+    try {
+      String token = await getToken();
+
+      final response = await http.post(Uri.parse(base + 'unfavorite_item'),
+          body: jsonEncode(body),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          });
+      switch (response.statusCode) {
+        case 200:
+          apiProvider.data = json.decode(response.body);
+          break;
+        default:
+          apiProvider.error = jsonDecode(response.body);
+      }
+    } catch (e) {
+      apiProvider.error = {'message': e.toString()};
+    }
+    print(apiProvider.data);
+    return apiProvider;
+  }
 }
