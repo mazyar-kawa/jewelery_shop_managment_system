@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
@@ -16,6 +17,7 @@ import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: CountriesProvider()),
         ChangeNotifierProvider.value(value: ItemProviderORG()),
         ChangeNotifierProvider.value(value: SingleItem()),
+        ChangeNotifierProvider.value(value: HomeItemsProvider()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {
@@ -71,6 +74,7 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             localizationsDelegates: const [
               KurdishMaterialLocalizations.delegate,
+              RefreshLocalizations.delegate,
               KurdishWidgetLocalizations.delegate,
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

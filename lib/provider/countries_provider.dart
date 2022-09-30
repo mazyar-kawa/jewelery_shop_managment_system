@@ -12,25 +12,35 @@ class CountriesProvider with ChangeNotifier {
 
   Future<void> getCountries() async {
     try {
+      print('Hello');
       final response = await http.get(Uri.parse(base + 'countries'), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       });
 
-      final data = await json.decode(response.body) as Map<String, dynamic>;
+      final data = Contries.fromJson(json.decode(response.body));
 
-      final List<dynamic> extradata = data['countries'];
+      // final List<dynamic> extradata = data['countries'];
 
       final List<CountriesModel> temporaryList = [];
 
-      extradata.forEach((element) {
+      for (int i = 0; i < data.countries.length; i++) {
         temporaryList.add(CountriesModel(
-            id: element['id'],
-            namecountries: element['name'],
-            picturecountries: element['img']));
-      });
+          id: data.countries[i].id,
+          namecountries: data.countries[i].namecountries,
+          picturecountries: data.countries[i].picturecountries,
+        ));
+      }
+
+      // extradata.forEach((element) {
+      //   temporaryList.add(CountriesModel(
+      //       id: element['id'],
+      //       namecountries: element['name'],
+      //       picturecountries: element['img']));
+      // });
+
       _countries = temporaryList;
-      notifyListeners();
     } catch (e) {}
+    notifyListeners();
   }
 }
