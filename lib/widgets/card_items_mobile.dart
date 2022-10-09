@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
+import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,10 +19,61 @@ class CardItemsMobile extends StatefulWidget {
   State<CardItemsMobile> createState() => _CardItemsMobileState();
 }
 
-class _CardItemsMobileState extends State<CardItemsMobile> {
+class _CardItemsMobileState extends State<CardItemsMobile>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+
+  bool islike = false;
+
+  favouriteAndUnFavourite(SingleItem product) async {
+    if (product.isFavourited == true) {
+      ApiProvider unFavourite = await Auth().UnFavouriteItem(product.id!);
+      if (unFavourite.data != null) {
+        setState(() {
+          product.isFavourited = false;
+          showSnackBar(context, unFavourite.data['message'], true);
+        });
+      }
+    } else {
+      ApiProvider favourite = await Auth().FavouriteItem(product.id!);
+      if (favourite.data != null) {
+        setState(() {
+          islike = true;
+          startAnimation(product);
+          product.isFavourited = true;
+          showSnackBar(context, favourite.data['message'], false);
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+
+    super.initState();
+  }
+
+  startAnimation(SingleItem product) async {
+    if (product.isFavourited == true || islike == true) {
+      await animationController.forward();
+      await Future.delayed(
+        Duration(seconds: 2),
+        () {
+          if (animationController.isCompleted) {
+            setState(() {
+              islike = false;
+              animationController.reverse();
+            });
+          }
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final product = Provider.of<Items>(context, listen: false);
     final product = Provider.of<SingleItem>(context);
     return Container(
       width: double.infinity,
@@ -66,7 +120,9 @@ class _CardItemsMobileState extends State<CardItemsMobile> {
                       ),
                       child: Center(
                         child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              favouriteAndUnFavourite(product);
+                            },
                             child: product.isFavourited!
                                 ? SvgPicture.asset(
                                     'assets/images/heart-solid.svg',

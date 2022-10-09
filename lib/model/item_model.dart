@@ -1,5 +1,18 @@
 import 'package:flutter/cupertino.dart';
 
+class FavouriteItems {
+  FavouriteItems({
+    this.items,
+  });
+
+  List<SingleItem>? items;
+
+  factory FavouriteItems.fromJson(Map<String, dynamic> json) => FavouriteItems(
+        items: List<SingleItem>.from(
+            json["myFavorite"].map((x) => SingleItem.fromJson(x))),
+      );
+}
+
 class HomeItems {
   HomeItems({
     this.randomItems,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 
 class HomeItemsProvider with ChangeNotifier {
@@ -25,44 +26,58 @@ class HomeItemsProvider with ChangeNotifier {
   Future<void> getRandomItems({int id = 0}) async {
     try {
       final List<SingleItem> temporaryList = [];
+      String token = await Auth().getToken();
       if (id == 0) {
-        final response = await http.get(Uri.parse(base + 'random_items'));
+        final response =
+            await http.get(Uri.parse(base + 'random_items'), headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
         final data = HomeRandomItems.fromJson(json.decode(response.body));
 
         for (var i = 0; i < data.items!.length; i++) {
           temporaryList.add(SingleItem(
-              id: data.items![i].id,
-              name: data.items![i].name,
-              img: data.items![i].img,
-              description: data.items![i].description,
-              mount: data.items![i].mount,
-              type: data.items![i].type,
-              profit: data.items![i].profit,
-              quantity: data.items![i].quantity,
-              size: data.items![i].size,
-              categoryId: data.items![i].categoryId,
-              companyId: data.items![i].companyId,
-              countryId: data.items![i].countryId));
+            id: data.items![i].id,
+            name: data.items![i].name,
+            img: data.items![i].img,
+            description: data.items![i].description,
+            mount: data.items![i].mount,
+            type: data.items![i].type,
+            profit: data.items![i].profit,
+            quantity: data.items![i].quantity,
+            size: data.items![i].size,
+            categoryId: data.items![i].categoryId,
+            companyId: data.items![i].companyId,
+            countryId: data.items![i].countryId,
+            isFavourited: data.items![i].isFavourited,
+          ));
         }
       } else {
-        final response =
-            await http.get(Uri.parse(base + 'random_items?category=$id'));
+        final response = await http
+            .get(Uri.parse(base + 'random_items?category=$id'), headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
         final data = HomeRandomItems.fromJson(json.decode(response.body));
 
         for (var i = 0; i < data.items!.length; i++) {
           temporaryList.add(SingleItem(
-              id: data.items![i].id,
-              name: data.items![i].name,
-              img: data.items![i].img,
-              description: data.items![i].description,
-              mount: data.items![i].mount,
-              type: data.items![i].type,
-              profit: data.items![i].profit,
-              quantity: data.items![i].quantity,
-              size: data.items![i].size,
-              categoryId: data.items![i].categoryId,
-              companyId: data.items![i].companyId,
-              countryId: data.items![i].countryId));
+            id: data.items![i].id,
+            name: data.items![i].name,
+            img: data.items![i].img,
+            description: data.items![i].description,
+            mount: data.items![i].mount,
+            type: data.items![i].type,
+            profit: data.items![i].profit,
+            quantity: data.items![i].quantity,
+            size: data.items![i].size,
+            categoryId: data.items![i].categoryId,
+            companyId: data.items![i].companyId,
+            countryId: data.items![i].countryId,
+            isFavourited: data.items![i].isFavourited,
+          ));
         }
       }
       _randomItems = temporaryList;
@@ -74,7 +89,12 @@ class HomeItemsProvider with ChangeNotifier {
 
   Future<void> getAllItemHome() async {
     try {
-      final response = await http.get(Uri.parse(base + 'home'));
+      String token = await Auth().getToken();
+      final response = await http.get(Uri.parse(base + 'home'), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
       final data = HomeItems.fromJson(json.decode(response.body));
       final List<Categories> categories = [];
       final List<SingleItem> temporaryList = [];
@@ -90,50 +110,56 @@ class HomeItemsProvider with ChangeNotifier {
 
       for (var i = 0; i < data.randomItems!.length; i++) {
         temporaryList.add(SingleItem(
-            id: data.randomItems![i].id,
-            name: data.randomItems![i].name,
-            img: data.randomItems![i].img,
-            description: data.randomItems![i].description,
-            mount: data.randomItems![i].mount,
-            type: data.randomItems![i].type,
-            profit: data.randomItems![i].profit,
-            quantity: data.randomItems![i].quantity,
-            size: data.randomItems![i].size,
-            categoryId: data.randomItems![i].categoryId,
-            companyId: data.randomItems![i].companyId,
-            countryId: data.randomItems![i].countryId));
+          id: data.randomItems![i].id,
+          name: data.randomItems![i].name,
+          img: data.randomItems![i].img,
+          description: data.randomItems![i].description,
+          mount: data.randomItems![i].mount,
+          type: data.randomItems![i].type,
+          profit: data.randomItems![i].profit,
+          quantity: data.randomItems![i].quantity,
+          size: data.randomItems![i].size,
+          categoryId: data.randomItems![i].categoryId,
+          companyId: data.randomItems![i].companyId,
+          countryId: data.randomItems![i].countryId,
+          isFavourited: data.randomItems![i].isFavourited,
+        ));
       }
       _randomItems = temporaryList;
       for (var i = 0; i < data.latestItems!.length; i++) {
         temporaryList1.add(SingleItem(
-            id: data.latestItems![i].id,
-            name: data.latestItems![i].name,
-            img: data.latestItems![i].img,
-            description: data.latestItems![i].description,
-            mount: data.latestItems![i].mount,
-            type: data.latestItems![i].type,
-            profit: data.latestItems![i].profit,
-            quantity: data.latestItems![i].quantity,
-            size: data.latestItems![i].size,
-            categoryId: data.latestItems![i].categoryId,
-            companyId: data.latestItems![i].companyId,
-            countryId: data.latestItems![i].countryId));
+          id: data.latestItems![i].id,
+          name: data.latestItems![i].name,
+          img: data.latestItems![i].img,
+          description: data.latestItems![i].description,
+          mount: data.latestItems![i].mount,
+          type: data.latestItems![i].type,
+          profit: data.latestItems![i].profit,
+          quantity: data.latestItems![i].quantity,
+          size: data.latestItems![i].size,
+          categoryId: data.latestItems![i].categoryId,
+          companyId: data.latestItems![i].companyId,
+          countryId: data.latestItems![i].countryId,
+          isFavourited: data.latestItems![i].isFavourited,
+        ));
       }
       _latestItems = temporaryList1;
       for (var i = 0; i < data.mostFavouriteItems!.length; i++) {
         temporaryList2.add(SingleItem(
-            id: data.mostFavouriteItems![i].id,
-            name: data.mostFavouriteItems![i].name,
-            img: data.mostFavouriteItems![i].img,
-            description: data.mostFavouriteItems![i].description,
-            mount: data.mostFavouriteItems![i].mount,
-            type: data.mostFavouriteItems![i].type,
-            profit: data.mostFavouriteItems![i].profit,
-            quantity: data.mostFavouriteItems![i].quantity,
-            size: data.mostFavouriteItems![i].size,
-            categoryId: data.mostFavouriteItems![i].categoryId,
-            companyId: data.mostFavouriteItems![i].companyId,
-            countryId: data.mostFavouriteItems![i].countryId));
+          id: data.mostFavouriteItems![i].id,
+          name: data.mostFavouriteItems![i].name,
+          img: data.mostFavouriteItems![i].img,
+          description: data.mostFavouriteItems![i].description,
+          mount: data.mostFavouriteItems![i].mount,
+          type: data.mostFavouriteItems![i].type,
+          profit: data.mostFavouriteItems![i].profit,
+          quantity: data.mostFavouriteItems![i].quantity,
+          size: data.mostFavouriteItems![i].size,
+          categoryId: data.mostFavouriteItems![i].categoryId,
+          companyId: data.mostFavouriteItems![i].companyId,
+          countryId: data.mostFavouriteItems![i].countryId,
+          isFavourited: data.mostFavouriteItems![i].isFavourited,
+        ));
       }
       _mostFavourite = temporaryList2;
 
