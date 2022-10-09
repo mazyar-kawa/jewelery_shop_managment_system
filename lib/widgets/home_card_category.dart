@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
@@ -31,60 +32,68 @@ class HomeCardCategory extends StatefulWidget {
 
 class _HomeCardCategoryState extends State<HomeCardCategory>
     with TickerProviderStateMixin {
-  @override
-  void initState() {
-    controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2))
-          ..addStatusListener((status) {
-            setState(() {
-              if (status == AnimationStatus.completed) {
-                twitter_favorite = false;
-              } else {
-                twitter_favorite = true;
-              }
-            });
-          });
-    super.initState();
-  }
+  late AnimationController animationController;
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  late AnimationController controller;
-
-  bool twitter_favorite = false;
+  bool islike = false;
 
   favouriteAndUnFavourite(SingleItem product) async {
     if (product.isFavourited == true) {
-      ApiProvider response =
-          await Auth().UnFavouriteItem(product.id!) as ApiProvider;
-      if (response.data != null) {
+      ApiProvider unFavourite = await Auth().UnFavouriteItem(product.id!);
+      if (unFavourite.data != null) {
         setState(() {
           product.isFavourited = false;
-          twitter_favorite = false;
-          showSnackBar(context, response.data['message'], true);
+          showSnackBar(context, unFavourite.data['message'], true);
         });
       }
     } else {
-      ApiProvider response = await Auth().FavouriteItem(product.id!);
-      if (response.data != null) {
+      ApiProvider favourite = await Auth().FavouriteItem(product.id!);
+      if (favourite.data != null) {
         setState(() {
+          islike = true;
+          startAnimation(product);
           product.isFavourited = true;
-          twitter_favorite = true;
-          controller.forward();
-          showSnackBar(context, response.data['message'], false);
+          showSnackBar(context, favourite.data['message'], false);
         });
       }
     }
   }
 
   @override
+  void initState() {
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
+    super.initState();
+  }
+
+  startAnimation(SingleItem product) async {
+    if (product.isFavourited == true || islike == true) {
+      await animationController.forward();
+      await Future.delayed(
+        Duration(milliseconds: 150),
+        () {
+          if (animationController.isCompleted) {
+            setState(() {
+              islike = false;
+              animationController.reverse();
+            });
+          }
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final product = Provider.of<SingleItem>(context);
     final basket = Provider.of<BasketItemProvider>(context);
+
     return AnimatedBuilder(
       animation: widget._pageController,
       builder: (context, child) {
@@ -96,17 +105,17 @@ class _HomeCardCategoryState extends State<HomeCardCategory>
       },
       child: Stack(
         children: [
-          InkWell(
+          GestureDetector(
             onDoubleTap: () async {
-              if (widget.login) {
-                ApiProvider response = await Auth().FavouriteItem(product.id!);
-                if (response.data != null) {
+              ApiProvider favourite = await Auth().FavouriteItem(product.id!);
+              if (favourite.data != null) {
+                setState(() {
+                  islike = true;
+                  startAnimation(product);
                   product.isFavourited = true;
-                  twitter_favorite = true;
-                  controller.forward();
-                  showSnackBar(context, response.data['message'], false);
-                }
-              } else {}
+                  showSnackBar(context, favourite.data['message'], false);
+                });
+              }
             },
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 10),
@@ -157,7 +166,7 @@ class _HomeCardCategoryState extends State<HomeCardCategory>
                                         onTap: () {
                                           favouriteAndUnFavourite(product);
                                         },
-                                        child: product.isFavourited == true
+                                        child: product.isFavourited!
                                             ? SvgPicture.asset(
                                                 'assets/images/heart-solid.svg',
                                                 width: 15,
@@ -310,11 +319,11 @@ class _HomeCardCategoryState extends State<HomeCardCategory>
               ),
             ),
           ),
-          twitter_favorite
+          islike
               ? Center(
                   child: Container(
                     child: LottieBuilder.asset(
-                      controller: controller,
+                      controller: animationController,
                       'assets/images/twitter-favorite-heart.json',
                       width: 550,
                     ),

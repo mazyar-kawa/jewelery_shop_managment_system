@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_web.dart';
@@ -9,10 +10,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HorizantleListView extends StatefulWidget {
   final String title;
+  final bool islogin;
   final List<SingleItem> provder;
 
   const HorizantleListView({
     required this.title,
+    required this.islogin,
     required this.provder,
     Key? key,
   }) : super(key: key);
@@ -33,6 +36,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
         initialPage: _current, viewportFraction: 0.6, keepPage: true);
     _pageControllerWeb = PageController(
         initialPage: _current, viewportFraction: 0.3, keepPage: true);
+
     super.initState();
   }
 
@@ -110,6 +114,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
                             pageController: _pageControllerMobile,
                             current: _current,
                             index: index,
+                            islogin: widget.islogin,
                           ),
                         )),
           ),

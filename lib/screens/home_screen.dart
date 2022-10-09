@@ -280,19 +280,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   HorizantleListView(
                       title: AppLocalizations.of(context)!.neww,
                       provder:
-                          Provider.of<HomeItemsProvider>(context).latestItems),
+                          Provider.of<HomeItemsProvider>(context).latestItems,
+                      islogin: widget.islogin),
                   // most sale
                   HorizantleListView(
-                    title: AppLocalizations.of(context)!.mostSales,
-                    provder:
-                        Provider.of<HomeItemsProvider>(context).randomItems,
-                  ),
+                      title: AppLocalizations.of(context)!.mostSales,
+                      provder:
+                          Provider.of<HomeItemsProvider>(context).randomItems,
+                      islogin: widget.islogin),
                   // most favorite
                   HorizantleListView(
-                    title: AppLocalizations.of(context)!.mostFavourite,
-                    provder:
-                        Provider.of<HomeItemsProvider>(context).mostFavourite,
-                  ),
+                      title: AppLocalizations.of(context)!.mostFavourite,
+                      provder:
+                          Provider.of<HomeItemsProvider>(context).mostFavourite,
+                      islogin: widget.islogin),
                 ],
               );
             } else if (snapshot.connectionState == ConnectionState.waiting) {

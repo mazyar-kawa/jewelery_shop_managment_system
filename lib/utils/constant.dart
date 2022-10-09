@@ -24,14 +24,18 @@ Color scaffoldbackgroundDark = Color(0xFF3B3B3B);
 Color shadowCardDark = Color(0xff7dd3fc).withOpacity(0.3);
 
 String base = 'http://192.168.1.32:8000/api/';
+
 void showSnackBar(BuildContext context, message, undon) {
   final snackBar = SnackBar(
+    dismissDirection: DismissDirection.startToEnd,
+    clipBehavior: Clip.antiAlias,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     content: Text(message),
     backgroundColor: undon ? Colors.red : Colors.green,
     behavior: SnackBarBehavior.floating,
     duration: Duration(milliseconds: 1000),
     margin: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-    elevation: 5,
+    elevation: 10,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
