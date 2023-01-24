@@ -244,23 +244,19 @@ class _ItemDetailState extends State<ItemDetail> {
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Align(
-                            alignment: FractionalOffset.bottomRight,
-                            child: ButtonTheme(
-                                height: 45,
-                                child: RaisedButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    'ADD TO CART',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
-                                  ),
-                                  color: Color(0xff455A64),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  splashColor: Color(0xff455A64),
-                                  elevation: 5,
-                                ))),
+                          alignment: FractionalOffset.bottomRight,
+                          child: ButtonTheme(
+                            height: 45,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              child: Text(
+                                'ADD TO CART',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     )
                   ],

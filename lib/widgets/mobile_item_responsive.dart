@@ -5,13 +5,17 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class ItemMobileResponsive extends StatelessWidget {
+  
   const ItemMobileResponsive({
     Key? key,
     required this.all,
     required this.searchController,
+    required this.islogin,
+
   }) : super(key: key);
 
   final Future? all;
+  final bool islogin;
   final TextEditingController searchController;
 
   @override
@@ -29,7 +33,7 @@ class ItemMobileResponsive extends StatelessWidget {
                     itemBuilder: (context, i) {
                       return ChangeNotifierProvider.value(
                         value: product[i],
-                        child: CardItemsMobile(index: i),
+                        child: CardItemsMobile(index: i,islogin: islogin),
                       );
                     })
                 : Container(
@@ -40,15 +44,23 @@ class ItemMobileResponsive extends StatelessWidget {
                       children: [
                         Container(
                           child: Center(
-                            child: Text(
-                              'Not data found with "${searchController.text}"',
-                              style: TextStyle(
-                                color: Color(0xff7dd3fc),
-                                fontSize: 20,
-                                fontFamily: 'RobotoB',
-                              ),
-                            ),
-                          ),
+                              child: searchController.text != ''
+                                  ? Text(
+                                      'Not data found with "${searchController.text}"',
+                                      style: TextStyle(
+                                        color: Color(0xff7dd3fc),
+                                        fontSize: 20,
+                                        fontFamily: 'RobotoB',
+                                      ),
+                                    )
+                                  : Text(
+                                      'Not data found',
+                                      style: TextStyle(
+                                        color: Color(0xff7dd3fc),
+                                        fontSize: 20,
+                                        fontFamily: 'RobotoB',
+                                      ),
+                                    )),
                         ),
                         Container(
                           child: Lottie.asset('assets/images/not_found.json',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
@@ -15,8 +16,8 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class LoadingPage extends StatefulWidget {
-  late bool islogin;
-  LoadingPage({Key? key, required this.islogin}) : super(key: key);
+  // late bool islogin;
+  LoadingPage({Key? key}) : super(key: key);
 
   @override
   State<LoadingPage> createState() => _LoadingPageState();
@@ -25,22 +26,24 @@ class LoadingPage extends StatefulWidget {
 class _LoadingPageState extends State<LoadingPage> {
   int _selectedIndex = 0;
   bool ismodule = false;
-  bool ismoduleAppBar = false;
+  // bool ismoduleAppBar = false;
   bool splash = false;
-  Widget currentPage = HomeScreen(islogin: false);
-
+  Widget currentPage = HomeScreen();
+  bool islogin = false;
+  RefreshUser refreshUser = RefreshUser();
+  AuthUser user = AuthUser();
   adduser() async {
     String token = await Auth().getToken();
     if (token == '') {
-      widget.islogin = false;
+      islogin = false;
     } else {
-      RefreshUser refreshUser =
-          Provider.of<RefreshUser>(context, listen: false);
+      refreshUser = Provider.of<RefreshUser>(context, listen: false);
       await refreshUser.refreshuser();
       ApiProvider response = await Auth().getUserDetials() as ApiProvider;
       if (response.data != null) {
-        widget.islogin = true;
-        currentPage = HomeScreen(islogin: widget.islogin);
+        islogin = true;
+        currentPage = HomeScreen();
+        user = refreshUser.currentUser;
       }
     }
   }
@@ -64,267 +67,67 @@ class _LoadingPageState extends State<LoadingPage> {
   Widget build(BuildContext context) {
     return splash
         ? Scaffold(
-            body: Stack(
-              children: [
-                currentPage,
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    margin: EdgeInsets.only(right: 25, bottom: 50),
-                    height: ismoduleAppBar ? 160 : 0,
-                    width: ismoduleAppBar ? 140 : 0,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).shadowColor,
-                            offset: Offset(0, 3),
-                            blurRadius: 5,
-                            spreadRadius: 2,
-                          )
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Consumer<ThemeChangeProvider>(
-                                builder: (context, providerTheme, child) {
-                                  return Switch(
-                                      inactiveThumbImage: NetworkImage(
-                                          'https://img.icons8.com/officel/344/sun.png'),
-                                      activeThumbImage: NetworkImage(
-                                          'https://img.icons8.com/offices/344/full-moon.png'),
-                                      value:
-                                          providerTheme.currentTheme == 'dark'
-                                              ? ismodule = true
-                                              : ismodule = false,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value) {
-                                            providerTheme
-                                                .setThemeProvider('dark');
-                                            ismodule = true;
-                                          } else {
-                                            providerTheme
-                                                .setThemeProvider('light');
-                                            ismodule = false;
-                                          }
-                                        });
-                                      });
-                                },
-                              ),
-                              Text(
-                                'Theme',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontSize: 18,
-                                  fontFamily: 'RobotoM',
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => BasketScreen()));
-                          },
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Consumer<BasketItemProvider>(
-                                    builder: (context, basket, child) {
-                                  return Stack(
-                                    children: [
-                                      SvgPicture.asset(
-                                          'assets/images/basket-shopping-solid.svg',
-                                          width: 30,
-                                          color: Theme.of(context)
-                                              .primaryColorLight),
-                                      Positioned(
-                                        right: 0,
-                                        height: 18,
-                                        width: 18,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(1000),
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor),
-                                          child: Center(
-                                            child: Text(
-                                                basket.countItem() > 9
-                                                    ? '9+'
-                                                    : '${basket.countItem()}',
-                                                style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .primaryColorLight,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                                Text(
-                                  'Basket',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColorLight,
-                                    fontSize: 18,
-                                    fontFamily: 'RobotoM',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SvgPicture.asset('assets/images/settings.svg',
-                                  width: 30,
-                                  color: Theme.of(context).primaryColorLight),
-                              Text(
-                                'Settings',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontSize: 18,
-                                  fontFamily: 'RobotoM',
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            body: currentPage,
             appBar: MediaQuery.of(context).size.width > websize
                 ? PreferredSize(
-                    preferredSize: Size.fromHeight(
-                        MediaQuery.of(context).size.height * 0.12),
                     child: Container(
-                      width: double.infinity,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(),
-                          Row(
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 20),
-                                      child: appBarItem('Home', 0),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 20),
-                                      child: appBarItem('Categories', 1),
-                                    ),
-                                    // Container(
-                                    //   width: 90,
-                                    //   height: 30,
-                                    //   padding: EdgeInsets.symmetric(horizontal: 10),
-                                    //   decoration: BoxDecoration(
-                                    //     border: Border.all(
-                                    //       color: Theme.of(context).primaryColorLight,
-                                    //       width: 1,
-                                    //     ),
-                                    //   ),
-                                    //   child: Center(
-                                    //     child: Text(
-                                    //       'Login',
-                                    //       style: TextStyle(
-                                    //         color:
-                                    //             Theme.of(context).primaryColorLight,
-                                    //         fontSize: 16,
-                                    //         fontFamily: 'RobotoB',
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                              child: Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            NotficationScreen()));
-                                              },
-                                              child: SvgPicture.asset(
-                                                  'assets/images/bell-solid.svg',
-                                                  width: 26,
-                                                  color: Theme.of(context)
-                                                      .primaryColorLight),
-                                            ),
-                                          )),
-                                          Positioned(
-                                              top: 20,
-                                              right: 0,
-                                              child: Container(
-                                                width: 10,
-                                                height: 10,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            1000),
-                                                    color: Color(0xffEF4444)),
-                                              ))
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: Container(
-                                        child: Center(
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                ismoduleAppBar =
-                                                    !ismoduleAppBar;
-                                              });
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                  'assets/images/profile.jpg'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: Text(
+                                "Logo",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
+                          Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 35),
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 70),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      appBarItem("Home", 0),
+                                      appBarItem("Categorys", 1),
+                                      appBarItem("Basket", 2),
+                                      appBarItem("Notfications", 3),
+                                    ],
+                                  ),
+                                ),
+                              )),
+                          Container(
+                            padding: EdgeInsets.only(right: 50, left: 20),
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundImage: islogin
+                                  ? NetworkImage(user.user!.profilePicture)
+                                  : NetworkImage(
+                                      'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
+                            ),
+                          )
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(1000),
+                          //   child: islogin
+                          //       ? Image.network(user.user!.profilePicture)
+                          //       : Image.network(
+                          //           'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
+                          // ),
                         ],
                       ),
                     ),
-                  )
+                    preferredSize: Size.fromHeight(
+                        MediaQuery.of(context).size.height * 0.09))
                 : null,
             bottomNavigationBar: MediaQuery.of(context).size.width < websize
                 ? Container(
@@ -411,8 +214,8 @@ class _LoadingPageState extends State<LoadingPage> {
               switch (_selectedIndex) {
                 case 0:
                   currentPage = HomeScreen(
-                    islogin: widget.islogin,
-                  );
+                      // islogin:islogin,
+                      );
                   break;
                 case 1:
                   currentPage = CategoryPage();
@@ -425,7 +228,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   break;
                 case 4:
                   currentPage = ProfileScreen(
-                    islogin: widget.islogin,
+                    islogin: islogin,
                   );
                   break;
               }
@@ -466,8 +269,8 @@ class _LoadingPageState extends State<LoadingPage> {
           switch (_selectedIndex) {
             case 0:
               currentPage = HomeScreen(
-                islogin: widget.islogin,
-              );
+                  // islogin: islogin,
+                  );
               break;
             case 1:
               currentPage = CategoryPage();
@@ -480,7 +283,7 @@ class _LoadingPageState extends State<LoadingPage> {
               break;
             case 4:
               currentPage = ProfileScreen(
-                islogin: widget.islogin,
+                islogin: islogin,
               );
               break;
           }

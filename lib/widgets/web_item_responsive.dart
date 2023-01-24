@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_web.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -8,9 +8,11 @@ class ItemWebResponsive extends StatelessWidget {
   const ItemWebResponsive({
     Key? key,
     required this.all,
+    required this.islogin,
   }) : super(key: key);
 
   final Future? all;
+  final bool islogin;
 
   @override
   Widget build(BuildContext context) {
@@ -137,14 +139,14 @@ class ItemWebResponsive extends StatelessWidget {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
-                            childAspectRatio: 0.9,
-                            crossAxisSpacing: 6,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                           ),
                           itemBuilder: (context, i) {
                             return ChangeNotifierProvider.value(
                               value: product[i],
-                              child: CardItemsWeb(index: i),
+                              child: HomeSmallCardMobile(index: i, islogin: islogin),
                             );
                           })
                       : Container(

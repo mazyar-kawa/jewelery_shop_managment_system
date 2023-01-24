@@ -31,7 +31,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  flutter_kurdish_localization: ^0.0.9
+  flutter_kurdish_localization: ^1.0.1
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^1.1.4
@@ -42,6 +42,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.0.15
   carousel_slider: ^4.1.1
+  easy_debounce: ^2.0.3
 
 dev_dependencies:
   flutter_lints: ^2.0.0

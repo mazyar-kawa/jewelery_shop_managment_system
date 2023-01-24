@@ -38,19 +38,22 @@ class HomeItemsProvider with ChangeNotifier {
 
         for (var i = 0; i < data.items!.length; i++) {
           temporaryList.add(SingleItem(
-            id: data.items![i].id,
-            name: data.items![i].name,
-            img: data.items![i].img,
-            description: data.items![i].description,
-            mount: data.items![i].mount,
-            type: data.items![i].type,
-            profit: data.items![i].profit,
-            quantity: data.items![i].quantity,
-            size: data.items![i].size,
-            categoryId: data.items![i].categoryId,
-            companyId: data.items![i].companyId,
-            countryId: data.items![i].countryId,
-            isFavourited: data.items![i].isFavourited,
+             id: data.items![i].id,
+          name: data.items![i].name,
+          size: data.items![i].size,
+          weight: data.items![i].weight,
+          img: data.items![i].img,
+          quantity: data.items![i].quantity,
+          categoryId: data.items![i].categoryId,
+          companyId: data.items![i].companyId,
+          countryId: data.items![i].countryId,
+          caratId:  data.items![i].caratId,
+          isFavourited: data.items![i].isFavourited,
+          price:  data.items![i].price,
+          inBasket:  data.items![i].inBasket,
+          caratMs: data.items![i].caratMs,
+          caratType: data.items![i].caratType,
+          countryName: data.items![i].countryName
           ));
         }
       } else {
@@ -64,19 +67,22 @@ class HomeItemsProvider with ChangeNotifier {
 
         for (var i = 0; i < data.items!.length; i++) {
           temporaryList.add(SingleItem(
-            id: data.items![i].id,
-            name: data.items![i].name,
-            img: data.items![i].img,
-            description: data.items![i].description,
-            mount: data.items![i].mount,
-            type: data.items![i].type,
-            profit: data.items![i].profit,
-            quantity: data.items![i].quantity,
-            size: data.items![i].size,
-            categoryId: data.items![i].categoryId,
-            companyId: data.items![i].companyId,
-            countryId: data.items![i].countryId,
-            isFavourited: data.items![i].isFavourited,
+             id: data.items![i].id,
+          name: data.items![i].name,
+          size: data.items![i].size,
+          weight: data.items![i].weight,
+          img: data.items![i].img,
+          quantity: data.items![i].quantity,
+          categoryId: data.items![i].categoryId,
+          companyId: data.items![i].companyId,
+          countryId: data.items![i].countryId,
+          caratId:  data.items![i].caratId,
+          isFavourited: data.items![i].isFavourited,
+          price:  data.items![i].price,
+          inBasket:  data.items![i].inBasket,
+          caratMs: data.items![i].caratMs,
+          caratType: data.items![i].caratType,
+          countryName: data.items![i].countryName
           ));
         }
       }
@@ -110,37 +116,43 @@ class HomeItemsProvider with ChangeNotifier {
 
       for (var i = 0; i < data.randomItems!.length; i++) {
         temporaryList.add(SingleItem(
-          id: data.randomItems![i].id,
+           id: data.randomItems![i].id,
           name: data.randomItems![i].name,
-          img: data.randomItems![i].img,
-          description: data.randomItems![i].description,
-          mount: data.randomItems![i].mount,
-          type: data.randomItems![i].type,
-          profit: data.randomItems![i].profit,
-          quantity: data.randomItems![i].quantity,
           size: data.randomItems![i].size,
+          weight: data.randomItems![i].weight,
+          img: data.randomItems![i].img,
+          quantity: data.randomItems![i].quantity,
           categoryId: data.randomItems![i].categoryId,
           companyId: data.randomItems![i].companyId,
           countryId: data.randomItems![i].countryId,
+          caratId:  data.randomItems![i].caratId,
           isFavourited: data.randomItems![i].isFavourited,
+          price:  data.randomItems![i].price,
+          inBasket:  data.randomItems![i].inBasket,
+          caratMs: data.randomItems![i].caratMs,
+          caratType: data.randomItems![i].caratType,
+          countryName: data.randomItems![i].countryName
         ));
       }
       _randomItems = temporaryList;
       for (var i = 0; i < data.latestItems!.length; i++) {
         temporaryList1.add(SingleItem(
-          id: data.latestItems![i].id,
+           id: data.latestItems![i].id,
           name: data.latestItems![i].name,
-          img: data.latestItems![i].img,
-          description: data.latestItems![i].description,
-          mount: data.latestItems![i].mount,
-          type: data.latestItems![i].type,
-          profit: data.latestItems![i].profit,
-          quantity: data.latestItems![i].quantity,
           size: data.latestItems![i].size,
+          weight: data.latestItems![i].weight,
+          img: data.latestItems![i].img,
+          quantity: data.latestItems![i].quantity,
           categoryId: data.latestItems![i].categoryId,
           companyId: data.latestItems![i].companyId,
           countryId: data.latestItems![i].countryId,
+          caratId:  data.latestItems![i].caratId,
           isFavourited: data.latestItems![i].isFavourited,
+          price:  data.latestItems![i].price,
+          inBasket:  data.latestItems![i].inBasket,
+          caratMs: data.latestItems![i].caratMs,
+          caratType: data.latestItems![i].caratType,
+          countryName: data.latestItems![i].countryName
         ));
       }
       _latestItems = temporaryList1;
@@ -148,17 +160,20 @@ class HomeItemsProvider with ChangeNotifier {
         temporaryList2.add(SingleItem(
           id: data.mostFavouriteItems![i].id,
           name: data.mostFavouriteItems![i].name,
-          img: data.mostFavouriteItems![i].img,
-          description: data.mostFavouriteItems![i].description,
-          mount: data.mostFavouriteItems![i].mount,
-          type: data.mostFavouriteItems![i].type,
-          profit: data.mostFavouriteItems![i].profit,
-          quantity: data.mostFavouriteItems![i].quantity,
           size: data.mostFavouriteItems![i].size,
+          weight: data.mostFavouriteItems![i].weight,
+          img: data.mostFavouriteItems![i].img,
+          quantity: data.mostFavouriteItems![i].quantity,
           categoryId: data.mostFavouriteItems![i].categoryId,
           companyId: data.mostFavouriteItems![i].companyId,
           countryId: data.mostFavouriteItems![i].countryId,
+          caratId:  data.mostFavouriteItems![i].caratId,
           isFavourited: data.mostFavouriteItems![i].isFavourited,
+          price:  data.mostFavouriteItems![i].price,
+          inBasket:  data.mostFavouriteItems![i].inBasket,
+          caratMs: data.mostFavouriteItems![i].caratMs,
+          caratType: data.mostFavouriteItems![i].caratType,
+          countryName: data.mostFavouriteItems![i].countryName
         ));
       }
       _mostFavourite = temporaryList2;

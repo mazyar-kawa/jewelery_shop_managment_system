@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +11,7 @@ class Auth {
     required String email,
     required String password,
   }) async {
+
     ApiProvider apiProvider = ApiProvider();
     final body = {
       'email': email,
@@ -30,13 +30,13 @@ class Auth {
           break;
         default:
           apiProvider.error = jsonDecode(response.body);
-          print(apiProvider.error);
           break;
       }
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
       print(e.toString());
     }
+    print(apiProvider.error);
     return apiProvider;
   }
 
@@ -115,7 +115,9 @@ class Auth {
 
   Future<bool> logOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    
     return await prefs.remove('token');
+    
   }
 
   Future<ApiProvider> FavouriteItem(int itemId) async {

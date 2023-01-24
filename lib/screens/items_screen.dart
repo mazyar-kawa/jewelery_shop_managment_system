@@ -1,12 +1,17 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/items_filter.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/mobile_item_responsive.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/web_item_responsive.dart';
 import 'package:lottie/lottie.dart';
+
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -21,47 +26,32 @@ class ItemsScreen extends StatefulWidget {
 
 class _ItemsScreenState extends State<ItemsScreen>
     with TickerProviderStateMixin {
-  final boredrUser = OutlineInputBorder(
-    borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),
-    borderRadius: BorderRadius.circular(15),
-  );
+  double start_size = 0.0;
+  double end_size = 0.0;
 
-  RangeValues rangePrice = const RangeValues(100, 6000);
-  bool isfilter = false;
-  bool istype = true;
-  bool isSize = true;
-  bool isPrice = true;
-  int sizevalue = 4;
+  double start_carat = 0.0;
+  double end_carat = 0.0;
+  RangeValues rangeCarat = RangeValues(12, 24);
+  RangeValues rangeSize = RangeValues(7, 32);
+  bool active_filter = false;
   int _selectedTypeIndex = 0;
   bool isloading = true;
-  bool islogin = false;
   bool issearch = false;
-
+  int _current = 2;
   final RefreshController refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
   TextEditingController searchController = TextEditingController();
 
-  AnimationController? controller;
-  Animation<double>? animation;
+  bool islogin = false;
 
-  void openFilter() {
-    setState(() {
-      isfilter = !isfilter;
-    });
-    if (isfilter) {
-      controller = AnimationController(
-          vsync: this, duration: Duration(milliseconds: 1000));
-      controller!.forward();
-      animation = CurvedAnimation(parent: controller!, curve: Curves.easeIn)
-        ..addListener(() {
-          setState(() {});
-        });
+  Future isLogin() async {
+    String token = await Auth().getToken();
+    if (token != "") {
+      islogin = true;
     } else {
-      controller!.reset();
+      islogin = false;
     }
   }
-
-  int _current = 2;
 
   PageController _pageController = PageController();
   Future? all;
@@ -74,19 +64,36 @@ class _ItemsScreenState extends State<ItemsScreen>
         all = AllItems(isloading);
       },
     );
-
+    isLogin();
     WidgetsBinding.instance.addPostFrameCallback((_) => all);
     super.initState();
   }
 
-  AllItems(bool first, {String search = ''}) async {
+  AllItems(bool first,
+      {String search = '',
+      double size_start = 0,
+      double size_end = 0,
+      double mount_start = 0,
+      double mount_end = 0}) async {
     final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
 
     if (first) {
-      await Provider.of<ItemProviderORG>(context, listen: false)
-          .getItems(CategoryId, search: search);
+      await Provider.of<ItemProviderORG>(context, listen: false).getItems(
+        CategoryId,
+        search: search,
+        size_start: size_start,
+        size_end: size_end,
+        mount_start: mount_start,
+        mount_end: mount_end,
+      );
     } else {
-      await Provider.of<ItemProviderORG>(context, listen: false).refresh();
+      await Provider.of<ItemProviderORG>(context, listen: false).refresh(
+        search: search,
+        size_start: size_start,
+        size_end: size_end,
+        mount_start: mount_start,
+        mount_end: mount_end,
+      );
     }
   }
 
@@ -94,7 +101,14 @@ class _ItemsScreenState extends State<ItemsScreen>
     await Future.delayed(
       Duration(seconds: 2),
       () {
-        all = AllItems(false);
+        all = AllItems(
+          false,
+          search: searchController.text,
+          size_start: 0,
+          size_end: 0,
+          mount_start: 0,
+          mount_end: 0,
+        );
       },
     );
     refreshController.loadComplete();
@@ -221,49 +235,22 @@ class _ItemsScreenState extends State<ItemsScreen>
         footer: CustomFooter(builder: (context, mode) {
           Widget body;
           if (provider.next_url == 'No data') {
-            body = InkWell(
-              onTap: () {
-                Refresh();
-                setState(() {
-                  islogin = true;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Lottie.asset('assets/images/no-data.json'),
+            body = Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Lottie.asset('assets/images/not more.json'),
+                ),
+                Container(
+                  child: Text(
+                    'There\'s no more Item.',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColorLight,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
-                  Container(
-                    height: 40,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(context).shadowColor,
-                          offset: Offset(0, 3),
-                        )
-                      ],
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'go to Top',
-                            style: TextStyle(
-                              fontFamily: 'RobotoB',
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_up_rounded)
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                )
+              ],
             );
           } else if (mode == LoadStatus.loading) {
             body = Lottie.asset('assets/images/preloader.json');
@@ -278,7 +265,6 @@ class _ItemsScreenState extends State<ItemsScreen>
           );
         }),
         child: SingleChildScrollView(
-          reverse: islogin,
           physics: BouncingScrollPhysics(),
           child: Column(
             children: [
@@ -286,253 +272,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                 children: [
                   MediaQuery.of(context).size.width > websize
                       ? Container()
-                      : Container(
-                          margin: EdgeInsets.only(top: 95),
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 25),
-                            height: isfilter
-                                ? MediaQuery.of(context).size.height *
-                                    animation!.value *
-                                    0.45
-                                : MediaQuery.of(context).size.height * 0.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Color(0xffECF1F4),
-                            ),
-                            child: ListView(
-                              shrinkWrap: true,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      top: 10, left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          'Categories',
-                                          style: TextStyle(
-                                            fontFamily: 'RobotoB',
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        child: istype
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    istype = false;
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons
-                                                      .keyboard_arrow_down_rounded,
-                                                  size: 28,
-                                                ))
-                                            : IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    istype = true;
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons
-                                                      .arrow_forward_ios_rounded,
-                                                  size: 18,
-                                                )),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: BouncingScrollPhysics(),
-                                  child: Container(
-                                      height: istype
-                                          ? MediaQuery.of(context).size.height *
-                                              0.085
-                                          : 0,
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 15),
-                                      child: Row(
-                                        children: [
-                                          categoryHorizontal(context, 'All', 0),
-                                          Container(
-                                            height: 35,
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              physics: BouncingScrollPhysics(),
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: category.length,
-                                              itemBuilder: (context, index) {
-                                                return categoryHorizontal(
-                                                    context,
-                                                    '${category[index].name![0].toUpperCase()}' +
-                                                        category[index]
-                                                            .name
-                                                            .toString()
-                                                            .substring(1),
-                                                    category[index].id);
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      )),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      top: 10, left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          'Size: ${sizevalue}',
-                                          style: TextStyle(
-                                            fontFamily: 'RobotoB',
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        child: isSize
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    isSize = false;
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons
-                                                      .keyboard_arrow_down_rounded,
-                                                  size: 28,
-                                                ))
-                                            : IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    isSize = true;
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons
-                                                      .arrow_forward_ios_rounded,
-                                                  size: 18,
-                                                )),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: isSize
-                                      ? MediaQuery.of(context).size.height *
-                                          0.075
-                                      : 0,
-                                  child: isSize
-                                      ? Slider(
-                                          min: 4.0,
-                                          max: 30.0,
-                                          label: sizevalue.round().toString(),
-                                          divisions: 26,
-                                          activeColor: Theme.of(context)
-                                              .primaryColorLight,
-                                          inactiveColor: Theme.of(context)
-                                              .primaryColorLight
-                                              .withOpacity(0.3),
-                                          value: sizevalue.toDouble(),
-                                          onChanged: (double value) {
-                                            setState(() {
-                                              sizevalue = value.round();
-                                            });
-                                          })
-                                      : null,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      top: 10, left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          'Price: ${rangePrice.start.toStringAsFixed(1)} to ${rangePrice.end.toStringAsFixed(1)}',
-                                          style: TextStyle(
-                                            fontFamily: 'RobotoB',
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        child: isPrice
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    isPrice = false;
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons
-                                                      .keyboard_arrow_down_rounded,
-                                                  size: 28,
-                                                ))
-                                            : IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    isPrice = true;
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons
-                                                      .arrow_forward_ios_rounded,
-                                                  size: 18,
-                                                )),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: isPrice
-                                      ? MediaQuery.of(context).size.height *
-                                          0.075
-                                      : 0,
-                                  child: isPrice
-                                      ? RangeSlider(
-                                          values: rangePrice,
-                                          min: 100,
-                                          max: 6000,
-                                          activeColor: Theme.of(context)
-                                              .primaryColorLight,
-                                          inactiveColor: Theme.of(context)
-                                              .primaryColorLight
-                                              .withOpacity(0.3),
-                                          labels: RangeLabels(
-                                            rangePrice.start.toStringAsFixed(2),
-                                            rangePrice.end.toStringAsFixed(2),
-                                          ),
-                                          onChanged: (RangeValues values) {
-                                            setState(() {
-                                              rangePrice = values;
-                                            });
-                                          },
-                                        )
-                                      : null,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      : Container(),
                   Align(
                     alignment: Alignment.topRight,
                     child: Container(
@@ -549,59 +289,74 @@ class _ItemsScreenState extends State<ItemsScreen>
                           setState(() {
                             issearch = true;
                           });
-                          AllItems(true, search: value);
-                          Future.delayed(Duration(milliseconds: 500), () {
+                          EasyDebounce.debounce(
+                              "Search", Duration(milliseconds: 500), () async {
+                            await AllItems(true,
+                                search: value,
+                                size_start: rangeSize.start,
+                                size_end: rangeSize.end,
+                                mount_start: rangeCarat.start,
+                                mount_end: rangeCarat.end);
                             setState(() {
                               issearch = false;
                             });
                           });
                         },
                         decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                          border: boredrUser,
-                          enabledBorder: boredrUser,
-                          disabledBorder: boredrUser,
-                          hintText:
-                              '${AppLocalizations.of(context)!.search}...',
-                          hintStyle: TextStyle(
-                              fontFamily: 'RobotoR', color: Colors.grey),
-                          prefixIcon: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: SvgPicture.asset(
-                              'assets/images/search.svg',
-                              width: 5,
-                              height: 5,
-                              color: Theme.of(context).primaryColorLight,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 10),
+                            border: boredruser,
+                            enabledBorder: boredruser,
+                            disabledBorder: boredruser,
+                            hintText:
+                                '${AppLocalizations.of(context)!.search}...',
+                            hintStyle: TextStyle(
+                                fontFamily: 'RobotoR', color: Colors.grey),
+                            prefixIcon: Container(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: SvgPicture.asset(
+                                'assets/images/search.svg',
+                                width: 5,
+                                height: 5,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
                             ),
-                          ),
-                          suffixIcon: MediaQuery.of(context).size.width >
-                                  websize
-                              ? Container()
-                              : Container(
-                                  padding: EdgeInsets.symmetric(vertical: 13),
-                                  child: InkWell(
-                                    onTap: openFilter,
-                                    child: SvgPicture.asset(
-                                      'assets/images/sliders-solid.svg',
-                                      width: 2,
-                                      height: 2,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                    ),
-                                  ),
-                                ),
-                        ),
+                            suffixIcon:
+                                MediaQuery.of(context).size.width > websize
+                                    ? Container()
+                                    : MyWidget(
+                                        categories: category,
+                                        active_filter: active_filter,
+                                        searchController: searchController,
+                                        AllItems: AllItems,
+                                        start_size: start_size,
+                                        end_size: end_size,
+                                        start_carat: start_carat,
+                                        end_carat: end_carat,
+                                        rangeSize: rangeSize,
+                                        rangeCarat: rangeCarat,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            active_filter=value;
+                                          });
+                                        },
+                                      )),
                       ),
                     ),
                   ),
                 ],
               ),
-              issearch == false
+              issearch == false && active_filter == false
                   ? MediaQuery.of(context).size.width > websize
-                      ? ItemWebResponsive(all: all)
+                      ? ItemWebResponsive(
+                          all: all,
+                          islogin: islogin,
+                        )
                       : ItemMobileResponsive(
-                          all: all, searchController: searchController)
+                          all: all,
+                          searchController: searchController,
+                          islogin: islogin,
+                        )
                   : Container(
                       width: 300,
                       height: MediaQuery.of(context).size.height * 0.5,
@@ -618,39 +373,6 @@ class _ItemsScreenState extends State<ItemsScreen>
                       ),
                     ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  categoryHorizontal(BuildContext context, String title, index) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedTypeIndex = index;
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.only(left: 10, right: 10),
-        height: 38,
-        width: 81,
-        decoration: BoxDecoration(
-            color: _selectedTypeIndex == index
-                ? Theme.of(context).primaryColorLight
-                : null,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Theme.of(context).primaryColorLight)),
-        child: Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              color: _selectedTypeIndex == index
-                  ? Colors.white
-                  : Theme.of(context).primaryColorLight,
-              fontFamily: 'RobotoB',
-              fontSize: 14,
-            ),
           ),
         ),
       ),

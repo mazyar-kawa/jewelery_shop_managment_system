@@ -3,16 +3,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/horizantl_list_view_home_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../widgets/home_card_category.dart';
 
 class HomeScreen extends StatefulWidget {
-  final bool islogin;
-  const HomeScreen({Key? key, required this.islogin}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -42,16 +42,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return time;
   }
 
+  bool islogin = false;
+  late AuthUser user;
+  Future isLogin() async {
+    String token = await Auth().getToken();
+    if (token != "") {
+      islogin = true;
+      user = Provider.of<RefreshUser>(context, listen: false).currentUser;
+    } else {
+      islogin = false;
+    }
+  }
+
   Future? random;
   Future? all;
 
   @override
   void initState() {
     _pageControllerMobile = PageController(
-        initialPage: _current, viewportFraction: 0.81, keepPage: true);
+        initialPage: _current, viewportFraction: 0.95, keepPage: true);
     _pageControllerWeb = PageController(
         initialPage: _current, viewportFraction: 0.5, keepPage: true);
-
+    isLogin();
     all = AllItems();
     super.initState();
   }
@@ -82,15 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final category = Provider.of<HomeItemsProvider>(context).categories;
-    late AuthUser user;
-    if (widget.islogin) {
-      user = Provider.of<RefreshUser>(context).currentUser;
-    }
-
-    final boredrUser = OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),
-      borderRadius: BorderRadius.circular(15),
-    );
     return Scaffold(
       body: FutureBuilder(
           future: all,
@@ -118,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
                                   ),
-                                  widget.islogin
+                                  islogin
                                       ? Text(
                                           '${user.user!.username}',
                                           style: TextStyle(
@@ -131,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       : Container()
                                 ],
                               ),
-                              widget.islogin
+                              islogin
                                   ? Container(
                                       child: CircleAvatar(
                                           radius: 25,
@@ -157,9 +160,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: InputDecoration(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                          border: boredrUser,
-                          enabledBorder: boredrUser,
-                          disabledBorder: boredrUser,
+                          border: boredruser,
+                          enabledBorder: boredruser,
+                          disabledBorder: boredruser,
                           hintText:
                               '${AppLocalizations.of(context)!.search}...',
                           hintStyle: TextStyle(
@@ -184,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             vertical: 15,
                             horizontal:
                                 MediaQuery.of(context).size.width > websize
-                                    ? 150
+                                    ? 200
                                     : 0),
                         child: Row(
                           children: [
@@ -222,47 +225,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               vertical: 20,
                             ),
                             height: 260,
-                            child: MediaQuery.of(context).size.width > websize
-                                ? PageView.builder(
-                                    itemCount: products.length,
-                                    onPageChanged: ((value) {
-                                      setState(() {
-                                        _current = value;
-                                      });
-                                    }),
-                                    physics: BouncingScrollPhysics(),
-                                    controller: _pageControllerWeb,
-                                    itemBuilder: (context, index) =>
-                                        ChangeNotifierProvider.value(
-                                      value: products[index],
-                                      child: HomeCardCategory(
-                                        pageController: _pageControllerWeb,
-                                        current: _current,
-                                        index: index,
-                                        login: widget.islogin,
+                            child: PageView.builder(
+                              itemCount: products.length,
+                              onPageChanged: ((value) {
+                                setState(() {
+                                  _current = value;
+                                });
+                              }),
+                              physics: BouncingScrollPhysics(),
+                              controller:
+                                  MediaQuery.of(context).size.width > websize
+                                      ? _pageControllerWeb
+                                      : _pageControllerMobile,
+                              itemBuilder: (context, index) =>
+                                  ChangeNotifierProvider.value(
+                                value: products[index],
+                                child: AnimatedBuilder(
+                                  animation: _pageControllerMobile,
+                                  builder: (context, child) {
+                                    return AnimatedScale(
+                                      curve: Curves.fastOutSlowIn,
+                                      scale: _current == index ? 1 : 0.8,
+                                      duration: Duration(milliseconds: 500),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(vertical: 10),
+                                        child: CardItemsMobile(
+                                          index: index,
+                                          islogin: islogin,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : PageView.builder(
-                                    itemCount: products.length,
-                                    onPageChanged: ((value) {
-                                      setState(() {
-                                        _current = value;
-                                      });
-                                    }),
-                                    physics: BouncingScrollPhysics(),
-                                    controller: _pageControllerMobile,
-                                    itemBuilder: (context, index) =>
-                                        ChangeNotifierProvider.value(
-                                      value: products[index],
-                                      child: HomeCardCategory(
-                                        pageController: _pageControllerMobile,
-                                        current: _current,
-                                        index: index,
-                                        login: widget.islogin,
-                                      ),
-                                    ),
-                                  ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
                           );
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -281,19 +277,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: AppLocalizations.of(context)!.neww,
                       provder:
                           Provider.of<HomeItemsProvider>(context).latestItems,
-                      islogin: widget.islogin),
+                      islogin: islogin),
                   // most sale
                   HorizantleListView(
                       title: AppLocalizations.of(context)!.mostSales,
                       provder:
                           Provider.of<HomeItemsProvider>(context).randomItems,
-                      islogin: widget.islogin),
+                      islogin: islogin),
                   // most favorite
                   HorizantleListView(
                       title: AppLocalizations.of(context)!.mostFavourite,
                       provder:
                           Provider.of<HomeItemsProvider>(context).mostFavourite,
-                      islogin: widget.islogin),
+                      islogin: islogin),
                 ],
               );
             } else if (snapshot.connectionState == ConnectionState.waiting) {

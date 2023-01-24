@@ -15,7 +15,7 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   final RefreshController refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
   Future? category;
   @override
   void initState() {
@@ -121,10 +121,10 @@ class _CategoryPageState extends State<CategoryPage> {
                                   color:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   child: Card(
-                                      elevation: 5,
+                                      elevation: 2,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(15)),
+                                              BorderRadius.circular(10)),
                                       child: Padding(
                                         padding: const EdgeInsets.all(25.0),
                                         child: Column(
@@ -132,27 +132,31 @@ class _CategoryPageState extends State<CategoryPage> {
                                               MainAxisAlignment.center,
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
-                                            Image(
-                                              image: NetworkImage(
-                                                  category[index]
-                                                      .picturecountries!),
-                                              height: 100,
+                                            Expanded(
+                                              flex: 3,
+                                              child: Image(
+                                                image: NetworkImage(
+                                                    category[index]
+                                                        .picturecountries!),
+                                              ),
                                             ),
                                             Divider(
                                               height: 30,
                                             ),
-                                            Container(
-                                              constraints:
-                                                  BoxConstraints(maxWidth: 100),
-                                              child: Text(
-                                                  category[index]
-                                                      .namecountries!,
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .primaryColorLight,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
+                                            Expanded(
+                                              child: Container(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 100),
+                                                child: Text(
+                                                    category[index]
+                                                        .namecountries!,
+                                                    style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColorLight,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
                                             )
                                           ],
                                         ),

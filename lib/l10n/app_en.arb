@@ -50,5 +50,6 @@
     "signup": "Sign Up",
     "email": "Email",
     "passwordconfirm": "Password confirm",
-    "alreadyhaveanaccount": "Already have an account?"
+    "alreadyhaveanaccount": "Already have an account?",
+    "order":"Orders"
 }

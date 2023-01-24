@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_web.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -100,7 +98,7 @@ class BasketScreen extends StatelessWidget {
                         for (var j = 0; j < product.length; j++) {
                           return ChangeNotifierProvider.value(
                             value: product[j],
-                            child: CardItemsWeb(index: i),
+                            // child: CardItemsWeb(index: i),
                           );
                         }
                         return Container();
@@ -118,7 +116,7 @@ class BasketScreen extends StatelessWidget {
                     for (var j = 0; j < product.length; j++) {
                       return ChangeNotifierProvider.value(
                         value: product[j],
-                        child: CardItemsMobile(index: i),
+                        // child: CardItemsMobile(index: i),
                       );
                     }
                     return Container();

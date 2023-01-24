@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_web.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -87,7 +86,7 @@ class FavoriteScreen extends StatelessWidget {
                       ),
                       itemBuilder: (context, i) => ChangeNotifierProvider.value(
                             value: product[i],
-                            child: CardItemsWeb(index: i),
+                            // child: CardItemsWeb(index: i),
                           )),
                 )
               : ListView.builder(
@@ -96,7 +95,7 @@ class FavoriteScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, i) => ChangeNotifierProvider.value(
                         value: product[i],
-                        child: CardItemsMobile(index: i),
+                        // child: CardItemsMobile(index: i),
                       )),
     );
   }

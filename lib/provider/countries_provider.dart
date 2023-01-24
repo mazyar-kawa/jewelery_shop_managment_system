@@ -12,7 +12,6 @@ class CountriesProvider with ChangeNotifier {
 
   Future<void> getCountries() async {
     try {
-      print('Hello');
       final response = await http.get(Uri.parse(base + 'countries'), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_web.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -78,8 +75,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
           Container(
             height: MediaQuery.of(context).size.width > websize ? 318 : 310.79,
             width: double.infinity,
-            child: MediaQuery.of(context).size.width > websize
-                ? PageView.builder(
+            child: PageView.builder(
                     itemCount: products.length,
                     onPageChanged: ((value) {
                       setState(() {
@@ -87,34 +83,24 @@ class _HorizantleListViewState extends State<HorizantleListView> {
                       });
                     }),
                     physics: BouncingScrollPhysics(),
-                    controller: _pageControllerWeb,
-                    itemBuilder: (context, index) =>
-                        ChangeNotifierProvider.value(
-                      value: products[index],
-                      child: HomeSmallCardweb(
-                        pageController: _pageControllerWeb,
-                        current: _current,
-                        index: index,
-                      ),
-                    ),
-                  )
-                : PageView.builder(
-                    itemCount: products.length,
-                    onPageChanged: ((value) {
-                      setState(() {
-                        _current = value;
-                      });
-                    }),
-                    physics: BouncingScrollPhysics(),
-                    controller: _pageControllerMobile,
+                    controller: MediaQuery.of(context).size.width > websize?_pageControllerWeb :_pageControllerMobile,
                     itemBuilder: (context, index) =>
                         ChangeNotifierProvider.value(
                           value: products[index],
-                          child: HomeSmallCardMobile(
-                            pageController: _pageControllerMobile,
-                            current: _current,
-                            index: index,
-                            islogin: widget.islogin,
+                          child: AnimatedBuilder(
+                            animation: _pageControllerMobile,
+                            builder: (context,child) {
+                              return AnimatedScale(
+                                curve: Curves.fastOutSlowIn,
+                                scale: _current == index ? 1 : 0.8,
+                                duration: Duration(milliseconds: 500),
+                                child: HomeSmallCardMobile(
+                                  current: _current,
+                                  index: index,
+                                  islogin: widget.islogin,
+                                ),
+                              );
+                            }
                           ),
                         )),
           ),

@@ -13,7 +13,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
   @override
   Widget build(BuildContext context) {
     return LoadingPage(
-      islogin: false,
+      // islogin: false,
     );
   }
 }

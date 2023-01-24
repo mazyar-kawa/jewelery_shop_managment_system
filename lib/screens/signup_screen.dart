@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/text_form_field.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +38,7 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
               context,
               MaterialPageRoute(
                   builder: (_) => LoadingPage(
-                        islogin: true,
+                        // islogin: true,
                       )));
         }
       });
@@ -300,15 +301,9 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TextFormField(
-                              controller: _emailController,
-                              decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)!.email,
-                                border: boredruser,
-                                enabledBorder: boredruser,
-                                focusedBorder: boredruser,
-                              ),
-                            ),
+                            TextFormUser(
+                                controller: _emailController,
+                                hintText: AppLocalizations.of(context)!.email),
                             for (var _error in error?['errors']?['email'] ?? [])
                               Align(
                                 alignment: Alignment.topLeft,
@@ -317,16 +312,10 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ),
-                            TextFormField(
-                              controller: _nameController,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(10),
-                                hintText: 'Name',
-                                border: boredruser,
-                                enabledBorder: boredruser,
-                                focusedBorder: boredruser,
-                              ),
-                            ),
+                            TextFormUser(
+                                controller: _nameController,
+                                hintText:
+                                    AppLocalizations.of(context)!.username),
                             for (var _error in error?['errors']?['name'] ?? [])
                               Align(
                                 alignment: Alignment.topLeft,
@@ -335,16 +324,10 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ),
-                            TextFormField(
-                              controller: _usernameController,
-                              decoration: InputDecoration(
+                            TextFormUser(
+                                controller: _usernameController,
                                 hintText:
-                                    AppLocalizations.of(context)!.username,
-                                border: boredruser,
-                                enabledBorder: boredruser,
-                                focusedBorder: boredruser,
-                              ),
-                            ),
+                                    AppLocalizations.of(context)!.username),
                             for (var _error
                                 in error?['errors']?['username'] ?? [])
                               Align(
@@ -354,17 +337,12 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ),
-                            TextFormField(
-                              controller: _passwordController,
-                              obscureText: true,
-                              decoration: InputDecoration(
+                            TextFormUser(
+                                controller: _passwordController,
                                 hintText:
                                     AppLocalizations.of(context)!.password,
-                                border: boredruser,
-                                enabledBorder: boredruser,
-                                focusedBorder: boredruser,
-                              ),
-                            ),
+                                isobscure: true,
+                                isIcon: true),
                             for (var _error
                                 in error?['errors']?['password'] ?? [])
                               Align(
@@ -374,17 +352,12 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ),
-                            TextFormField(
-                              controller: _passwordConfirmController,
-                              obscureText: true,
-                              decoration: InputDecoration(
+                            TextFormUser(
+                                controller: _passwordConfirmController,
                                 hintText: AppLocalizations.of(context)!
                                     .passwordconfirm,
-                                border: boredruser,
-                                enabledBorder: boredruser,
-                                focusedBorder: boredruser,
-                              ),
-                            ),
+                                isobscure: true,
+                                isIcon: true),
                             for (var _error in error?['errors']
                                     ?['password_confirmation'] ??
                                 [])

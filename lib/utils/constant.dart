@@ -13,15 +13,20 @@ Color seconderCardLight = Color(0xffFFDAD9);
 
 Color shadowCardLight = Colors.grey.withOpacity(0.3);
 
+
+
+
+
 Color primaryColorDark = Color(0xff7dd3fc);
 
-Color primaryFadeCardDark = Color(0xffe0f2fe);
-Color seconderFadeCardDark = Color(0xffe9d5ff);
+Color primaryFadeCardDark = Color(0xffbae6fd);
+Color seconderFadeCardDark = Color(0xffC6FCE5);
 
 Color primaryCardDark = Color(0xffbae6fd);
 Color seconderCardDark = Color(0xFFfecdd3);
-Color scaffoldbackgroundDark = Color(0xFF3B3B3B);
-Color shadowCardDark = Color(0xff7dd3fc).withOpacity(0.3);
+//3B3B3B
+Color scaffoldbackgroundDark = Color(0xFF121212);
+Color shadowCardDark = Color(0xffFFFFFF).withOpacity(0.3);
 
 String base = 'http://192.168.1.32:8000/api/';
 
@@ -39,3 +44,13 @@ void showSnackBar(BuildContext context, message, undon) {
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+
+final boredruser = OutlineInputBorder(
+  borderSide: BorderSide(
+    color: Color(0xffE9E9E9),
+    width: 2,
+  ),
+  borderRadius: BorderRadius.circular(15),
+);
+
+

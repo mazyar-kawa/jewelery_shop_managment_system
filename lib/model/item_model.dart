@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 
 class FavouriteItems {
@@ -64,6 +66,9 @@ class Items {
       );
 }
 
+
+
+//dastkari nakain labar awai hich nagorawa lei
 class ItemsClass {
   ItemsClass({
     required this.currentPage,
@@ -103,57 +108,89 @@ class ItemsClass {
 
 class SingleItem with ChangeNotifier {
   SingleItem({
-    this.id,
-    this.name,
-    this.size,
-    this.mount,
-    this.type,
-    this.profit,
-    this.img,
-    this.description,
-    this.quantity,
-    this.companyId,
-    this.categoryId,
-    this.countryId,
-    this.isFavourited,
+     this.id,
+         this.name,
+         this.size,
+         this.weight,
+         this.img,
+         this.quantity,
+         this.companyId,
+         this.categoryId,
+         this.countryId,
+         this.caratId,
+         this.isFavourited,
+         this.price,
+         this.inBasket,
+         this.caratType,
+         this.caratMs,
+         this.countryName,
   });
 
-  int? id;
-  String? name;
-  int? size;
-  int? mount;
-  String? type;
-  String? profit;
-  String? img;
-  String? description;
-  int? quantity;
-  int? companyId;
-  int? categoryId;
-  int? countryId;
-  bool? isFavourited;
+    int? id;
+    String? name;
+    int? size;
+    int? weight;
+    
+    String? img;
+    
+    int? quantity;
+    int? companyId;
+    int? categoryId;
+    int? countryId;
+    int? caratId;
+    bool? isFavourited;
+    double? price;
+    bool? inBasket;
+    String? caratType;
+    String? caratMs;
+    String? countryName;
 
   factory SingleItem.fromJson(Map<String, dynamic> json) => SingleItem(
         id: json["id"],
         name: json["name"],
         size: json["size"],
-        mount: json["mount"],
-        type: typeValues.map?[json["type"]],
-        profit: json["profit"],
+        weight: json["weight"],
         img: json["img"],
-        description: json["description"],
         quantity: json["quantity"],
         companyId: json["company_id"],
         categoryId: json["category_id"],
         countryId: json["country_id"],
+        countryName: Country.fromJson(json["country"]).name,
+        caratId: json["carat_id"],
         isFavourited: json["is_favourited"],
-      );
+        price: json["price"]?.toDouble(),
+        inBasket: json["in_basket"],
+        caratType: Carat.fromJson(json["carat"]).type,
+        caratMs: Carat.fromJson(json["carat"]).carat,
+  );
 }
 
-enum Type { LIRA, GOLD, SILVER }
+
+class Carat {
+    Carat({
+         this.id,
+         this.carat,
+         this.type,
+         this.price,
+    });
+
+    int? id;
+    String? carat;
+    String? type;
+    double? price;
+
+    factory Carat.fromJson(Map<String, dynamic> json) => Carat(
+        id: json["id"],
+        carat: json["carat"],
+        type: typeValues.map?[json["type"]],
+        price: json["price"]?.toDouble(),
+    );
+}
+
+enum Type { GOLD, SILVER }
 
 final typeValues = EnumValues({
   "gold": Type.GOLD.name,
-  "lira": Type.LIRA.name,
   "silver": Type.SILVER.name
 });
 
@@ -170,6 +207,50 @@ class EnumValues<T> {
     return reverseMap!;
   }
 }
+
+
+class Country {
+    Country({
+         this.id,
+         this.name,
+    });
+
+    int? id;
+    String? name;
+
+    factory Country.fromJson(Map<String, dynamic> json) => Country(
+        id: json["id"],
+        name: nameValues.map![json["name"]].toString(),
+    );
+}
+
+enum Name { ITALIAN , IRAQI , FRENCH, PERSIAN, TURKISH, DUBAI}
+
+final nameValues = EnumValues({
+    "Italian": Name.ITALIAN.name,
+    "Iraqi": Name.IRAQI.name,
+    "French": Name.FRENCH.name,
+    "Persian": Name.PERSIAN.name,
+    "Turkish": Name.TURKISH.name,
+    "Dubai":Name.DUBAI.name
+});
+
+class EnumValuesCountryName<T> {
+    Map<String, T>? map;
+    late Map<T, String>? reverseMap;
+
+    EnumValuesCountryName(this.map);
+
+    Map<T, String> get reverse {
+        reverseMap = map!.map((k, v) => MapEntry(v, k));
+        return reverseMap!;
+    }
+}
+
+
+
+
+
 
 class Categories with ChangeNotifier {
   int? id;

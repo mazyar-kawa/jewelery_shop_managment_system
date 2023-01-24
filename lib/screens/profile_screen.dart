@@ -101,9 +101,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 builder: (_) => UserManagmentScreen()));
                           },
                         ),
+                        
                         ProfileCards(
                           title: AppLocalizations.of(context)!.favourite,
                           image: 'assets/images/heart-solid.svg',
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => FavoriteScreen()));
+                          },
+                        ),
+                        ProfileCards(
+                          title: AppLocalizations.of(context)!.order,
+                          image: 'assets/images/orders.svg',
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (_) => FavoriteScreen()));
@@ -132,9 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => LoadingPage(
-                                          islogin: false,
-                                        )));
+                                    builder: (_) => LoadingPage()));
                           },
                         ),
                       ],

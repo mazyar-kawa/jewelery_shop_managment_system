@@ -5,6 +5,7 @@ import 'package:jewelery_shop_managmentsystem/sharedpreferences/theme_change.dar
 class ThemeChangeProvider with ChangeNotifier {
   String currentTheme = 'system';
   ThemeChangePreferences themechange = ThemeChangePreferences();
+
   ThemeMode get themeMode {
     if (currentTheme == 'system') {
       return ThemeMode.system;
@@ -19,6 +20,9 @@ class ThemeChangeProvider with ChangeNotifier {
   setThemeProvider(String value) {
     currentTheme = value;
     themechange.setTheme(value);
+
     notifyListeners();
   }
+
+
 }

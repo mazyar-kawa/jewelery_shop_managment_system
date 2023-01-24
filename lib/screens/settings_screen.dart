@@ -197,6 +197,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                             ),
                                           ],
                                           onChanged: (String? value) {
+                                           
                                             providerTheme
                                                 .setThemeProvider(value!);
                                           });
