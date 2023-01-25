@@ -5,6 +5,7 @@ import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
 
 class MyWidget extends StatefulWidget {
   final ValueChanged<bool> onChanged;
+  
   final List<Categories> categories;
   bool active_filter;
  TextEditingController searchController;
@@ -29,7 +30,7 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
-  String currentItem = "All";
+  Object currentItem = 0;
   
   @override
   Widget build(BuildContext context) {
@@ -114,19 +115,20 @@ class _MyWidgetState extends State<MyWidget> {
                           value: currentItem,
                           items: _categories
                               .map((e) => DropdownMenuItem(
-                                  value: e.name,
+                                  value: e.id,
                                   child: Text(e.name![0].toUpperCase() +
                                       e.name.toString().substring(1))))
                               .toList(),
                           onChanged: (value) {
                             setState(() {
-                              currentItem = value.toString();
+                              currentItem = value!;
+                              
                             });
                           },
                         ),
                       ),
-                      Text_rangeSlider(context, "Size",widget.rangeSize, 7, 32, 50),
-                    Text_rangeSlider(context, "Carat", widget.rangeCarat, 12, 24, 12),
+                    Text_rangeSlider(context, "Size",widget.rangeSize, 7, 32, 50),
+                    Text_rangeSlider(context, "Weight", widget.rangeCarat, 12, 24, 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

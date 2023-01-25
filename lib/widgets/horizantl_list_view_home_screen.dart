@@ -30,10 +30,9 @@ class _HorizantleListViewState extends State<HorizantleListView> {
   @override
   void initState() {
     _pageControllerMobile = PageController(
-        initialPage: _current, viewportFraction: 0.6, keepPage: true);
+        initialPage: _current, viewportFraction: 0.65, keepPage: true);
     _pageControllerWeb = PageController(
         initialPage: _current, viewportFraction: 0.3, keepPage: true);
-
     super.initState();
   }
 
@@ -73,7 +72,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.width > websize ? 318 : 310.79,
+            height: MediaQuery.of(context).size.width > websize ? 318 : 350,
             width: double.infinity,
             child: PageView.builder(
                     itemCount: products.length,

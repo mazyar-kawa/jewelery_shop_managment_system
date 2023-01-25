@@ -94,26 +94,26 @@ class _CardItemsMobileState extends State<CardItemsMobile>
       },
       child: Directionality(
         textDirection: TextDirection.ltr,
-        child: Stack(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-              width: MediaQuery.of(context).size.width,
-              height: 180,
-              decoration: BoxDecoration(
-                color: widget.index % 2 == 0
-                    ? Theme.of(context).accentColor
-                    : Theme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).shadowColor,
-                    blurRadius: 2,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(15),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+          width: MediaQuery.of(context).size.width,
+          height: 180,
+          decoration: BoxDecoration(
+            color: widget.index % 2 == 0
+                ? Theme.of(context).accentColor
+                : Theme.of(context).primaryColor,
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).shadowColor,
+                blurRadius: 2,
+                offset: Offset(0, 2),
               ),
-              child: Row(
+            ],
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Stack(
+            children: [
+              Row(
                 children: [
                   Expanded(
                     flex: 2,
@@ -364,19 +364,17 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                   ),
                 ],
               ),
-            ),
-            islike
-                ? Center(
-                    child: Container(
-                      child: Lottie.asset(
-                        controller: animationController,
-                        'assets/images/twitter-favorite-heart.json',
-                        width: 550,
-                      ),
-                    ),
-                  )
+              islike
+                ? Container(
+                  child: Lottie.asset(
+                    controller: animationController,
+                    'assets/images/twitter-favorite-heart.json',
+                    width: 450,
+                  ),
+                )
                 : Container(),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -335,6 +335,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                                         end_carat: end_carat,
                                         rangeSize: rangeSize,
                                         rangeCarat: rangeCarat,
+                                        
                                         onChanged: (value) {
                                           setState(() {
                                             active_filter=value;

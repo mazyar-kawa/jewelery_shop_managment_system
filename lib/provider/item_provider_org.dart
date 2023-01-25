@@ -18,6 +18,7 @@ class ItemProviderORG with ChangeNotifier {
 
   Future<void> getItems(
     int country_id, {
+    Object categoriesID=0,
     String search = '',
     double size_start = 0,
     double size_end = 0,
@@ -26,15 +27,16 @@ class ItemProviderORG with ChangeNotifier {
   }) async {
     try {
       String token = await Auth().getToken();
+      print(categoriesID);
       final response = await http.get(
           Uri.parse(base +
-              'country_items/$country_id?search=$search&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&mount_start=${mount_start == 0 ? '' : mount_start}&mount_end=${mount_end == 0 ? '' : mount_end}'),
+              'country_items/$country_id?search=$search&category_id=${categoriesID == 0 ? '' : categoriesID}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${mount_start == 0 ? '' : mount_start}&weight_end=${mount_end == 0 ? '' : mount_end}'),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
-
+      print(response.body);
       final data = Items.fromJson(json.decode(response.body));
       next_url = data.items.nextPageUrl!;
       final List<SingleItem> temporaryList = [];
@@ -64,6 +66,7 @@ class ItemProviderORG with ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+    
   }
 
   Future<void> refresh({String search = '',
