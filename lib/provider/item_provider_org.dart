@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
@@ -14,23 +15,26 @@ class ItemProviderORG with ChangeNotifier {
   List<SingleItem> _favouriteItems = [];
   List<SingleItem> get favouriteItems => [..._favouriteItems];
 
+  
   String next_url = '';
 
   Future<void> getItems(
     int country_id, {
-    Object categoriesID=0,
     String search = '',
     double size_start = 0,
     double size_end = 0,
-    double mount_start = 0,
-    double mount_end = 0,
+    double weight_start=0,
+    double weight_end=0,
+    int category_id=0,
+    int carat_id=0
   }) async {
     try {
+      print(weight_start);
+      print(weight_end);
       String token = await Auth().getToken();
-      print(categoriesID);
       final response = await http.get(
           Uri.parse(base +
-              'country_items/$country_id?search=$search&category_id=${categoriesID == 0 ? '' : categoriesID}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${mount_start == 0 ? '' : mount_start}&weight_end=${mount_end == 0 ? '' : mount_end}'),
+              'country_items/$country_id?search=$search&category_id=${category_id == 0 ?'' : category_id}&carat_id=${carat_id==0?'':carat_id}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${weight_start==0?'':weight_start}&weight_end=${weight_end==0?'':weight_end}'),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -72,17 +76,20 @@ class ItemProviderORG with ChangeNotifier {
   Future<void> refresh({String search = '',
     double size_start = 0,
     double size_end = 0,
-    double mount_start = 0,
-    double mount_end = 0,}) async {
+    double weight_start=0,
+    double weight_end=0,
+    int category_id=0,
+    int carat_id=0
+    }) async {
     try {
-      print(next_url);
       String token = await Auth().getToken();
-      final response = await http.get(Uri.parse(next_url+'&search=$search&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&mount_start=${mount_start == 0 ? '' : mount_start}&mount_end=${mount_end == 0 ? '' : mount_end}'), headers: {
+      final response = await http.get(Uri.parse(next_url+'&search=$search&category_id=${category_id == 0 ?'' : category_id}&carat_id=${carat_id==0?'':carat_id}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${weight_start==0?'':weight_start}&weight_end=${weight_end==0?'':weight_end}'), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       });
-      print(next_url+'?search=$search&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&mount_start=${mount_start == 0 ? '' : mount_start}&mount_end=${mount_end == 0 ? '' : mount_end}');
+      print(next_url+'&search=$search&category_id=${category_id == 0 ?'' : category_id}&carat_id=${carat_id==0?'':carat_id}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}');
+      
 
       final data = Items.fromJson(json.decode(response.body));
       this.next_url = data.items.nextPageUrl!;

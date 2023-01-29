@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
@@ -11,9 +12,9 @@ class HomeItemsProvider with ChangeNotifier {
 
   List<SingleItem> get latestItems => [..._latestItems];
 
-  List<Categories> _categories = [];
+  List<Category> _categories = [];
 
-  List<Categories> get categories => [..._categories];
+  List<Category> get categories => [..._categories];
 
   List<SingleItem> _mostFavourite = [];
 
@@ -22,6 +23,12 @@ class HomeItemsProvider with ChangeNotifier {
   List<SingleItem> _randomItems = [];
 
   List<SingleItem> get randomItems => [..._randomItems];
+
+
+  List<Carat> _carates = [];
+
+  List<Carat> get carates => [..._carates];
+  
 
   Future<void> getRandomItems({int id = 0}) async {
     try {
@@ -102,12 +109,13 @@ class HomeItemsProvider with ChangeNotifier {
         'Authorization': 'Bearer $token',
       });
       final data = HomeItems.fromJson(json.decode(response.body));
-      final List<Categories> categories = [];
+      final List<Category> categories = [];
       final List<SingleItem> temporaryList = [];
       final List<SingleItem> temporaryList1 = [];
       final List<SingleItem> temporaryList2 = [];
+      
       for (var i = 0; i < data.categories!.length; i++) {
-        categories.add(Categories(
+        categories.add(Category(
           id: data.categories![i].id,
           name: data.categories![i].name,
         ));
@@ -183,4 +191,40 @@ class HomeItemsProvider with ChangeNotifier {
       print(e.toString());
     }
   }
+
+
+  Future<void> getCarates() async{
+  try {
+    final response = await http.get(Uri.parse(base + 'itemsFilter'), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      });
+      final data=Filter.fromJson(json.decode(response.body));
+      final List<Category> category=[];
+      final List<Carat> carat=[];
+
+      for (var i = 0; i < data.carats!.length; i++) {
+        carat.add(Carat(
+            id: data.carats![i].id,
+            carat: data.carats![i].carat,
+            type: data.carats![i].type,
+        ));
+      }
+      _carates=carat;
+      for (var i = 0; i < data.categories!.length; i++) {
+        category.add(Category(
+          id: data.categories![i].id,
+          name: data.categories![i].name,
+        ));
+      }
+      _categories=category;
+      notifyListeners();
+  } catch (e) {
+    print(e.toString());
+  }
+
 }
+}
+
+
+

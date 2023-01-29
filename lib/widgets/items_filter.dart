@@ -1,37 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
-import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
+import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 
 class MyWidget extends StatefulWidget {
   final ValueChanged<bool> onChanged;
-  
-  final List<Categories> categories;
+  final ValueChanged<int> onChangedCarat;
+  final ValueChanged<int> onChangedCategory;
+  final ValueChanged<double> onChangestart_size;
+  final ValueChanged<double> onChangeend_size;
+  final ValueChanged<double> onChangestart_weight;
+  final ValueChanged<double> onChangeend_weight;
+  final List<Category> categories;
+  final List<Carat> carates;
   bool active_filter;
- TextEditingController searchController;
-  Function(bool first,{String search,
-      double size_start,
-      double size_end ,
-      double mount_start,
-      double mount_end })  AllItems;
+  TextEditingController searchController;
+  Function(
+    bool first, {
+    String search,
+    double size_start,
+    double size_end,
+    double weight_start,
+    double weight_end,
+    int categoryId,
+    int caratId,
+  }) AllItems;
 
-      dynamic start_size;
-      dynamic end_size;
+  dynamic rangeSize;
+  dynamic rangeCarat;
 
-      dynamic start_carat;
-      dynamic end_carat;
-
-      dynamic rangeSize;
-      dynamic rangeCarat;
-  MyWidget({super.key, required this.categories,required this.active_filter,required this.searchController,required this.AllItems,required this.start_size,required this.end_size,required this.start_carat,required this.end_carat,required this.rangeSize,required this.rangeCarat,required this.onChanged});
+  int categoryId;
+  int caratId;
+  MyWidget({
+    super.key,
+    required this.categories,
+    required this.active_filter,
+    required this.searchController,
+    required this.AllItems,
+    required this.rangeSize,
+    required this.rangeCarat,
+    required this.onChanged,
+    required this.carates,
+    required this.categoryId,
+    required this.caratId,
+    required this.onChangestart_size,
+    required this.onChangeend_size,
+    required this.onChangestart_weight,
+    required this.onChangeend_weight,
+    required this.onChangedCarat,
+    required this.onChangedCategory,
+  });
 
   @override
   State<MyWidget> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<MyWidget> {
-  Object currentItem = 0;
-  
+  int currentType = 0;
+  int currentCarat = 0;
+  double startSize = 0;
+  double endSize = 0;
+  double startWeight = 0;
+  double endWeight = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,14 +81,23 @@ class _MyWidgetState extends State<MyWidget> {
   }
 
   Future Show(BuildContext context) {
-    List<Categories> _categories = [
-      Categories(id: 0, name: 'All'),
+    List<Category> _categories = [
+      Category(id: 0, name: 'All'),
       for (int i = 0; i < widget.categories.length; i++)
-        Categories(
+        Category(
             id: widget.categories.map((e) => e.id).toList().elementAt(i),
             name: widget.categories.map((e) => e.name).toList().elementAt(i))
     ];
 
+    List<Carat> _carates = [
+      Carat(id: 0, type: "All", carat: ""),
+      for (int i = 0; i < widget.carates.length; i++)
+        Carat(
+          id: widget.carates.map((e) => e.id).toList().elementAt(i),
+          carat: widget.carates.map((e) => e.carat).toList().elementAt(i),
+          type: widget.carates.map((e) => e.type).toList().elementAt(i),
+        ),
+    ];
     return showDialog(
       context: context,
       builder: (context) {
@@ -68,7 +107,7 @@ class _MyWidgetState extends State<MyWidget> {
               borderRadius: BorderRadius.circular(10),
             ),
             content: Container(
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.6,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -112,88 +151,135 @@ class _MyWidgetState extends State<MyWidget> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: DropdownButtonFormField(
-                          value: currentItem,
+                          value: currentType,
                           items: _categories
                               .map((e) => DropdownMenuItem(
                                   value: e.id,
                                   child: Text(e.name![0].toUpperCase() +
                                       e.name.toString().substring(1))))
                               .toList(),
-                          onChanged: (value) {
+                          onChanged: (int? value) {
                             setState(() {
-                              currentItem = value!;
-                              
+                              currentType = value!;
                             });
                           },
                         ),
                       ),
-                    Text_rangeSlider(context, "Size",widget.rangeSize, 7, 32, 50),
-                    Text_rangeSlider(context, "Weight", widget.rangeCarat, 12, 24, 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                               widget.active_filter = true;
-                                widget.rangeSize = RangeValues(7, 32);
-                                widget.rangeCarat = RangeValues(12, 24);
-                               widget.searchController.text = '';
-                               widget.onChanged(widget.active_filter);
-                               
-                              });
-                              widget.AllItems(true);
-                              
-                              Future.delayed(
-                                Duration(milliseconds: 1000),
-                                () {
-                                  setState(() {
-                                   widget.active_filter = false;
-                                    widget.onChanged(widget.active_filter);
-                                  });
-                                },
-                              );
-                            },
-                            icon: Icon(Icons.refresh)),
-                        InkWell(
-                          onTap: () {
+                      Text(
+                        "Carat",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorLight,
+                          fontFamily: 'RobotoM',
+                          fontSize: 16,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: DropdownButtonFormField(
+                          value: currentCarat,
+                          items: _carates
+                              .map((e) => DropdownMenuItem(
+                                  value: e.id,
+                                  child: Text(e.type![0].toUpperCase() +
+                                      e.type.toString().substring(1) +
+                                      ' ' +
+                                      e.carat!.toString())))
+                              .toList(),
+                          onChanged: (int? value) {
                             setState(() {
-                              widget.active_filter = true;
-                              widget.onChanged(widget.active_filter);
-                            });
-                           widget.AllItems(true,
-                                search:widget.searchController.text,
-                                size_start: widget.start_size,
-                                size_end: widget.end_size,
-                                mount_start: widget.start_carat,
-                                mount_end: widget.end_carat);
-                            Future.delayed(Duration(milliseconds: 500), () {
-                              setState(() {
-                                widget.active_filter = false;
-                                widget.onChanged(widget.active_filter);
-                              });
+                              currentCarat = value!;
                             });
                           },
-                          child: Container(
-                            width: 75,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Filter",
-                                style: TextStyle(
-                                  color: Theme.of(context).buttonColor,
-                                  fontFamily: 'RobotoM',
+                        ),
+                      ),
+                      Text_rangeSlider(
+                          context, "Size", widget.rangeSize, 7, 32, 50),
+                      Text_rangeSlider(
+                          context, "Weight", widget.rangeCarat, 12, 24, 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  widget.active_filter = true;
+                                  widget.rangeSize = RangeValues(7, 32);
+                                  widget.rangeCarat = RangeValues(12, 24);
+                                  widget.searchController.text = '';
+                                  widget.onChanged(widget.active_filter);
+                                  startSize = 0;
+                                  endSize = 0;
+                                  widget.onChangeend_size(0);
+                                  widget.onChangestart_size(0);
+                                  startWeight = 0;
+                                  endWeight = 0;
+                                  widget.onChangestart_weight(0);
+                                  widget.onChangeend_weight(0);
+                                  widget.onChangedCarat(0);
+                                  widget.onChangedCategory(0);
+                                  currentCarat=0;
+                                  currentType=0;
+                                  Navigator.pop(context);
+                                });
+                                widget.AllItems(true);
+
+                                Future.delayed(
+                                  Duration(milliseconds: 1000),
+                                  () {
+                                    setState(() {
+                                      widget.active_filter = false;
+                                      widget.onChanged(widget.active_filter);
+                                    });
+                                  },
+                                );
+                              },
+                              icon: Icon(Icons.refresh)),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                widget.active_filter = true;
+                                widget.onChanged(widget.active_filter);
+                                Navigator.pop(context);
+                              });
+                              widget.AllItems(
+                                true,
+                                search: widget.searchController.text,
+                                size_start: startSize,
+                                size_end: endSize,
+                                weight_start: startWeight,
+                                weight_end: endWeight,
+                                categoryId: currentType,
+                                caratId: currentCarat,
+                              );
+                              widget.onChangedCarat(currentCarat);
+                               widget.onChangedCategory(currentType);
+                              Future.delayed(Duration(milliseconds: 500), () {
+                                setState(() {
+                                  widget.active_filter = false;
+                                  widget.onChanged(widget.active_filter);
+                                });
+                              });
+                            },
+                            child: Container(
+                              width: 75,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Filter",
+                                  style: TextStyle(
+                                    color: Theme.of(context).buttonColor,
+                                    fontFamily: 'RobotoM',
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                     ],
                   )
                 ],
@@ -202,6 +288,7 @@ class _MyWidgetState extends State<MyWidget> {
       },
     );
   }
+
   StatefulBuilder Text_rangeSlider(BuildContext context, String lable,
       RangeValues range, double min, double max, int div) {
     return StatefulBuilder(
@@ -236,12 +323,17 @@ class _MyWidgetState extends State<MyWidget> {
                   setState(() {
                     range = values;
                     if (lable.contains("Size")) {
-                      widget.start_size = range.start;
-                      widget.end_size = range.end;
+                      startSize = range.start;
+                      widget.onChangestart_size(startSize);
+
+                      endSize = range.end;
+                      widget.onChangeend_size(endSize);
                     }
-                    if (lable.contains("Carat")) {
-                      widget.start_carat = range.start;
-                      widget.end_carat = range.end;
+                    if (lable.contains("Weight")) {
+                      startWeight = range.start;
+                      widget.onChangestart_weight(startWeight);
+                      endWeight = range.end;
+                      widget.onChangeend_weight(endWeight);
                     }
                   });
                 },

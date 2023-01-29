@@ -115,9 +115,7 @@ class Auth {
 
   Future<bool> logOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    
     return await prefs.remove('token');
-    
   }
 
   Future<ApiProvider> FavouriteItem(int itemId) async {
@@ -143,7 +141,7 @@ class Auth {
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
-    print(apiProvider.data);
+    
     return apiProvider;
   }
 
@@ -170,7 +168,7 @@ class Auth {
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
-    print(apiProvider.data);
+    
     return apiProvider;
   }
 }

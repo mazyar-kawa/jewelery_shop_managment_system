@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
+import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 
 class FavouriteItems {
   FavouriteItems({
@@ -26,7 +25,7 @@ class HomeItems {
   List<SingleItem>? randomItems;
   List<SingleItem>? latestItems;
   List<SingleItem>? mostFavouriteItems;
-  List<Categories>? categories;
+  List<Category>? categories;
 
   factory HomeItems.fromJson(Map<String, dynamic> json) => HomeItems(
         randomItems: List<SingleItem>.from(
@@ -35,8 +34,8 @@ class HomeItems {
             json["latestItems"].map((x) => SingleItem.fromJson(x))),
         mostFavouriteItems: List<SingleItem>.from(
             json["mostFavouriteItems"].map((x) => SingleItem.fromJson(x))),
-        categories: List<Categories>.from(
-            json['categories'].map((x) => Categories.fromJson(x))),
+        categories: List<Category>.from(
+            json['categories'].map((x) => Category.fromJson(x))),
       );
 }
 
@@ -65,8 +64,6 @@ class Items {
         items: ItemsClass.fromJson(json["items"]),
       );
 }
-
-
 
 //dastkari nakain labar awai hich nagorawa lei
 class ItemsClass {
@@ -108,42 +105,42 @@ class ItemsClass {
 
 class SingleItem with ChangeNotifier {
   SingleItem({
-     this.id,
-         this.name,
-         this.size,
-         this.weight,
-         this.img,
-         this.quantity,
-         this.companyId,
-         this.categoryId,
-         this.countryId,
-         this.caratId,
-         this.isFavourited,
-         this.price,
-         this.inBasket,
-         this.caratType,
-         this.caratMs,
-         this.countryName,
+    this.id,
+    this.name,
+    this.size,
+    this.weight,
+    this.img,
+    this.quantity,
+    this.companyId,
+    this.categoryId,
+    this.countryId,
+    this.caratId,
+    this.isFavourited,
+    this.price,
+    this.inBasket,
+    this.caratType,
+    this.caratMs,
+    this.countryName,
   });
 
-    int? id;
-    String? name;
-    int? size;
-    int? weight;
-    
-    String? img;
-    
-    int? quantity;
-    int? companyId;
-    int? categoryId;
-    int? countryId;
-    int? caratId;
-    bool? isFavourited;
-    double? price;
-    bool? inBasket;
-    String? caratType;
-    String? caratMs;
-    String? countryName;
+  int? id;
+  String? name;
+  int? size;
+  int? weight;
+
+  String? img;
+
+  int? quantity;
+  int? companyId;
+  int? categoryId;
+  int? countryId;
+  int? caratId;
+  bool? isFavourited;
+  double? price;
+  bool? inBasket;
+  String? caratType;
+  String? caratMs;
+  String? countryName;
 
   factory SingleItem.fromJson(Map<String, dynamic> json) => SingleItem(
         id: json["id"],
@@ -162,37 +159,13 @@ class SingleItem with ChangeNotifier {
         inBasket: json["in_basket"],
         caratType: Carat.fromJson(json["carat"]).type,
         caratMs: Carat.fromJson(json["carat"]).carat,
-  );
-}
-
-
-class Carat {
-    Carat({
-         this.id,
-         this.carat,
-         this.type,
-         this.price,
-    });
-
-    int? id;
-    String? carat;
-    String? type;
-    double? price;
-
-    factory Carat.fromJson(Map<String, dynamic> json) => Carat(
-        id: json["id"],
-        carat: json["carat"],
-        type: typeValues.map?[json["type"]],
-        price: json["price"]?.toDouble(),
-    );
+      );
 }
 
 enum Type { GOLD, SILVER }
 
-final typeValues = EnumValues({
-  "gold": Type.GOLD.name,
-  "silver": Type.SILVER.name
-});
+final typeValues =
+    EnumValues({"gold": Type.GOLD.name, "silver": Type.SILVER.name});
 
 class EnumValues<T> {
   Map<String, T>? map;
@@ -208,60 +181,40 @@ class EnumValues<T> {
   }
 }
 
-
 class Country {
-    Country({
-         this.id,
-         this.name,
-    });
-
-    int? id;
-    String? name;
-
-    factory Country.fromJson(Map<String, dynamic> json) => Country(
-        id: json["id"],
-        name: nameValues.map![json["name"]].toString(),
-    );
-}
-
-enum Name { ITALIAN , IRAQI , FRENCH, PERSIAN, TURKISH, DUBAI}
-
-final nameValues = EnumValues({
-    "Italian": Name.ITALIAN.name,
-    "Iraqi": Name.IRAQI.name,
-    "French": Name.FRENCH.name,
-    "Persian": Name.PERSIAN.name,
-    "Turkish": Name.TURKISH.name,
-    "Dubai":Name.DUBAI.name
-});
-
-class EnumValuesCountryName<T> {
-    Map<String, T>? map;
-    late Map<T, String>? reverseMap;
-
-    EnumValuesCountryName(this.map);
-
-    Map<T, String> get reverse {
-        reverseMap = map!.map((k, v) => MapEntry(v, k));
-        return reverseMap!;
-    }
-}
-
-
-
-
-
-
-class Categories with ChangeNotifier {
-  int? id;
-  String? name;
-  Categories({
+  Country({
     this.id,
     this.name,
   });
 
-  factory Categories.fromJson(Map<String, dynamic> json) => Categories(
-        id: json['id'],
-        name: json['name'],
+  int? id;
+  String? name;
+
+  factory Country.fromJson(Map<String, dynamic> json) => Country(
+        id: json["id"],
+        name: nameValues.map![json["name"]].toString(),
       );
+}
+
+enum Name { ITALIAN, IRAQI, FRENCH, PERSIAN, TURKISH, DUBAI }
+
+final nameValues = EnumValues({
+  "Italian": Name.ITALIAN.name,
+  "Iraqi": Name.IRAQI.name,
+  "French": Name.FRENCH.name,
+  "Persian": Name.PERSIAN.name,
+  "Turkish": Name.TURKISH.name,
+  "Dubai": Name.DUBAI.name
+});
+
+class EnumValuesCountryName<T> {
+  Map<String, T>? map;
+  late Map<T, String>? reverseMap;
+
+  EnumValuesCountryName(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map!.map((k, v) => MapEntry(v, k));
+    return reverseMap!;
+  }
 }

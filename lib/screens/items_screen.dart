@@ -1,7 +1,6 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
@@ -11,7 +10,6 @@ import 'package:jewelery_shop_managmentsystem/widgets/items_filter.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/mobile_item_responsive.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/web_item_responsive.dart';
 import 'package:lottie/lottie.dart';
-
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -26,11 +24,11 @@ class ItemsScreen extends StatefulWidget {
 
 class _ItemsScreenState extends State<ItemsScreen>
     with TickerProviderStateMixin {
-  double start_size = 0.0;
-  double end_size = 0.0;
+  double start_size = 0;
+  double end_size = 0;
+  double start_weight = 0;
+  double end_weight = 0;
 
-  double start_carat = 0.0;
-  double end_carat = 0.0;
   RangeValues rangeCarat = RangeValues(12, 24);
   RangeValues rangeSize = RangeValues(7, 32);
   bool active_filter = false;
@@ -38,6 +36,8 @@ class _ItemsScreenState extends State<ItemsScreen>
   bool isloading = true;
   bool issearch = false;
   int _current = 2;
+  int category_id = 0;
+  int carat_id = 0;
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
   TextEditingController searchController = TextEditingController();
@@ -62,6 +62,7 @@ class _ItemsScreenState extends State<ItemsScreen>
       Duration.zero,
       () {
         all = AllItems(isloading);
+        Provider.of<HomeItemsProvider>(context, listen: false).getCarates();
       },
     );
     isLogin();
@@ -69,31 +70,36 @@ class _ItemsScreenState extends State<ItemsScreen>
     super.initState();
   }
 
-  AllItems(bool first,
-      {String search = '',
-      double size_start = 0,
-      double size_end = 0,
-      double mount_start = 0,
-      double mount_end = 0}) async {
+  AllItems(
+    bool first, {
+    String search = '',
+    double size_start = 0,
+    double size_end = 0,
+    double weight_start = 0,
+    double weight_end = 0,
+    int categoryId = 0,
+    int caratId = 0,
+  }) async {
     final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
-
     if (first) {
       await Provider.of<ItemProviderORG>(context, listen: false).getItems(
-        CategoryId,
-        search: search,
-        size_start: size_start,
-        size_end: size_end,
-        mount_start: mount_start,
-        mount_end: mount_end,
-      );
+          CategoryId,
+          search: search,
+          size_start: start_size,
+          size_end: end_size,
+          weight_start: start_weight,
+          weight_end: end_weight,
+          category_id: categoryId,
+          carat_id: caratId);
     } else {
       await Provider.of<ItemProviderORG>(context, listen: false).refresh(
-        search: search,
-        size_start: size_start,
-        size_end: size_end,
-        mount_start: mount_start,
-        mount_end: mount_end,
-      );
+          search: search,
+          size_start: start_size,
+          size_end: end_size,
+          weight_start: start_weight,
+          weight_end: end_weight,
+          category_id: categoryId,
+          carat_id: caratId);
     }
   }
 
@@ -104,10 +110,11 @@ class _ItemsScreenState extends State<ItemsScreen>
         all = AllItems(
           false,
           search: searchController.text,
-          size_start: 0,
-          size_end: 0,
-          mount_start: 0,
-          mount_end: 0,
+          size_start: start_size,
+          size_end: end_size,
+          weight_start: start_weight,
+          weight_end: end_weight,
+          categoryId: category_id,
         );
       },
     );
@@ -134,6 +141,8 @@ class _ItemsScreenState extends State<ItemsScreen>
   @override
   Widget build(BuildContext context) {
     final category = Provider.of<HomeItemsProvider>(context).categories;
+    final carat = Provider.of<HomeItemsProvider>(context).carates;
+
     final provider = Provider.of<ItemProviderORG>(context, listen: false);
     return Scaffold(
       appBar: PreferredSize(
@@ -285,18 +294,21 @@ class _ItemsScreenState extends State<ItemsScreen>
                         controller: searchController,
                         onChanged: (value) {
                           value = searchController.text;
-
                           setState(() {
                             issearch = true;
                           });
                           EasyDebounce.debounce(
                               "Search", Duration(milliseconds: 500), () async {
-                            await AllItems(true,
-                                search: value,
-                                size_start: rangeSize.start,
-                                size_end: rangeSize.end,
-                                mount_start: rangeCarat.start,
-                                mount_end: rangeCarat.end);
+                            await AllItems(
+                              true,
+                              search: value,
+                              size_start: start_size,
+                              size_end: end_size,
+                              weight_start: start_weight,
+                              caratId: carat_id,
+                              weight_end: end_weight,
+                              categoryId: category_id,
+                            );
                             setState(() {
                               issearch = false;
                             });
@@ -329,16 +341,44 @@ class _ItemsScreenState extends State<ItemsScreen>
                                         active_filter: active_filter,
                                         searchController: searchController,
                                         AllItems: AllItems,
-                                        start_size: start_size,
-                                        end_size: end_size,
-                                        start_carat: start_carat,
-                                        end_carat: end_carat,
                                         rangeSize: rangeSize,
                                         rangeCarat: rangeCarat,
-                                        
+                                        carates: carat,
+                                        categoryId: category_id,
+                                        caratId: carat_id,
+                                        onChangestart_size: (value) {
+                                          setState(() {
+                                            start_size = value;
+                                          });
+                                        },
+                                        onChangeend_size: (value) {
+                                          setState(() {
+                                            end_size = value;
+                                          });
+                                        },
+                                        onChangestart_weight: (value) {
+                                          setState(() {
+                                            start_weight = value;
+                                          });
+                                        },
+                                        onChangeend_weight: (value) {
+                                          setState(() {
+                                            end_weight = value;
+                                          });
+                                        },
                                         onChanged: (value) {
                                           setState(() {
-                                            active_filter=value;
+                                            active_filter = value;
+                                          });
+                                        },
+                                        onChangedCarat: (value) {
+                                          setState(() {
+                                            carat_id = value;
+                                          });
+                                        },
+                                        onChangedCategory: (value) {
+                                          setState(() {
+                                            category_id=value;
                                           });
                                         },
                                       )),

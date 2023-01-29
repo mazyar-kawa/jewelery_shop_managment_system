@@ -248,10 +248,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       scale: _current == index ? 1 : 0.8,
                                       duration: Duration(milliseconds: 500),
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(vertical: 10),
+                                        padding: EdgeInsets.symmetric(vertical: 15),
                                         child: CardItemsMobile(
                                           index: index,
                                           islogin: islogin,
+                                          isbasket: false,
                                         ),
                                       ),
                                     );

@@ -50,7 +50,8 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   void initState() {
-    // Provider.of<ItemProviderORG>(context, listen: false).getItems(1);
+    Provider.of<BasketItemProvider>(context,listen: false).getItemBasket();
+    
     adduser();
     Future.delayed(
       Duration(seconds: 3),
@@ -65,6 +66,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return splash
         ? Scaffold(
             body: currentPage,

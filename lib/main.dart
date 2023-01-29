@@ -44,6 +44,7 @@ class _MyAppState extends State<MyApp> {
     getlanguage();
     changeTheme();
     super.initState();
+    
   }
 
   getlanguage() async {

@@ -133,7 +133,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                         padding: const EdgeInsets.all(5),
                         height: 25,
                         decoration: BoxDecoration(
-                          color: product.caratType == 'GOLD'
+                          color: product.caratType == 'gold'
                               ? Color(0xffFFD700).withOpacity(0.1)
                               : Color(0xffC0C0C0).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
@@ -142,7 +142,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                           child: Text(
                             '${product.caratType!} ${product.caratMs!}',
                             style: TextStyle(
-                              color: product.caratType == 'GOLD'
+                              color: product.caratType == 'gold'
                                   ? Color(0xffFFD700)
                                   : Color(0xFFA3A3A3),
                               fontFamily: 'RobotoM',
@@ -236,37 +236,33 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              child: Row(
-                                children: [
-                                  Icon(FontAwesome5.balance_scale,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      size: 15),
-                                  Text(
-                                    ' : ${product.weight!}',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: 'RobotoM',
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(FontAwesome5.balance_scale,
+                                  color:
+                                      Theme.of(context).primaryColorLight,
+                                  size: 15),
+                              Text(
+                                '  ${product.weight!}g',
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).primaryColorLight,
+                                  fontFamily: 'RobotoM',
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         )
                       ],
                     ),
                   )),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 5),
+                    margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           child: Text(
@@ -279,10 +275,10 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                           ),
                         ),
                         Container(
-                          height: 30,
-                          width: 80,
+                          height: 40,
+                          width: 40,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                               color: Theme.of(context).scaffoldBackgroundColor,
                               border: Border.all(
                                 color: Theme.of(context).primaryColorLight,
@@ -302,43 +298,15 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                                   }
                                 },
                                 child: product.inBasket!
-                                    ? Row(
-                                      children: [
-                                        Text(
-                                          "Added",
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                            fontFamily: 'RobotoB',
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SvgPicture.asset(
-                                          "assets/images/check.svg",
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                        ),
-                                      ],
+                                    ? SvgPicture.asset(
+                                      "assets/images/check.svg",
+                                      color: Theme.of(context)
+                                          .primaryColorLight,
                                     )
-                                    : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Add",
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                            fontFamily: 'RobotoB',
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SvgPicture.asset(
-                                          "assets/images/shop.svg",
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                        ),
-                                      ],
+                                    : SvgPicture.asset(
+                                      "assets/images/shop.svg",
+                                      color: Theme.of(context)
+                                          .primaryColorLight,
                                     )),
                           ),
                         )
