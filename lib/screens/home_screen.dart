@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future isLogin() async {
     String token = await Auth().getToken();
     if (token != "") {
+      print("token haia la home");
       islogin = true;
       user = Provider.of<RefreshUser>(context, listen: false).currentUser;
     } else {

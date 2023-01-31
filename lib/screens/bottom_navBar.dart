@@ -4,7 +4,6 @@ import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/basket_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/category_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/home_screen.dart';
@@ -34,6 +33,7 @@ class _LoadingPageState extends State<LoadingPage> {
   AuthUser user = AuthUser();
   adduser() async {
     String token = await Auth().getToken();
+    print("Mazyar");
     if (token == '') {
       islogin = false;
     } else {
@@ -197,13 +197,35 @@ class _LoadingPageState extends State<LoadingPage> {
                   )
                 : null,
           )
-        : Container(
-            color: Colors.white,
-            child: Center(
-              child:
-                  Lottie.asset('assets/images/loader_daimond.json', width: 200),
-            ),
-          );
+        : Scaffold(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                flex: 10,
+                child: Container(
+                    child: Center(
+                      child:
+                          Lottie.asset('assets/images/loader_daimond.json', width: 200),
+                    ),
+                  ),
+              ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Center(
+                      child: Text("Loading...",style: TextStyle(
+                        color: Theme.of(context).primaryColorLight,
+                        fontSize: 18,
+                      ),)
+                          
+                    ),
+                  ),
+                ),
+        
+            ],
+          ),
+        );
   }
 
   appBarItem(String title, int index) {

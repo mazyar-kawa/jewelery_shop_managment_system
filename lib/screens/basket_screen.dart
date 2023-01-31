@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
+import 'package:jewelery_shop_managmentsystem/screens/sure_order_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
@@ -20,20 +21,48 @@ class _BasketScreenState extends State<BasketScreen> {
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
   Future? items;
+  bool onload = true;
   @override
   void initState() {
-    items = onLoading();
+    items = LoadingAllItem(onload);
     isLogin();
     super.initState();
   }
 
-  onLoading()  async{
-    await Provider.of<BasketItemProvider>(context, listen: false)
-        .getItemBasket();
+  LoadingAllItem(bool isfirst) async {
+    if (isfirst) {
+      await Provider.of<BasketItemProvider>(context, listen: false)
+          .getItemBasket();
+    } else {
+      await Provider.of<BasketItemProvider>(context, listen: false)
+          .pagination();
+    }
+  }
+
+  void onLoading() async {
+    onload = false;
+    await Future.delayed(
+      Duration(seconds: 2),
+      () {
+        items = LoadingAllItem(false);
+      },
+    );
+    refreshController.loadComplete();
+  }
+
+  void Refresh() async {
+    await Future.delayed(
+      Duration(seconds: 2),
+      () {
+        items = LoadingAllItem(true);
+      },
+    );
+    refreshController.refreshCompleted();
   }
 
   bool ischeckAll = false;
   bool islogin = false;
+  bool change = false;
 
   Future isLogin() async {
     String token = await Auth().getToken();
@@ -44,54 +73,10 @@ class _BasketScreenState extends State<BasketScreen> {
     }
   }
 
-  
-  
-
   @override
   Widget build(BuildContext context) {
     final basket = Provider.of<BasketItemProvider>(context, listen: false);
-     final item = Provider.of<BasketItemProvider>(context).baskets;
     return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton:item.length != 0
-            ? InkWell(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "\$990",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorLight,
-                          fontFamily: 'RobotoM',
-                          fontSize: 18,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Next",
-                            style: TextStyle(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              fontFamily: 'RobotoM',
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            : null,
         appBar: PreferredSize(
           preferredSize:
               Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
@@ -122,7 +107,8 @@ class _BasketScreenState extends State<BasketScreen> {
             ),
           ),
         ),
-        body: item.length == 0 ? Column(
+        body: basket.baskets.length == 0
+            ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
@@ -148,9 +134,233 @@ class _BasketScreenState extends State<BasketScreen> {
                     ),
                   )
                 ],
-              ):
-             SmartRefresher(
-                enablePullDown: true,
+              )
+            : Column(
+              children: [
+                FutureBuilder(
+                  future: items,
+                  builder: (context, snapshot) {
+                    final item =
+                        Provider.of<BasketItemProvider>(context).baskets;
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return item.length != 0
+                          ? Expanded(
+                            child: Column(children: [
+                                Container(
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Checkbox(
+                                            checkColor: Colors.white,
+                                            fillColor:
+                                                MaterialStateProperty.all(
+                                                    Theme.of(context)
+                                                        .primaryColorLight),
+                                            value: ischeckAll,
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                ischeckAll = value!;
+                                              });
+                                            },
+                                          ),
+                                          Text(
+                                            "All",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              fontFamily: 'RobotoM',
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        "${basket.countItemReady()} Selected",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          fontFamily: 'RobotoM',
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  indent: 10,
+                                  color: Theme.of(context).primaryColorLight,
+                                  height: 2,
+                                ),
+                                Expanded(
+                                  flex: 10,
+                                  child: SmartRefresher(
+                                      enablePullDown: true,
+                                                enablePullUp: true,
+                                                controller: refreshController,
+                                                header: CustomHeader(
+                                                  builder: (context, mode) {
+                                                    Widget body;
+                                                    if (mode == LoadStatus.loading) {
+                                                      body = Lottie.asset('assets/images/refresh.json');
+                                                    } else {
+                                                      body = Lottie.asset('assets/images/refresh.json');
+                                                    }
+                                                    return Container(
+                                                      height: 75,
+                                                      child: Center(child: body),
+                                                    );
+                                                  },
+                                                ),
+                                                footer: CustomFooter(
+                                                  builder: (context, mode) {
+                                                  Widget body;
+                                                  if (basket.next_url == 'No data') {
+                                                    body = Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          child: Lottie.asset('assets/images/not more.json'),
+                                                        ),
+                                                        Container(
+                                                          child: Text(
+                                                            'There\'s no more Item.',
+                                                            style: TextStyle(
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    );
+                                                  } else if (mode == LoadStatus.loading) {
+                                                    body = Lottie.asset('assets/images/preloader.json');
+                                                  } else {
+                                                    body = Lottie.asset('assets/images/preloader.json');
+                                                  }
+                                                  return Container(
+                                                    padding: EdgeInsets.only(bottom: 10),
+                                                    height: 75.0,
+                                                    child: Center(child: body),
+                                                  );
+                                                }),
+                                                onLoading: onLoading,
+                                                onRefresh: Refresh,
+                                    child: ListView.builder(
+                                      itemCount: item.length,
+                                      physics: BouncingScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, i) {
+                                        return ChangeNotifierProvider.value(
+                                          value: item[i],
+                                          child: CardItemsMobile(
+                                            index: i,
+                                            islogin: islogin,
+                                            isbasket: true,
+                                            checked: ischeckAll,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                  Expanded(
+                    child: Container(
+                  alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SureOrderScreen(),
+                          ));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      height: 40,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).primaryColorLight,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            fontFamily: 'RobotoM',
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),flex: 1,)
+                              ]),
+                          )
+                          : Expanded(
+                            flex: 1,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    child: Center(
+                                        child: Text(
+                                      AppLocalizations.of(context)!
+                                          .yourBasketisempty,
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'RobotoB',
+                                        color: Theme.of(context)
+                                            .primaryColorLight,
+                                      ),
+                                    )),
+                                  ),
+                                  Container(
+                                    child: Center(
+                                      child: Lottie.asset(
+                                        'assets/images/empty-box.json',
+                                        width: MediaQuery.of(context)
+                                                    .size
+                                                    .width >
+                                                websize
+                                            ? 650
+                                            : 350,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                          );
+                    } else {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Lottie.asset(
+                                'assets/images/loader_daimond.json',
+                                width: 200),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+                
+              ],
+            ));
+  }
+}
+
+
+/*
+  enablePullDown: true,
                 enablePullUp: true,
                 controller: refreshController,
                 header: CustomHeader(
@@ -167,7 +377,8 @@ class _BasketScreenState extends State<BasketScreen> {
                     );
                   },
                 ),
-                footer: CustomFooter(builder: (context, mode) {
+                footer: CustomFooter(
+                  builder: (context, mode) {
                   Widget body;
                   if (basket.next_url == 'No data') {
                     body = Row(
@@ -192,7 +403,6 @@ class _BasketScreenState extends State<BasketScreen> {
                   } else {
                     body = Lottie.asset('assets/images/preloader.json');
                   }
-
                   return Container(
                     padding: EdgeInsets.only(bottom: 10),
                     height: 75.0,
@@ -200,125 +410,43 @@ class _BasketScreenState extends State<BasketScreen> {
                   );
                 }),
                 onLoading: onLoading,
-                onRefresh: onLoading,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      item.length != 0
-                          ? Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Checkbox(
-                                            checkColor: Colors.white,
-                                            fillColor: MaterialStateProperty.all(
-                                                Theme.of(context).primaryColorLight),
-                                            value: ischeckAll,
-                                            onChanged: (bool? value) {
-                                              setState(() {
-                                                ischeckAll = value!;
-                                              });
-                                            },
-                                          ),
-                                          Text(
-                                            "All",
-                                            style: TextStyle(
-                                              color:
-                                                  Theme.of(context).primaryColorLight,
-                                              fontFamily: 'RobotoM',
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                            "${basket.countItemReady()} Selected",
-                                            style: TextStyle(
-                                              color:
-                                                  Theme.of(context).primaryColorLight,
-                                              fontFamily: 'RobotoM',
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                    ],
-                                  ),
-                                ),
-                                Divider(
-                                  indent: 10,
-                                  color: Theme.of(context).primaryColorLight,
-                                  height: 2,
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      FutureBuilder(
-                        future: items,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return 
-                            item.length != 0 ? 
-                            ListView.builder(
-                                    itemCount: item.length,
-                                    physics: BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, i) {
-                                      return ChangeNotifierProvider.value(
-                                        value: item[i],
-                                        child: CardItemsMobile(index: i, islogin: islogin, isbasket: true,),
-                                      );
-                                    },
-                                  )
-                                : Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Center(
-                                            child: Text(
-                                          AppLocalizations.of(context)!
-                                              .yourBasketisempty,
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                            fontFamily: 'RobotoB',
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                          ),
-                                        )),
-                                      ),
-                                      Container(
-                                        child: Center(
-                                          child: Lottie.asset(
-                                            'assets/images/empty-box.json',
-                                            width: MediaQuery.of(context)
-                                                        .size
-                                                        .width >
-                                                    websize
-                                                ? 650
-                                                : 350,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  );
-                          } else {
-                            return Container(
-                              child: Lottie.asset(
-                                  'assets/images/loader_daimond.json',
-                                  width: 200),
-                            );
-                          }
-                        },
-                      )
-                    ],
+                onRefresh: Refresh,
+
+*/
+
+
+/*
+Container(
+                alignment: Alignment.bottomRight,
+                margin: EdgeInsets.symmetric(horizontal: 15),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SureOrderScreen(),
+                        ));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    height: 40,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).primaryColorLight,
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Next",
+                        style: TextStyle(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          fontFamily: 'RobotoM',
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               )
-           );
-  }
-}
+
+*/

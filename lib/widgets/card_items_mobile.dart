@@ -13,16 +13,21 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CardItemsMobile extends StatefulWidget {
-  const CardItemsMobile({
-    Key? key,
-    required this.index,
-    required this.islogin,
-    required this.isbasket,
-  }) : super(key: key);
+  ValueChanged<int>? onChanged;
+  CardItemsMobile(
+      {Key? key,
+      required this.index,
+      required this.islogin,
+      required this.isbasket,
+      this.checked,
+      })
+      : super(key: key);
 
   final int index;
   final bool islogin;
   final bool isbasket;
+  bool? checked;
+   
 
   @override
   State<CardItemsMobile> createState() => _CardItemsMobileState();
@@ -77,7 +82,8 @@ class _CardItemsMobileState extends State<CardItemsMobile>
         });
       }
     }
-  await  Provider.of<BasketItemProvider>(context, listen: false).getItemBasket();
+    await Provider.of<BasketItemProvider>(context, listen: false)
+        .getItemBasket();
   }
 
   @override
@@ -111,6 +117,11 @@ class _CardItemsMobileState extends State<CardItemsMobile>
     } else {
       provider.removeItemReady(itemBasket);
     }
+    
+      
+   
+
+   
   }
 
   @override
@@ -121,6 +132,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
     } else {
       product = Provider.of<SingleItem>(context);
     }
+
     return GestureDetector(
       onDoubleTap: () async {
         if (widget.islogin != false && widget.isbasket == false) {
@@ -403,7 +415,8 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                                         builder: (_) =>
                                                             SignIn()));
                                               } else {
-                                                addAndRemoveItemToBasket(product);
+                                                addAndRemoveItemToBasket(
+                                                    product);
                                               }
                                             },
                                             child: Icon(
