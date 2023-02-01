@@ -292,9 +292,7 @@ class _LoadingPageState extends State<LoadingPage> {
           _selectedIndex = index;
           switch (_selectedIndex) {
             case 0:
-              currentPage = HomeScreen(
-                  // islogin: islogin,
-                  );
+              currentPage = HomeScreen();
               break;
             case 1:
               currentPage = CategoryPage();
