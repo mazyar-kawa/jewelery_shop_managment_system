@@ -5,6 +5,7 @@ import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
@@ -14,20 +15,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CardItemsMobile extends StatefulWidget {
   ValueChanged<int>? onChanged;
-  CardItemsMobile(
-      {Key? key,
-      required this.index,
-      required this.islogin,
-      required this.isbasket,
-      this.checked,
-      })
-      : super(key: key);
+  CardItemsMobile({
+    Key? key,
+    required this.index,
+    required this.islogin,
+    required this.isbasket,
+    required this.issure,
+  }) : super(key: key);
 
   final int index;
   final bool islogin;
   final bool isbasket;
-  bool? checked;
-   
+  final bool issure;
 
   @override
   State<CardItemsMobile> createState() => _CardItemsMobileState();
@@ -117,11 +116,6 @@ class _CardItemsMobileState extends State<CardItemsMobile>
     } else {
       provider.removeItemReady(itemBasket);
     }
-    
-      
-   
-
-   
   }
 
   @override
@@ -134,6 +128,9 @@ class _CardItemsMobileState extends State<CardItemsMobile>
     }
 
     return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetails(item_id: product.id!),));
+      },
       onDoubleTap: () async {
         if (widget.islogin != false && widget.isbasket == false) {
           ApiProvider favourite = await Auth().FavouriteItem(product.id!);
@@ -180,7 +177,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                           topLeft: Radius.circular(15),
                           bottomLeft: Radius.circular(15),
                         ),
-                        color: Colors.white,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                       ),
                       child: Column(
                         children: [
@@ -212,7 +209,8 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                               BorderRadius.circular(10000),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.white,
+                                              color:
+                                                  Theme.of(context).shadowColor,
                                               blurRadius: 5,
                                               spreadRadius: 2,
                                               offset: Offset(1, 2),
@@ -253,16 +251,18 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                           ),
                           Column(
                               crossAxisAlignment:
-                                  CrossAxisAlignment.stretch, // add this
+                                  CrossAxisAlignment.stretch, 
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                               children: <Widget>[
-                                ClipRRect(
+                                AspectRatio(
+                                    aspectRatio: 1.8,
                                     child: Image.network(product.img!,
-                                        // width: 300,
-                                        height: 90,
                                         fit: BoxFit.contain)),
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 10,
+                                   
                                   ),
                                   padding: const EdgeInsets.all(5),
                                   height: 28,
@@ -306,7 +306,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Flexible(
+                          Expanded(
                             child: Container(
                               margin:
                                   EdgeInsets.only(right: 15, left: 10, top: 5),
@@ -317,7 +317,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Flexible(
+                                      Expanded(
                                         child: Container(
                                           child: new Text(
                                             product.name!,

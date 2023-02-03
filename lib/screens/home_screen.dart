@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
@@ -46,8 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late AuthUser user;
   Future isLogin() async {
     String token = await Auth().getToken();
-    if (token != "") {
-      print("token haia la home");
+    if (token != '') {
       islogin = true;
       user = Provider.of<RefreshUser>(context, listen: false).currentUser;
     } else {
@@ -95,6 +95,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final category = Provider.of<HomeItemsProvider>(context).categories;
+    List<Category> _categories=[
+      Category(id: 0,name: 'all'),
+    ];
+
+    for (int i=0;i<category.length;i++){
+      _categories.add(Category(
+        id: category[i].id,
+        name: category[i].name
+      ));
+    }
     return Scaffold(
       body: FutureBuilder(
           future: all,
@@ -143,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .user!.profilePicture !=
                                                   null
                                               ? NetworkImage(
-                                                  user.user!.profilePicture)
+                                                  user.user!.profilePicture,)
                                               : NetworkImage(
                                                   'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
                                     )
@@ -179,7 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           )),
                     ),
                   ),
-
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
@@ -192,23 +201,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                     : 0),
                         child: Row(
                           children: [
-                            categoryHorizontal(context, 'All', 0),
                             Container(
                               height: 35,
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
-                                itemCount: category.length,
+                                itemCount: _categories.length,
                                 itemBuilder: (context, index) {
                                   return categoryHorizontal(
                                       context,
-                                      '${category[index].name![0].toUpperCase()}' +
-                                          category[index]
+                                      '${_categories[index].name![0].toUpperCase()}' +
+                                          _categories[index]
                                               .name
                                               .toString()
                                               .substring(1),
-                                      category[index].id);
+                                      _categories[index].id);
                                 },
                               ),
                             ),
@@ -254,6 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           index: index,
                                           islogin: islogin,
                                           isbasket: false,
+                                          issure: false,
                                         ),
                                       ),
                                     );

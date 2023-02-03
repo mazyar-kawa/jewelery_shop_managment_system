@@ -81,6 +81,29 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
     }
   }
 
+  addAndRemoveItemToBasket(SingleItem item) async {
+    if (item.inBasket == true) {
+      ApiProvider removeItem =
+          await BasketItemProvider().removeToBasket(item.id!);
+      if (removeItem.data != null) {
+        setState(() {
+          item.inBasket = false;
+          showSnackBar(context, removeItem.data['message'], true);
+        });
+      }
+    } else {
+      ApiProvider addItem = await BasketItemProvider().addToBasket(item.id!);
+      if (addItem.data != null) {
+        setState(() {
+          item.inBasket = true;
+          showSnackBar(context, addItem.data['message'], false);
+        });
+      }
+    }
+    await Provider.of<BasketItemProvider>(context, listen: false)
+        .getItemBasket();
+  }
+
   @override
   void dispose() {
     animationController.dispose();
@@ -158,10 +181,12 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                               height: 30,
                               width: 30,
                               decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius: BorderRadius.circular(10000),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.white,
+                                    color: Theme.of(context).shadowColor,
                                     blurRadius: 5,
                                     spreadRadius: 2,
                                     offset: Offset(1, 2),
@@ -176,12 +201,12 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                                     child: product.isFavourited!
                                         ? SvgPicture.asset(
                                             'assets/images/heart-solid.svg',
-                                            width: 20,
+                                            width: 15,
                                             color: Colors.red,
                                           )
                                         : SvgPicture.asset(
                                             'assets/images/heart-regular.svg',
-                                            width: 20,
+                                            width: 15,
                                             color: Colors.red,
                                           )),
                               ),
@@ -192,7 +217,8 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                               height: 30,
                               width: 30,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius: BorderRadius.circular(10000),
                               ),
                             ),
@@ -241,14 +267,12 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(FontAwesome5.balance_scale,
-                                  color:
-                                      Theme.of(context).primaryColorLight,
+                                  color: Theme.of(context).primaryColorLight,
                                   size: 15),
                               Text(
                                 '  ${product.weight!}g',
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).primaryColorLight,
+                                  color: Theme.of(context).primaryColorLight,
                                   fontFamily: 'RobotoM',
                                   fontSize: 16,
                                 ),
@@ -260,7 +284,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                     ),
                   )),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -285,29 +309,26 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                               )),
                           child: Center(
                             child: InkWell(
-                                onTap: () {
-                                  // basket.addToBasket(
-                                  //     DateTime.now().toString(),
-                                  //     product.id!,
-                                  //     1);
-                                  if (widget.islogin == false) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => SignIn()));
-                                  }
-                                },
-                                child: product.inBasket!
-                                    ? SvgPicture.asset(
+                              onTap: () {
+                                if (widget.islogin == false) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => SignIn()));
+                                } else {
+                                  addAndRemoveItemToBasket(product);
+                                }
+                              },
+                              child: product.inBasket!
+                                  ? SvgPicture.asset(
                                       "assets/images/check.svg",
-                                      color: Theme.of(context)
-                                          .primaryColorLight,
+                                      color: Colors.green,
                                     )
-                                    : SvgPicture.asset(
+                                  : SvgPicture.asset(
                                       "assets/images/shop.svg",
-                                      color: Theme.of(context)
-                                          .primaryColorLight,
-                                    )),
+                                      color: Theme.of(context).primaryColorLight,
+                                    ),
+                            ),
                           ),
                         )
                       ],

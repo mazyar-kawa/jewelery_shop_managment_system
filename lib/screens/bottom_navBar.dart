@@ -25,19 +25,20 @@ class LoadingPage extends StatefulWidget {
 class _LoadingPageState extends State<LoadingPage> {
   int _selectedIndex = 0;
   bool ismodule = false;
-  // bool ismoduleAppBar = false;
   bool splash = false;
   Widget currentPage = HomeScreen();
   bool islogin = false;
+
   RefreshUser refreshUser = RefreshUser();
   AuthUser user = AuthUser();
+
+
   adduser() async {
     String token = await Auth().getToken();
-    print("Mazyar");
     if (token == '') {
       islogin = false;
     } else {
-      refreshUser = Provider.of<RefreshUser>(context, listen: false);
+      refreshUser =await Provider.of<RefreshUser>(context, listen: false);
       await refreshUser.refreshuser();
       ApiProvider response = await Auth().getUserDetials() as ApiProvider;
       if (response.data != null) {
@@ -51,7 +52,6 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     Provider.of<BasketItemProvider>(context,listen: false).getItemBasket();
-    
     adduser();
     Future.delayed(
       Duration(seconds: 3),
@@ -66,7 +66,6 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return splash
         ? Scaffold(
             body: currentPage,

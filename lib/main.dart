@@ -13,6 +13,7 @@ import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dar
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
+import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:flutter/services.dart';

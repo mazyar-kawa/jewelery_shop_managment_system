@@ -27,23 +27,19 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  animated_text_kit: ^4.2.2
-  carousel_slider: ^4.1.1
-  cupertino_icons: ^1.0.2
   easy_debounce: ^2.0.3
   flutter:
     sdk: flutter
   flutter_kurdish_localization: ^1.0.1
   flutter_localizations:
     sdk: flutter
+  flutter_slidable: ^2.0.0
   flutter_svg: ^1.1.4
   fluttericon: ^2.0.0
-  hovering: ^1.0.4
   http: ^0.13.5
   lottie: ^1.4.0
   provider: ^6.0.3
   pull_to_refresh: ^2.0.0
-  rive: ^0.10.1
   shared_preferences: ^2.0.15
 
 dev_dependencies:

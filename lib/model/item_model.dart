@@ -121,6 +121,9 @@ class SingleItem with ChangeNotifier {
     this.caratType,
     this.caratMs,
     this.countryName,
+    this.description,
+    // this.itemPictures
+
   });
 
   int? id;
@@ -129,7 +132,7 @@ class SingleItem with ChangeNotifier {
   int? weight;
 
   String? img;
-
+  String? description;
   int? quantity;
   int? companyId;
   int? categoryId;
@@ -141,6 +144,7 @@ class SingleItem with ChangeNotifier {
   String? caratType;
   String? caratMs;
   String? countryName;
+  // List<Country>? itemPictures;
 
   factory SingleItem.fromJson(Map<String, dynamic> json) => SingleItem(
         id: json["id"],
@@ -157,8 +161,10 @@ class SingleItem with ChangeNotifier {
         isFavourited: json["is_favourited"],
         price: json["price"]?.toDouble(),
         inBasket: json["in_basket"],
+        description: json["description"],
         caratType: Carat.fromJson(json["carat"]).type,
         caratMs: Carat.fromJson(json["carat"]).carat,
+        // itemPictures: List<Country>.from(json["item_pictures"].map((x) => Country.fromJson(x))),
       );
 }
 
@@ -185,14 +191,17 @@ class Country {
   Country({
     this.id,
     this.name,
+    this.itemId
   });
 
   int? id;
   String? name;
+  int? itemId;
 
   factory Country.fromJson(Map<String, dynamic> json) => Country(
         id: json["id"],
         name: nameValues.map![json["name"]].toString(),
+        itemId: json["item_id"],
       );
 }
 

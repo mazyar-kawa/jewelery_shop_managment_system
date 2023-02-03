@@ -29,13 +29,6 @@ class BasketItemProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  countProfite() {
-    double totalprofit = 0;
-    for (var i = 0; i < _ready.length; i++) {
-      totalprofit += _ready[i].profit!;
-    }
-    return totalprofit;
-  }
 
   clearItemChecked() {
     _ready.clear();

@@ -224,103 +224,110 @@ class _BasketScreenState extends State<BasketScreen> {
                 }),
                 onLoading: onLoading,
                 onRefresh: Refresh,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      FutureBuilder(
-                        future: items,
-                        builder: (context, snapshot) {
-                          final item =
-                              Provider.of<BasketItemProvider>(context).baskets;
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return item.length != 0
-                                ? Column(children: [
-                                    Container(
-                                      alignment: Alignment.centerRight,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                                      child: Text(
-                                        "${basket.countItemReady()} Selected",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                          fontFamily: 'RobotoM',
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                    Divider(
-                                      indent: 10,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      height: 2,
-                                    ),
-                                    ListView.builder(
-                                      itemCount: item.length,
-                                      physics: BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, i) {
-                                        return ChangeNotifierProvider.value(
-                                          value: item[i],
-                                          child: CardItemsMobile(
-                                            index: i,
-                                            islogin: islogin,
-                                            isbasket: true,
-                                            checked: ischeckAll,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ])
-                                : Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Center(
-                                            child: Text(
-                                          AppLocalizations.of(context)!
-                                              .yourBasketisempty,
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                            fontFamily: 'RobotoB',
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                          ),
-                                        )),
-                                      ),
-                                      Container(
-                                        child: Center(
-                                          child: Lottie.asset(
-                                            'assets/images/empty-box.json',
-                                            width: MediaQuery.of(context)
-                                                        .size
-                                                        .width >
-                                                    websize
-                                                ? 650
-                                                : 350,
-                                            fit: BoxFit.cover,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          FutureBuilder(
+                            future: items,
+                            builder: (context, snapshot) {
+                              final item =
+                                  Provider.of<BasketItemProvider>(context).baskets;
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return item.length != 0
+                                    ? Column(children: [
+                                        Container(
+                                          alignment: Alignment.centerRight,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 10),
+                                          child: Text(
+                                            "${basket.countItemReady()} Selected",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              fontFamily: 'RobotoM',
+                                              fontSize: 16,
+                                            ),
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  );
-                          } else {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: Lottie.asset(
-                                      'assets/images/loader_daimond.json',
-                                      width: 200),
-                                ),
-                              ],
-                            );
-                          }
-                        },
+                                        Divider(
+                                          indent: 10,
+                                          color:
+                                              Theme.of(context).primaryColorLight,
+                                          height: 2,
+                                        ),
+                                        ListView.builder(
+                                          itemCount: item.length,
+                                          physics: BouncingScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, i) {
+                                            return ChangeNotifierProvider.value(
+                                              value: item[i],
+                                              child: CardItemsMobile(
+                                                index: i,
+                                                islogin: islogin,
+                                                isbasket: true,
+                                                issure: false,
+                                                
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ])
+                                    : Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            child: Center(
+                                                child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .yourBasketisempty,
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                fontFamily: 'RobotoB',
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                              ),
+                                            )),
+                                          ),
+                                          Container(
+                                            child: Center(
+                                              child: Lottie.asset(
+                                                'assets/images/empty-box.json',
+                                                width: MediaQuery.of(context)
+                                                            .size
+                                                            .width >
+                                                        websize
+                                                    ? 650
+                                                    : 350,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      );
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container(
+                                  child: Center(
+                                    child: Lottie.asset(
+                                        'assets/images/loader_daimond.json',
+                                        width: 200),
+                                  ),
+                                );
+                              }
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ));
   }

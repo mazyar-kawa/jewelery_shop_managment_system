@@ -1,366 +1,392 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class ItemDetails extends StatefulWidget {
-  const ItemDetails({Key? key}) : super(key: key);
+  final int item_id;
+  const ItemDetails({super.key, required this.item_id});
 
   @override
   State<ItemDetails> createState() => _ItemDetailsState();
 }
 
-class _ItemDetailsState extends State<ItemDetails>
-    with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
-
+class _ItemDetailsState extends State<ItemDetails> {
+  bool isloading = false;
   @override
   void initState() {
-    animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 3));
+    Future.delayed(
+      Duration.zero,
+      () {
+        loadItem().then((value) {
+          isloading = true;
+        });
+      },
+    );
+
     super.initState();
   }
 
-  bool addbasket = false;
-
-  startAnimation() async {
-    addbasket = true;
-    if (addbasket == true) {
-      await animationController.forward();
-      await Future.delayed(
-        Duration(milliseconds: 150),
-        () {
-          if (animationController.isCompleted) {
-            setState(() {
-              animationController.reverse();
-            });
-          }
-        },
-      );
-    }
+  Future loadItem() async {
+    return await Provider.of<ItemProviderORG>(context, listen: false)
+        .getItemById(widget.item_id);
   }
 
-  int _currentPage = 0;
-  int quantity = 1;
-  int maxline = 3;
+  int current = 0;
   @override
   Widget build(BuildContext context) {
+    final item = Provider.of<ItemProviderORG>(context).ItemDetails;
     return Scaffold(
-      body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
-        slivers: [
-          SliverFillRemaining(
-            child: Column(
+        appBar: PreferredSize(
+          preferredSize:
+              Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
+          child: Container(
+            padding: EdgeInsets.only(
+                left: 15,
+                right: 15,
+                top: MediaQuery.of(context).size.width > websize ? 10 : 35),
+            child: Row(
               children: [
-                Flexible(
-                    flex: 3,
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_rounded,
+                      color: Theme.of(context).primaryColorLight,
+                    )),
+                Text(
+                  "Details",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'RobotoB',
+                    color: Theme.of(context).primaryColorLight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: isloading
+            ? Column(
+                children: [
+                  Expanded(
+                    flex: 4,
                     child: Container(
-                      color: Theme.of(context).buttonColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 60, horizontal: 25),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Container(
-                                width: 35,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey.withOpacity(0.4),
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: IconButton(
-                                  padding: EdgeInsets.only(right: 1),
-                                  onPressed: () {},
-                                  icon: Icon(Icons.arrow_back_ios_new_rounded),
-                                  iconSize: 20,
-                                  color: Colors.grey.withOpacity(0.8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                                height: 40,
+                                width: 40,
+                                child: Center(
+                                  child: InkWell(
+                                      onTap: () {
+                                        // favouriteAndUnFavourite(
+                                        //     product);
+                                      },
+                                      child: item.isFavourited!
+                                          ? SvgPicture.asset(
+                                              'assets/images/heart-solid.svg',
+                                              width: 15,
+                                              color: Colors.red,
+                                            )
+                                          : SvgPicture.asset(
+                                              'assets/images/heart-regular.svg',
+                                              width: 15,
+                                              color: Colors.red,
+                                            )),
+                                )),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1.8,
+                                child: PageView.builder(
+                                  onPageChanged: (value) {
+                                    setState(() {
+                                      current = value;
+                                    });
+                                  },
+                                  itemCount: 3,
+                                  itemBuilder: (context, index) {
+                                    return Image.network(item.img!,
+                                        fit: BoxFit.contain);
+                                  },
                                 ),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 40, bottom: 20),
-                              width: 300,
-                              height: 250,
-                              child: PageView.builder(
-                                onPageChanged: (value) {
-                                  setState(() {
-                                    _currentPage = value;
-                                  });
-                                },
-                                itemCount: 3,
-                                itemBuilder: (context, index) {
+                              Flex(
+                                children: List.generate(3, (_) {
                                   return Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    color: Colors.amber,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 25),
+                                    width: current == _
+                                        ? MediaQuery.of(context).size.width *
+                                            0.05
+                                        : 6,
+                                    height: 6,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(1000),
+                                        color: current == _
+                                            ? Theme.of(context)
+                                                .primaryColorLight
+                                            : Theme.of(context)
+                                                .primaryColorLight
+                                                .withOpacity(0.3),
+                                      ),
+                                    ),
                                   );
-                                },
+                                }),
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                direction: Axis.horizontal,
                               ),
-                            ),
-                            Row(
+                            ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                for (int i = 0; i < 3; i++) SliderDot(i),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    )),
-                Flexible(
-                  flex: 2,
-                  child: Container(
-                    color: Theme.of(context).buttonColor,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                child: Container(
-                                  padding: EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    'NameItems',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: 'RobotoB',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                width: 35,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey.withOpacity(0.4),
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: SvgPicture.asset(
-                                  'assets/images/heart-solid.svg',
-                                  width: 15,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 20),
-                            width: 90,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).secondaryHeaderColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                                child: Text(
-                              'Description',
-                              style: TextStyle(
-                                color: Theme.of(context).buttonColor,
-                                fontFamily: 'RobotoM',
-                                fontSize: 16,
-                              ),
-                            )),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 25),
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (maxline != 10) {
-                                    maxline = 10;
-                                  } else {
-                                    maxline = 3;
-                                  }
-                                });
-                              },
-                              child: RichText(
-                                maxLines: maxline,
-                                softWrap: true,
-                                text: TextSpan(
-                                  text:
-                                      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-                                  style: TextStyle(
+                                Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
                                     color: Theme.of(context).primaryColorLight,
-                                    fontFamily: 'RobotoM',
-                                    fontSize: 16,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Icon(FontAwesome5.minus,
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      size: 12),
+                                ),
+                                Container(
+                                  width: 25,
+                                  height: 25,
+                                  child: Center(
+                                    child: Text(
+                                      "01",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'RobotoM',
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColorLight,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Icon(FontAwesome5.plus,
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      size: 12),
+                                ),
+                              ],
                             ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).shadowColor,
+                              blurRadius: 5,
+                              offset: Offset(0, -4),
+                            )
+                          ]),
+                      child: SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
+                          child: Column(
                             children: [
-                              Container(
-                                width: 100,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Size: 14',
-                                    style: TextStyle(
-                                      color: Theme.of(context).buttonColor,
-                                      fontFamily: 'RobotoM',
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.name!,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            fontFamily: 'RobotoB',
+                                            fontSize: 18),
+                                      ),
+                                      Text(
+                                        item.countryName!,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            fontFamily: 'RobotoB',
+                                            fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    padding: const EdgeInsets.all(5),
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                      color: item.caratType == 'gold'
+                                          ? Color(0xffFFD700).withOpacity(0.1)
+                                          : Color(0xffC0C0C0).withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${item.caratType!} ${item.caratMs!}',
+                                        style: TextStyle(
+                                          color: item.caratType == 'gold'
+                                              ? Color(0xffFFD700)
+                                              : Color(0xFFA3A3A3),
+                                          fontFamily: 'RobotoM',
+                                          fontSize: 14,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                               Container(
-                                width: 100,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Mount: 22',
-                                    style: TextStyle(
-                                      color: Theme.of(context).buttonColor,
-                                      fontFamily: 'RobotoM',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 100,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Gold',
-                                    style: TextStyle(
-                                      color: Theme.of(context).buttonColor,
-                                      fontFamily: 'RobotoM',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 25,
-                            right: 25,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                child: Center(
-                                  child: Text(
-                                    '200\$',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: 'RobotoB',
-                                      fontSize: 24,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 150,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    )),
+                                margin: EdgeInsets.symmetric(vertical: 25),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '+',
+                                      "\$${item.price!.round()}",
                                       style: TextStyle(
-                                        fontFamily: 'RobotoB',
-                                        fontSize: 20,
-                                      ),
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          fontFamily: 'RobotoB',
+                                          fontSize: 20),
                                     ),
-                                    Text(
-                                      '${quantity}',
-                                      style: TextStyle(
-                                        fontFamily: 'RobotoM',
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      '-',
-                                      style: TextStyle(
-                                        fontFamily: 'RobotoB',
-                                        fontSize: 20,
+                                    Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 10),
+                                      child: Row(
+                                        children: [
+                                          Icon(FontAwesome5.balance_scale,
+                                              color: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                              size: 15),
+                                          Text(
+                                            '  ${item.weight}g',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                              fontFamily: 'RobotoM',
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               Container(
-                                height: 40,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                  borderRadius: BorderRadius.circular(5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        "Description",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            fontFamily: 'RobotoM',
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: new Text(
+                                        item.description!,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          fontFamily: 'RobotoB',
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.06,
+                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      item.inBasket!
+                                          ? "Added"
+                                          : "Add to basket",
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        fontFamily: 'RobotoB',
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               )
                             ],
                           ),
-                        )
-                      ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container SliderDot(index) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 2),
-      width: _currentPage == index ? 20 : 5,
-      height: 6,
-      decoration: BoxDecoration(
-          color: _currentPage == index
-              ? Theme.of(context).secondaryHeaderColor
-              : Colors.grey.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(10000)),
-    );
+                ],
+              )
+            : Center(
+                child: Lottie.asset('assets/images/loader_daimond.json',
+                    width: 200),
+              ));
   }
 }

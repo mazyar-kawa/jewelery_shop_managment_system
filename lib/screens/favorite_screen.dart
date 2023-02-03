@@ -94,7 +94,7 @@ class FavoriteScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, i) => ChangeNotifierProvider.value(
                         value: product[i],
-                        child: CardItemsMobile(index: i,islogin: true,isbasket: false),
+                        child: CardItemsMobile(index: i,islogin: true,isbasket: false,issure: false,),
                       )),
     );
   }
