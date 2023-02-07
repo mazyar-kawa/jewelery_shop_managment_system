@@ -109,7 +109,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               AspectRatio(
-                                aspectRatio: 1.8,
+                                aspectRatio: 2.5,
                                 child: PageView.builder(
                                   onPageChanged: (value) {
                                     setState(() {
@@ -152,234 +152,208 @@ class _ItemDetailsState extends State<ItemDetails> {
                               ),
                             ],
                           ),
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 25,
-                                  height: 25,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColorLight,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Icon(FontAwesome5.minus,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      size: 12),
-                                ),
-                                Container(
-                                  width: 25,
-                                  height: 25,
-                                  child: Center(
-                                    child: Text(
-                                      "01",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: 'RobotoM',
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 25,
-                                  height: 25,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColorLight,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Icon(FontAwesome5.plus,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      size: 12),
-                                ),
-                              ],
-                            ),
-                          )
                         ],
                       ),
                     ),
                   ),
                   Expanded(
-                    flex: 3,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Theme.of(context).shadowColor,
-                              blurRadius: 5,
-                              offset: Offset(0, -4),
-                            )
-                          ]),
-                      child: SingleChildScrollView(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                    flex: 5,
+                    child: DraggableScrollableSheet(
+                      initialChildSize: 0.85,
+                      minChildSize: 0.25,
+                      builder: (context, scrollController) {
+                        return Container(
+                          
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColorLight,
+                              borderRadius:
+                                  BorderRadius.vertical(top: Radius.circular(32.0)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context).shadowColor,
+                                  blurRadius: 5,
+                                  offset: Offset(0, -4),
+                                )
+                              ]),
+                          child: SingleChildScrollView(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              child: Column(
+                                
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                   Center(
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(vertical: 5),
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                        borderRadius: BorderRadius.circular(15)),
+                                    height: 4,
+                                    width: 48,
+                                  ),
+                                ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        item.name!,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .scaffoldBackgroundColor,
-                                            fontFamily: 'RobotoB',
-                                            fontSize: 18),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item.name!,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor,
+                                                fontFamily: 'RobotoB',
+                                                fontSize: 18),
+                                          ),
+                                          Text(
+                                            item.countryName!,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor,
+                                                fontFamily: 'RobotoB',
+                                                fontSize: 16),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        item.countryName!,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .scaffoldBackgroundColor,
-                                            fontFamily: 'RobotoB',
-                                            fontSize: 16),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        padding: const EdgeInsets.all(5),
+                                        height: 28,
+                                        decoration: BoxDecoration(
+                                          color: item.caratType == 'gold'
+                                              ? Color(0xffFFD700)
+                                                  .withOpacity(0.1)
+                                              : Color(0xffC0C0C0)
+                                                  .withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            '${item.caratType!} ${item.caratMs!}',
+                                            style: TextStyle(
+                                              color: item.caratType == 'gold'
+                                                  ? Color(0xffFFD700)
+                                                  : Color(0xFFA3A3A3),
+                                              fontFamily: 'RobotoM',
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    padding: const EdgeInsets.all(5),
-                                    height: 28,
-                                    decoration: BoxDecoration(
-                                      color: item.caratType == 'gold'
-                                          ? Color(0xffFFD700).withOpacity(0.1)
-                                          : Color(0xffC0C0C0).withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '${item.caratType!} ${item.caratMs!}',
-                                        style: TextStyle(
-                                          color: item.caratType == 'gold'
-                                              ? Color(0xffFFD700)
-                                              : Color(0xFFA3A3A3),
-                                          fontFamily: 'RobotoM',
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 25),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "\$${item.price!.round()}",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          fontFamily: 'RobotoB',
-                                          fontSize: 20),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 10),
-                                      child: Row(
-                                        children: [
-                                          Icon(FontAwesome5.balance_scale,
+                                    margin: EdgeInsets.symmetric(vertical: 25),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "\$${item.price!.round()}",
+                                          style: TextStyle(
                                               color: Theme.of(context)
                                                   .scaffoldBackgroundColor,
-                                              size: 15),
-                                          Text(
-                                            '  ${item.weight}g',
+                                              fontFamily: 'RobotoB',
+                                              fontSize: 20),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 10),
+                                          child: Row(
+                                            children: [
+                                              Icon(FontAwesome5.balance_scale,
+                                                  color: Theme.of(context)
+                                                      .scaffoldBackgroundColor,
+                                                  size: 15),
+                                              Text(
+                                                '  ${item.weight}g',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .scaffoldBackgroundColor,
+                                                  fontFamily: 'RobotoM',
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: Text(
+                                            "Description",
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor,
+                                                fontFamily: 'RobotoM',
+                                                fontSize: 20),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: new Text(
+                                            item.description!,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .scaffoldBackgroundColor,
-                                              fontFamily: 'RobotoM',
-                                              fontSize: 16,
+                                              fontFamily: 'RobotoB',
+                                              fontSize: 18,
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: Text(
-                                        "Description",
-                                        style: TextStyle(
+                                  ),
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.06,
+                                      margin: EdgeInsets.symmetric(vertical: 5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          item.inBasket!
+                                              ? "Added"
+                                              : "Add to basket",
+                                          style: TextStyle(
                                             color: Theme.of(context)
-                                                .scaffoldBackgroundColor,
-                                            fontFamily: 'RobotoM',
-                                            fontSize: 20),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: new Text(
-                                        item.description!,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 3,
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          fontFamily: 'RobotoB',
-                                          fontSize: 18,
+                                                .primaryColorLight,
+                                            fontFamily: 'RobotoB',
+                                            fontSize: 20,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  margin: EdgeInsets.symmetric(vertical: 5),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      item.inBasket!
-                                          ? "Added"
-                                          : "Add to basket",
-                                      style: TextStyle(
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        fontFamily: 'RobotoB',
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   ),
                 ],

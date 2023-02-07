@@ -23,7 +23,7 @@ class LoadingPage extends StatefulWidget {
 }
 
 class _LoadingPageState extends State<LoadingPage> {
-  int _selectedIndex = 0;
+  
   bool ismodule = false;
   bool splash = false;
   Widget currentPage = HomeScreen();
@@ -31,18 +31,18 @@ class _LoadingPageState extends State<LoadingPage> {
 
   RefreshUser refreshUser = RefreshUser();
   AuthUser user = AuthUser();
+  PageController? pageController;
 
+  Future adduser() async {
 
-  adduser() async {
-    String token = await Auth().getToken();
-    if (token == '') {
-      islogin = false;
-    } else {
-      refreshUser =await Provider.of<RefreshUser>(context, listen: false);
+   final  checkuser=  await Provider.of<Checkuser>(context,listen: false).checkUser();
+    
+    if(checkuser){
+      refreshUser = await Provider.of<RefreshUser>(context, listen: false);
       await refreshUser.refreshuser();
       ApiProvider response = await Auth().getUserDetials() as ApiProvider;
       if (response.data != null) {
-        islogin = true;
+        
         currentPage = HomeScreen();
         user = refreshUser.currentUser;
       }
@@ -51,24 +51,55 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   void initState() {
-    Provider.of<BasketItemProvider>(context,listen: false).getItemBasket();
-    adduser();
-    Future.delayed(
-      Duration(seconds: 3),
-      () {
+    pageController=PageController();
+    adduser().then((value) {
+      Provider.of<BasketItemProvider>(context, listen: false)
+          .getItemBasket()
+          .then((value) {
         setState(() {
           splash = true;
         });
-      },
-    );
+      });
+    });
+
     super.initState();
   }
 
+  int _selectedIndex = 0;
+
+  final List<Widget> screens = [
+    HomeScreen(),
+    CategoryPage(),
+    BasketScreen(),
+    NotficationScreen(),
+    ProfileScreen(),
+  ];
+
+  onTapped(index){
+    setState(() {
+      _selectedIndex=index;
+    });
+    pageController!.jumpToPage(index);
+  }
+
+  _onPageChanged(int index){
+    setState(() {
+      _selectedIndex=index;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+    final islogin=Provider.of<Checkuser>(context).islogin;
     return splash
         ? Scaffold(
-            body: currentPage,
+            body: PageView(
+              controller: pageController,
+              onPageChanged: _onPageChanged,
+              children: screens,
+            ),
             appBar: MediaQuery.of(context).size.width > websize
                 ? PreferredSize(
                     child: Container(
@@ -132,99 +163,143 @@ class _LoadingPageState extends State<LoadingPage> {
                 : null,
             bottomNavigationBar: MediaQuery.of(context).size.width < websize
                 ? Container(
-                    padding: EdgeInsets.symmetric(vertical: 7),
-                    height: 60,
-                    color: Theme.of(context).primaryColorLight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        navBarItem('assets/images/home.svg', 33, 33, 0),
-                        navBarItem('assets/images/category.svg', 30, 30, 1),
-                        Consumer<BasketItemProvider>(
-                            builder: (context, basket, child) {
-                          return Stack(
-                            children: [
-                              navBarItem(
-                                  'assets/images/basket-shopping-solid.svg',
-                                  30,
-                                  30,
-                                  2),
-                              Positioned(
-                                right: 0,
-                                height: 18,
-                                width: 18,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
-                                  child: Center(
-                                    child: Text(
-                                        basket.countItem() > 9
-                                            ? '9+'
-                                            : '${basket.countItem()}',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                        Stack(
+                    padding: EdgeInsets.only(top: 10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    ),
+                    child: BottomAppBar(
+                      elevation: 0,
+                      color: Colors.transparent,
+                      child: SizedBox(
+                        height: 60,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Container(
-                              child: navBarItem(
-                                  'assets/images/bell-solid.svg', 30, 30, 3),
+                            IconBottomAppBar(
+                                icon: 'assets/images/home.svg',
+                                width: 33,
+                                height: 33,
+                                selected: _selectedIndex == 0,
+                                onPressed: () {
+                                 
+                                  onTapped(0);
+                                }),
+                            IconBottomAppBar(
+                                icon: 'assets/images/category.svg',
+                                width: 30,
+                                height: 30,
+                                selected: _selectedIndex == 1,
+                                onPressed: () {
+                                  
+                                  onTapped(1);
+                                }),
+                            Consumer<BasketItemProvider>(
+                                builder: (context, basket, child) {
+                              return Stack(
+                                children: [
+                                  IconBottomAppBar(
+                                      icon:
+                                          'assets/images/basket-shopping-solid.svg',
+                                      width: 30,
+                                      height: 30,
+                                      selected: _selectedIndex == 2,
+                                      onPressed: () {
+                                        
+                                        onTapped(2);
+                                      }),
+                                  Positioned(
+                                    right: 0,
+                                    height: 18,
+                                    width: 18,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(1000),
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
+                                      child: Center(
+                                        child: Text(
+                                            basket.countItem() > 9
+                                                ? '9+'
+                                                : '${basket.countItem()}',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                            Stack(
+                              children: [
+                                Container(
+                                  child: IconBottomAppBar(
+                                      icon: 'assets/images/bell-solid.svg',
+                                      width: 30,
+                                      height: 30,
+                                      selected: _selectedIndex == 3,
+                                      onPressed: () {
+                                        onTapped(3);
+                                      }),
+                                ),
+                                Positioned(
+                                    right: 0,
+                                    child: Container(
+                                      width: 12,
+                                      height: 12,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(1000),
+                                          color: Color(0xffEF4444)),
+                                    ))
+                              ],
                             ),
-                            Positioned(
-                                right: 0,
-                                child: Container(
-                                  width: 12,
-                                  height: 12,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      color: Color(0xffEF4444)),
-                                ))
+                            IconBottomAppBar(
+                                icon: 'assets/images/user-solid.svg',
+                                width: 30,
+                                height: 30,
+                                selected: _selectedIndex == 4,
+                                onPressed: () {
+                                  onTapped(4);
+                                }),
                           ],
                         ),
-                        navBarItem('assets/images/user-solid.svg', 30, 30, 4),
-                      ],
+                      ),
                     ),
                   )
                 : null,
           )
         : Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                flex: 10,
-                child: Container(
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  flex: 10,
+                  child: Container(
                     child: Center(
-                      child:
-                          Lottie.asset('assets/images/loader_daimond.json', width: 200),
+                      child: Lottie.asset('assets/images/loader_daimond.json',
+                          width: 200),
                     ),
                   ),
-              ),
+                ),
                 Expanded(
                   flex: 1,
                   child: Container(
                     child: Center(
-                      child: Text("Loading...",style: TextStyle(
+                        child: Text(
+                      "Loading...",
+                      style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
                         fontSize: 18,
-                      ),)
-                          
-                    ),
+                      ),
+                    )),
                   ),
                 ),
-        
-            ],
-          ),
-        );
+              ],
+            ),
+          );
   }
 
   appBarItem(String title, int index) {
@@ -250,9 +325,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   currentPage = NotficationScreen();
                   break;
                 case 4:
-                  currentPage = ProfileScreen(
-                    islogin: islogin,
-                  );
+                  currentPage = ProfileScreen();
                   break;
               }
             });
@@ -283,57 +356,52 @@ class _LoadingPageState extends State<LoadingPage> {
       ],
     );
   }
+}
 
-  navBarItem(String icon, double width, double height, int index) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-          switch (_selectedIndex) {
-            case 0:
-              currentPage = HomeScreen();
-              break;
-            case 1:
-              currentPage = CategoryPage();
-              break;
-            case 2:
-              currentPage = BasketScreen();
-              break;
-            case 3:
-              currentPage = NotficationScreen();
-              break;
-            case 4:
-              currentPage = ProfileScreen(
-                islogin: islogin,
-              );
-              break;
-          }
-        });
-      },
-      child: Column(
-        children: [
-          SvgPicture.asset(
+class IconBottomAppBar extends StatelessWidget {
+  final String icon;
+  final double width;
+  final double height;
+  final bool selected;
+  final Function() onPressed;
+  const IconBottomAppBar(
+      {super.key,
+      required this.icon,
+      required this.width,
+      required this.height,
+      required this.selected,
+      required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        InkWell(
+          onTap: onPressed,
+          child: SvgPicture.asset(
             icon,
-            color: index == _selectedIndex
-                ? Theme.of(context).scaffoldBackgroundColor
-                : Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+            color: selected
+                ? Theme.of(context).primaryColorLight
+                : Theme.of(context).primaryColorLight.withOpacity(0.7),
             width: width,
             height: height,
           ),
-          SizedBox(
-            height: 3,
-          ),
-          index == _selectedIndex && MediaQuery.of(context).size.width < websize
-              ? Container(
-                  width: 7,
-                  height: 7,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(1000),
-                      color: Theme.of(context).scaffoldBackgroundColor),
-                )
-              : Container(),
-        ],
-      ),
+        ),
+        selected
+            ? Container(
+                margin: EdgeInsets.only(top: 4),
+                width: 25,
+                height: 3,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorLight,
+                    borderRadius: BorderRadius.circular(15)),
+              )
+            : Container(
+                margin: EdgeInsets.only(top: 4),
+                width: 25,
+                height: 3,
+              ),
+      ],
     );
   }
 }

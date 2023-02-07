@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:http/http.dart' as http;
@@ -100,6 +101,7 @@ class Auth {
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
+    
     return apiProvider;
   }
 
@@ -171,4 +173,24 @@ class Auth {
     
     return apiProvider;
   }
+}
+
+class Checkuser with ChangeNotifier{
+  bool _islogon=false;
+
+  bool get islogin=> _islogon;
+
+
+  Future<bool> checkUser() async{
+    String token = await Auth().getToken();
+    if (token == '') {
+      _islogon = false;
+    } else {
+      _islogon=true;
+    }
+    return _islogon;
+  }
+
+
+
 }

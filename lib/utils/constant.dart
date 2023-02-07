@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
+import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:provider/provider.dart';
+
 
 const websize = 600;
 
@@ -52,6 +58,5 @@ final boredruser = OutlineInputBorder(
   ),
   borderRadius: BorderRadius.circular(15),
 );
-
 
  

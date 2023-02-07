@@ -1,11 +1,14 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/dashed_separator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +24,15 @@ class _SureOrderScreenState extends State<SureOrderScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
 
+  bool orederd = false;
+
   void showBill(BuildContext context, List<ItemBasket> items) => showDialog(
         context: context,
         builder: (context) {
+          List<int> basketId = [];
+          for (int i = 0; i < items.length; i++) {
+            basketId.add(items[i].basketId!);
+          }
           return Dialog(
             child: Container(
               height: MediaQuery.of(context).size.height * 0.5,
@@ -67,14 +76,39 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    '${index + 1}. ${items[index].name}',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: 'RobotoM',
-                                      fontSize: 14,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${index + 1}. ${items[index].name}',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          fontFamily: 'RobotoM',
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.close,
+                                              size: 14,
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                            ),
+                                            Text(
+                                              '${items[index].quantity}',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                                fontFamily: 'RobotoM',
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
                                   ),
                                   Text(
                                     "\$${items[index].price!.round()}",
@@ -102,7 +136,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                           children: [
                             Container(
                               child: Text(
-                                "Total: \$${basket.totalBeforOrder()}",
+                                "Total: \$${basket.TotalPrice()}",
                                 style: TextStyle(
                                   color: Theme.of(context).primaryColorLight,
                                   fontFamily: 'RobotoB',
@@ -111,11 +145,26 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                               ),
                             ),
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
+                                ApiProvider response =
+                                    await Order().Orders(basketId);
+                                if (response.data == null) {
+                                  showSnackBar(context,
+                                      response.error!['message'], true);
+                                }
+                                await Provider.of<HomeItemsProvider>(context,
+                                        listen: false)
+                                    .getAllItemHome();
+
+                                await Provider.of<BasketItemProvider>(context,
+                                        listen: false)
+                                    .getItemBasket();
+
                                 Navigator.pop(context);
                                 showdialog(context);
                                 setState(() {
                                   basket.clearItemChecked();
+                                  orederd = true;
                                 });
                               },
                               child: Container(
@@ -172,6 +221,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
   void initState() {
     loadItem =
         Provider.of<BasketItemProvider>(context, listen: false).getReadyItem();
+
     animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 3));
     animationController
@@ -183,6 +233,13 @@ class _SureOrderScreenState extends State<SureOrderScreen>
     super.initState();
   }
 
+  UpdateQuantities(int itemId, int quantity, bool increase) async {
+    ApiProvider updateQuantity = await Order().UpdateQuantity(itemId, quantity);
+    if (updateQuantity.data != null) {
+      showSnackBar(context, updateQuantity.data['message'], increase);
+    }
+  }
+
   @override
   void dispose() {
     animationController.dispose();
@@ -192,34 +249,32 @@ class _SureOrderScreenState extends State<SureOrderScreen>
   @override
   Widget build(BuildContext context) {
     final item = Provider.of<BasketItemProvider>(context, listen: false);
+
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize:
-              Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
-          child: Container(
-            padding: EdgeInsets.only(
-                left: 15,
-                right: 15,
-                top: MediaQuery.of(context).size.width > websize ? 10 : 35),
-            child: Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios_rounded,
-                      color: Theme.of(context).primaryColorLight,
-                    )),
-                Text(
-                  "Check Out",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'RobotoB',
-                    color: Theme.of(context).primaryColorLight,
-                  ),
-                ),
-              ],
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: true,
+          title: Text(
+            "Check out",
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'RobotoB',
+              color: Theme.of(context).primaryColorLight,
+            ),
+          ),
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              height: 20,
+              width: 25,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
           ),
         ),
@@ -329,7 +384,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                                                   .name!,
                                                               overflow:
                                                                   TextOverflow
-                                                                      .fade,
+                                                                      .ellipsis,
                                                               maxLines: 1,
                                                               softWrap: false,
                                                               style: TextStyle(
@@ -390,28 +445,63 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Container(
-                                                    width: 25,
-                                                    height: 25,
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .primaryColorLight,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                    child: Icon(
-                                                        FontAwesome5.minus,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        items[index].quantity =
+                                                            items[index]
+                                                                    .quantity! -
+                                                                1;
+
+                                                        if (items[index]
+                                                                .quantity! <
+                                                            1) {
+                                                          items[index]
+                                                              .quantity = 1;
+                                                          showSnackBar(
+                                                              context,
+                                                              "You can\'t decrease quantity to 0",
+                                                              true);
+                                                        } else {
+                                                          EasyDebounce.debounce(
+                                                              "decreaseQuantity",
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      250), () {
+                                                            UpdateQuantities(
+                                                                items[index]
+                                                                    .id!,
+                                                                items[index]
+                                                                    .quantity!,
+                                                                true);
+                                                          });
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      width: 25,
+                                                      height: 25,
+                                                      decoration: BoxDecoration(
                                                         color: Theme.of(context)
-                                                            .scaffoldBackgroundColor,
-                                                        size: 12),
+                                                            .primaryColorLight,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      child: Icon(
+                                                          FontAwesome5.minus,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .scaffoldBackgroundColor,
+                                                          size: 12),
+                                                    ),
                                                   ),
                                                   Container(
                                                     width: 25,
                                                     height: 25,
                                                     child: Center(
                                                       child: Text(
-                                                        "01",
+                                                        "${items[index].quantity}",
                                                         style: TextStyle(
                                                           fontSize: 16,
                                                           fontFamily: 'RobotoM',
@@ -422,21 +512,43 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                                       ),
                                                     ),
                                                   ),
-                                                  Container(
-                                                    width: 25,
-                                                    height: 25,
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .primaryColorLight,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                    child: Icon(
-                                                        FontAwesome5.plus,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        items[index].quantity =
+                                                            items[index]
+                                                                    .quantity! +
+                                                                1;
+                                                      });
+                                                      EasyDebounce.debounce(
+                                                          "increaseQuantity",
+                                                          Duration(
+                                                              milliseconds:
+                                                                  250), () {
+                                                        UpdateQuantities(
+                                                            items[index].id!,
+                                                            items[index]
+                                                                .quantity!,
+                                                            false);
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      width: 25,
+                                                      height: 25,
+                                                      decoration: BoxDecoration(
                                                         color: Theme.of(context)
-                                                            .scaffoldBackgroundColor,
-                                                        size: 12),
+                                                            .primaryColorLight,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      child: Icon(
+                                                          FontAwesome5.plus,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .scaffoldBackgroundColor,
+                                                          size: 12),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -482,7 +594,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                             ),
                                             Container(
                                               child: Text(
-                                                '\$${basket.totalBeforOrder()}',
+                                                '\$${basket.TotalPrice()}',
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColorLight,
@@ -495,11 +607,14 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                         ),
                                       ),
                                       InkWell(
-                                        onTap: (){
-                                           showBill(context, items);
+                                        onTap: () {
+                                          showBill(context, items);
                                         },
                                         child: Container(
-                                          height: MediaQuery.of(context).size.height*0.06,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.06,
                                           margin:
                                               EdgeInsets.symmetric(vertical: 5),
                                           decoration: BoxDecoration(
@@ -528,33 +643,64 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             )),
                       ],
                     )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Center(
-                              child: Text(
-                            "Ops! it is empty",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'RobotoB',
-                              color: Theme.of(context).primaryColorLight,
+                  : !orederd
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Center(
+                                  child: Text(
+                                "Ops! it is empty",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: 'RobotoB',
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                              )),
                             ),
-                          )),
-                        ),
-                        Container(
-                          child: Center(
-                            child: Lottie.asset(
-                              'assets/images/empty-box.json',
-                              width: MediaQuery.of(context).size.width > websize
-                                  ? 650
-                                  : 350,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                            Container(
+                              child: Center(
+                                child: Lottie.asset(
+                                  'assets/images/empty-box.json',
+                                  width: MediaQuery.of(context).size.width >
+                                          websize
+                                      ? 650
+                                      : 350,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                          ],
                         )
-                      ],
-                    );
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Center(
+                                  child: Text(
+                                "Thank\'s for your order, Please check your orders",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: 'RobotoB',
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                              )),
+                            ),
+                            Container(
+                              child: Center(
+                                child: Lottie.asset(
+                                  'assets/images/order_complete.json',
+                                  width: MediaQuery.of(context).size.width >
+                                          websize
+                                      ? 650
+                                      : 350,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                          ],
+                        );
             } else if (snapshot.connectionState == ConnectionState.waiting) {
               return Container(
                 child: Center(

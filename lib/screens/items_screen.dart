@@ -145,81 +145,78 @@ class _ItemsScreenState extends State<ItemsScreen>
 
     final provider = Provider.of<ItemProviderORG>(context, listen: false);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
-        child: Container(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 50),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_ios_rounded,
-                        color: Theme.of(context).primaryColorLight,
-                      )),
-                  Text(
-                    AppLocalizations.of(context)!.items,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'RobotoB',
-                      color: Theme.of(context).primaryColorLight,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).primaryColorLight,
-                ),
-                child: Stack(
-                  children: [
-                    Container(
-                      child: Center(
-                        child: SvgPicture.asset(
-                          'assets/images/basket-shopping-solid.svg',
-                          width: 25,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      height: 18,
-                      width: 18,
-                      child: Consumer<BasketItemProvider>(
-                          builder: (context, basket, child) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(1000),
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          child: Center(
-                            child: Text(
-                                basket.countItem() > 9
-                                    ? '9+'
-                                    : '${basket.countItem()}',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColorLight,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.of(context)!.items,
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'RobotoB',
+            color: Theme.of(context).primaryColorLight,
           ),
         ),
+        leading: InkWell(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            height: 20,
+            width: 25,
+            
+            child: Icon(Icons.arrow_back_ios_new_rounded,
+                color: Theme.of(context).primaryColorLight),
+          ),
+        ),
+        actions: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).primaryColorLight,
+            ),
+            child: Stack(
+              children: [
+                Container(
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'assets/images/basket-shopping-solid.svg',
+                      width: 25,
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  height: 18,
+                  width: 18,
+                  child: Consumer<BasketItemProvider>(
+                      builder: (context, basket, child) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(1000),
+                          color: Theme.of(context).scaffoldBackgroundColor),
+                      child: Center(
+                        child: Text(
+                            basket.countItem() > 9
+                                ? '9+'
+                                : '${basket.countItem()}',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColorLight,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: SmartRefresher(
         enablePullDown: true,
@@ -378,7 +375,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                                         },
                                         onChangedCategory: (value) {
                                           setState(() {
-                                            category_id=value;
+                                            category_id = value;
                                           });
                                         },
                                       )),

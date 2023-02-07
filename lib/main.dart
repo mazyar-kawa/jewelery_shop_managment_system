@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
@@ -15,6 +16,7 @@ import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart'
 import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -70,22 +72,21 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: ItemProviderORG()),
         ChangeNotifierProvider.value(value: SingleItem()),
         ChangeNotifierProvider.value(value: HomeItemsProvider()),
+        ChangeNotifierProvider.value(value: Checkuser()),
+        ChangeNotifierProvider.value(value: ItemBasket()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {
         return Consumer<LanguageProvider>(builder: (child, provider, value) {
           return MaterialApp(
-            
             localizationsDelegates: const [
               KurdishMaterialLocalizations.delegate,
-              // RefreshLocalizations.delegate,
               KurdishWidgetLocalizations.delegate,
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            
             supportedLocales: AppLocalizations.supportedLocales,
             locale: provider.getCurrentLanguage,
             debugShowCheckedModeBanner: false,
@@ -113,7 +114,7 @@ class _MyAppState extends State<MyApp> {
               mobilescreen: MobileScreenLayout(),
               webscreen: WebScreenLayout(),
             ),
-            // home: ItemDetails(),
+            
             routes: {
               ItemsScreen.routname: (context) => ItemsScreen(),
             },

@@ -21,41 +21,33 @@ class ProfileCards extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 10),
         padding: EdgeInsets.all(10),
         child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: SvgPicture.asset(
-                  image,
-                  width: 30,
-                  color: title == AppLocalizations.of(context)!.logOut
-                      ? Colors.red
-                      : Theme.of(context).primaryColorLight,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: 'RobotoB',
-                    fontSize: 18,
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: SvgPicture.asset(
+                    'assets/images/${image}',
+                    width: 25,
                     color: title == AppLocalizations.of(context)!.logOut
                         ? Colors.red
                         : Theme.of(context).primaryColorLight,
                   ),
                 ),
-              ),
-            ],
-          ),
-          Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: title == AppLocalizations.of(context)!.logOut
-                ? Colors.red
-                : Theme.of(context).primaryColorLight,
-          )
-        ]),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontFamily: 'RobotoB',
+                      fontSize: 18,
+                      color: title == AppLocalizations.of(context)!.logOut
+                          ? Colors.red
+                          : Theme.of(context).primaryColorLight,
+                    ),
+                  ),
+                ),
+              ],
+            ),
       ),
     );
   }

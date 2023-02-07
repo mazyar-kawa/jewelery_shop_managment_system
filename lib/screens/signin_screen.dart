@@ -34,9 +34,7 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (_) => LoadingPage(
-                        // islogin: true,
-                      )));
+                  builder: (_) => LoadingPage()));
         }
       });
     super.initState();

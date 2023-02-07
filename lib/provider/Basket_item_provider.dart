@@ -16,10 +16,10 @@ class BasketItemProvider with ChangeNotifier {
 
   List<ItemBasket> get ready => [..._ready];
 
-  totalBeforOrder() {
+  TotalPrice() {
     double total = 0;
     for (var i = 0; i < ready.length; i++) {
-      total += _ready[i].price!.round();
+      total += _ready[i].price!.round() * _ready[i].quantity!;
     }
     return total;
   }
@@ -28,7 +28,6 @@ class BasketItemProvider with ChangeNotifier {
     await _ready;
     notifyListeners();
   }
-
 
   clearItemChecked() {
     _ready.clear();
@@ -40,17 +39,17 @@ class BasketItemProvider with ChangeNotifier {
 
   addItemReady(ItemBasket items) {
     _ready.add(ItemBasket(
+        basketId: items.basketId,
+        userId: items.userId,
         id: items.id,
-        name: items.name,
-        size: items.size,
-        weight: items.weight,
-        img: items.img,
         quantity: items.quantity,
-        price: items.price,
+        name: items.name,
+        countryName: items.countryName,
         caratMs: items.caratMs,
         caratType: items.caratType,
-        countryName: items.countryName,
-        profit: items.profit));
+        img: items.img,
+        price: items.price,
+        weight: items.weight));
     countItemReady();
     notifyListeners();
   }
@@ -79,29 +78,46 @@ class BasketItemProvider with ChangeNotifier {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       });
-      final data = await Basket.fromJson(json.decode(response.body));
-      List<ItemBasket> temporaryList = [];
-      next_url = data.nextPageUrl == null ? "No data" : data.nextPageUrl;
-      for (var i = 0; i < data.data!.length; i++) {
-        temporaryList.add(ItemBasket(
-            id: data.data![i].id,
-            name: data.data![i].name,
-            size: data.data![i].size,
-            weight: data.data![i].weight,
-            img: data.data![i].img,
-            quantity: data.data![i].quantity,
-            price: data.data![i].price,
-            caratMs: data.data![i].caratMs,
-            caratType: data.data![i].caratType,
-            countryName: data.data![i].countryName,
-            inBasket: data.data![i].inBasket,
-            isFavourited: data.data![i].isFavourited,
-            profit: data.data![i].profit));
-      }
-      _basket = temporaryList;
+      switch (response.statusCode) {
+        case 200:
+          final data = await Basket.fromJson(json.decode(response.body));
+          List<ItemBasket> temporaryList = [];
+          next_url = data.nextPageUrl == null ? "No data" : data.nextPageUrl;
+          for (var i = 0; i < data.data!.length; i++) {
+            final dataOrganize = data.data![i];
+            if (dataOrganize.quantity != 0) {
+              temporaryList.add(ItemBasket(
+                basketId: dataOrganize.basketId,
+                userId: dataOrganize.userId,
+                id: dataOrganize.id,
+                quantity: dataOrganize.quantity,
+                name: dataOrganize.name,
+                countryName: dataOrganize.countryName,
+                caratMs: dataOrganize.caratMs,
+                caratType: dataOrganize.caratType,
+                img: dataOrganize.img,
+                price: dataOrganize.price,
+                weight: dataOrganize.weight,
+                inBasket: dataOrganize.inBasket,
+              ));
+            } else {
+              removeToBasket(dataOrganize.id!);
+            }
+          }
 
-      countItem();
-      notifyListeners();
+          _basket = temporaryList;
+
+          countItem();
+          notifyListeners();
+
+          break;
+
+        case 401:
+          _basket.clear();
+          break;
+        default:
+          print("Some thing are worng");
+      }
     } catch (e) {
       print(e.toString());
     }
@@ -120,20 +136,21 @@ class BasketItemProvider with ChangeNotifier {
       this.next_url = data.nextPageUrl == null ? "No data" : data.nextPageUrl;
 
       for (var i = 0; i < data.data!.length; i++) {
+        final dataOrganize = data.data![i];
         _basket.add(ItemBasket(
-            id: data.data![i].id,
-            name: data.data![i].name,
-            size: data.data![i].size,
-            weight: data.data![i].weight,
-            img: data.data![i].img,
-            quantity: data.data![i].quantity,
-            price: data.data![i].price,
-            caratMs: data.data![i].caratMs,
-            caratType: data.data![i].caratType,
-            countryName: data.data![i].countryName,
-            inBasket: data.data![i].inBasket,
-            isFavourited: data.data![i].isFavourited,
-            profit: data.data![i].profit));
+          basketId: dataOrganize.basketId,
+          userId: dataOrganize.userId,
+          id: dataOrganize.id,
+          quantity: dataOrganize.quantity,
+          name: dataOrganize.name,
+          countryName: dataOrganize.countryName,
+          caratMs: dataOrganize.caratMs,
+          caratType: dataOrganize.caratType,
+          img: dataOrganize.img,
+          price: dataOrganize.price,
+          weight: dataOrganize.weight,
+          inBasket: dataOrganize.inBasket,
+        ));
       }
 
       notifyListeners();

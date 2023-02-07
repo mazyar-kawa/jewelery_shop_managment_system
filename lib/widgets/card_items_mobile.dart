@@ -5,13 +5,14 @@ import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CardItemsMobile extends StatefulWidget {
   ValueChanged<int>? onChanged;
@@ -46,6 +47,9 @@ class _CardItemsMobileState extends State<CardItemsMobile>
         setState(() {
           product.isFavourited = false;
           showSnackBar(context, unFavourite.data['message'], true);
+          Provider.of<ItemProviderORG>(context,listen: false)
+        .getFavouriteItem();
+          Provider.of<HomeItemsProvider>(context, listen: false).getAllItemHome();
         });
       }
     } else {
@@ -59,6 +63,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
         });
       }
     }
+   
   }
 
   addAndRemoveItemToBasket(item) async {
@@ -128,8 +133,12 @@ class _CardItemsMobileState extends State<CardItemsMobile>
     }
 
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetails(item_id: product.id!),));
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItemDetails(item_id: product.id!),
+            ));
       },
       onDoubleTap: () async {
         if (widget.islogin != false && widget.isbasket == false) {
@@ -250,10 +259,8 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                       ),
                           ),
                           Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.stretch, 
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 AspectRatio(
                                     aspectRatio: 1.8,
@@ -262,7 +269,6 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 10,
-                                   
                                   ),
                                   padding: const EdgeInsets.all(5),
                                   height: 28,
@@ -335,7 +341,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                           ? Container(
                                               child: Row(
                                                 children: [
-                                                  Text("1"),
+                                                  Text('${product.quantity}'),
                                                   Icon(Icons.close, size: 16),
                                                 ],
                                               ),

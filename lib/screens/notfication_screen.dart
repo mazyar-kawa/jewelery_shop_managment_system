@@ -7,32 +7,30 @@ class NotficationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(
-            MediaQuery.of(context).size.width > websize
-                ? MediaQuery.of(context).size.height * 0.2
-                : MediaQuery.of(context).size.height * 0.1),
-        child: Container(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 50),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_rounded,
-                    color: Theme.of(context).primaryColorLight,
-                  )),
-              Text(
-                'Notfication',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'RobotoB',
-                  color: Theme.of(context).primaryColorLight,
-                ),
-              ),
-            ],
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        centerTitle: true,
+        title: Text(
+          "Notfications",
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'RobotoB',
+            color: Theme.of(context).primaryColorLight,
+          ),
+        ),
+        leading: InkWell(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            height: 20,
+            width: 25,
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Theme.of(context).primaryColorLight,
+            ),
           ),
         ),
       ),

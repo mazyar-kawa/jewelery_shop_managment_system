@@ -17,32 +17,38 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: true,
+          title: Text(
+            AppLocalizations.of(context)!.settings,
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'RobotoB',
+              color: Theme.of(context).primaryColorLight,
+            ),
+          ),
+          leading: InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              height: 20,
+              width: 25,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+          ),
+        ),
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
         child: ListView(
           children: [
-            Container(
-              child: Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_ios_rounded,
-                        color: Theme.of(context).primaryColorLight,
-                      )),
-                  Text(
-                    AppLocalizations.of(context)!.settings,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'RobotoB',
-                      color: Theme.of(context).primaryColorLight,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+           
             Container(
               margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               child: Column(

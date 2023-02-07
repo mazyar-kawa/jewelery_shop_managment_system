@@ -13,7 +13,8 @@ class CategoryPage extends StatefulWidget {
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _CategoryPageState extends State<CategoryPage>
+    with AutomaticKeepAliveClientMixin {
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
   Future? category;
@@ -25,7 +26,7 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   fetchCategory() async {
-    Provider.of<CountriesProvider>(context, listen: false).getCountries();
+    await Provider.of<CountriesProvider>(context, listen: false).getCountries();
   }
 
   void Refresh() async {
@@ -40,6 +41,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(
@@ -182,4 +184,8 @@ class _CategoryPageState extends State<CategoryPage> {
               }),
         ));
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

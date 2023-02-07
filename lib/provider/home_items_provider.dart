@@ -28,6 +28,8 @@ class HomeItemsProvider with ChangeNotifier {
   List<Carat> _carates = [];
 
   List<Carat> get carates => [..._carates];
+
+  bool loadingState = false;
   
 
   Future<void> getRandomItems({int id = 0}) async {
@@ -101,7 +103,7 @@ class HomeItemsProvider with ChangeNotifier {
   }
 
   Future<void> getAllItemHome() async {
-    try {
+      try {
       String token = await Auth().getToken();
       final response = await http.get(Uri.parse(base + 'home'), headers: {
         'Content-Type': 'application/json',
@@ -190,6 +192,8 @@ class HomeItemsProvider with ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+    
+    
   }
 
 

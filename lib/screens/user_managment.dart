@@ -18,6 +18,33 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
     AuthUser user = Provider.of<RefreshUser>(context).currentUser;
 
     return Scaffold(
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: true,
+          title: Text(
+            AppLocalizations.of(context)!.userManagement,
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'RobotoB',
+              color: Theme.of(context).primaryColorLight,
+            ),
+          ),
+          leading: InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              height: 20,
+              width: 25,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+          ),
+        ),
         body: ListView(
       physics: BouncingScrollPhysics(),
       shrinkWrap: true,
@@ -25,29 +52,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-              child: Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_ios_rounded,
-                        color: Theme.of(context).primaryColorLight,
-                      )),
-                  Text(
-                    AppLocalizations.of(context)!.userManagement,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'RobotoB',
-                      color: Theme.of(context).primaryColorLight,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            
             Container(
               margin: EdgeInsets.only(top: 40),
               height: MediaQuery.of(context).size.height * 0.2,

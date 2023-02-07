@@ -1,11 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 

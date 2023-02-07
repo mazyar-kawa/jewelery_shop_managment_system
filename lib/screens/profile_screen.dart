@@ -4,7 +4,6 @@ import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/favorite_screen.dart';
-import 'package:jewelery_shop_managmentsystem/screens/history_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/settings_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/user_managment.dart';
@@ -14,140 +13,225 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final bool islogin;
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
-  ProfileScreen({required this.islogin});
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    late AuthUser user;
-    if (widget.islogin) {
-      user = Provider.of<RefreshUser>(context).currentUser;
+    final islogin = Provider.of<Checkuser>(context).islogin;
+    late User user;
+    if (islogin) {
+      user = Provider.of<RefreshUser>(context).currentUser.user!;
     }
     return Scaffold(
-        body: widget.islogin
-            ? ListView(
+        body: islogin
+            ? SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 25),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundImage: user.user!.profilePicture != null
-                                ? NetworkImage(user.user!.profilePicture)
-                                : NetworkImage(
-                                    'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
-                          ),
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              child: Lottie.asset(
+                                  "assets/images/circle_avatar.json",
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45),
+                            ),
+                            Container(
+                              child: CircleAvatar(
+                                  radius:
+                                      MediaQuery.of(context).size.width * 0.12,
+                                  backgroundImage: user.profilePicture != null
+                                      ? NetworkImage(
+                                          user.profilePicture,
+                                        )
+                                      : NetworkImage(
+                                          'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
+                            )
+                          ],
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${user.user!.name}',
+                      ),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                user.username!,
                                 style: TextStyle(
                                   color: Theme.of(context).primaryColorLight,
-                                  fontFamily: 'RobotoB',
+                                  fontFamily: "RobotoB",
                                   fontSize: 24,
                                 ),
                               ),
-                              Text(
-                                '@ ${user.user!.username}',
+                            ),
+                            Container(
+                              child: Text(
+                                user.email!,
                                 style: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'RobotoM',
-                                  fontSize: 14,
+                                  color: Theme.of(context)
+                                      .primaryColorLight
+                                      .withOpacity(0.5),
+                                  fontFamily: "RobotoM",
+                                  fontSize: 20,
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 20),
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              width: MediaQuery.of(context).size.width * 0.30,
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Theme.of(context).shadowColor,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 3))
+                                  ]),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '20',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontFamily: "RobotoB",
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Favorites',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontFamily: "RobotoB",
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 20),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                              width: MediaQuery.of(context).size.width * 0.30,
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Theme.of(context).shadowColor,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 3))
+                                  ]),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '03',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontFamily: "RobotoB",
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Orders',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontFamily: "RobotoB",
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          children: [
+                            ProfileCards(
+                                title: "Settings",
+                                image: "settings.svg",
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SettingScreen()));
+                                }),
+                            ProfileCards(
+                                title: "Account information",
+                                image: "user.svg",
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              UserManagmentScreen()));
+                                }),
+                            ProfileCards(
+                                title: "My Orders",
+                                image: "orders.svg",
+                                onPressed: () {}),
+                            ProfileCards(
+                                title: "My Favorites",
+                                image: "heart-solid.svg",
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FavoriteScreen()));
+                                }),
+                            user.roleId! == 1
+                                ? ProfileCards(
+                                    title: "Admin",
+                                    image: "user-group-solid.svg",
+                                    onPressed: () {})
+                                : Container(),
+                            ProfileCards(
+                                title: "LogOut",
+                                image: "logout.svg",
+                                onPressed: () {
+                                  Auth().logOut();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          LoadingPage(),
+                                    ),
+                                  );
+                                }),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                  Divider(
-                    indent: 30,
-                    endIndent: 30,
-                    color: Theme.of(context).primaryColorLight.withOpacity(0.3),
-                    thickness: 2,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: Column(
-                      children: [
-                        ProfileCards(
-                          title: AppLocalizations.of(context)!.settings,
-                          image: 'assets/images/settings.svg',
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => SettingScreen()));
-                          },
-                        ),
-                        ProfileCards(
-                          title: AppLocalizations.of(context)!.userManagement,
-                          image: 'assets/images/user-solid.svg',
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => UserManagmentScreen()));
-                          },
-                        ),
-                        
-                        ProfileCards(
-                          title: AppLocalizations.of(context)!.favourite,
-                          image: 'assets/images/heart-solid.svg',
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => FavoriteScreen()));
-                          },
-                        ),
-                        ProfileCards(
-                          title: AppLocalizations.of(context)!.order,
-                          image: 'assets/images/orders.svg',
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => FavoriteScreen()));
-                          },
-                        ),
-                        ProfileCards(
-                          title: AppLocalizations.of(context)!.history,
-                          image: 'assets/images/history.svg',
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => HistoryScreen()));
-                          },
-                        ),
-                        user.user!.roleId == 1
-                            ? ProfileCards(
-                                title: AppLocalizations.of(context)!.admin,
-                                image: 'assets/images/user-group-solid.svg',
-                                onPressed: () {},
-                              )
-                            : Container(),
-                        ProfileCards(
-                          title: AppLocalizations.of(context)!.logOut,
-                          image: 'assets/images/logout.svg',
-                          onPressed: () {
-                            Auth().logOut();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => LoadingPage()));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               )
             : Consumer<ThemeChangeProvider>(
                 builder: (context, provider, chile) {
@@ -177,10 +261,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => SignIn()));
-                        });
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => SignIn()));
                       },
                       child: Container(
                         margin:
