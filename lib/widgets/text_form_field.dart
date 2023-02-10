@@ -42,10 +42,12 @@ class _TextFormUserState extends State<TextFormUser> {
                         ? SvgPicture.asset(
                             'assets/images/eye-solid.svg',
                             width: 5,
+                            color: Theme.of(context).primaryColorLight,
                           )
                         : SvgPicture.asset(
                             'assets/images/eye-slash-solid.svg',
                             width: 5,
+                            color: Theme.of(context).primaryColorLight,
                           ),
                   ),
                 )

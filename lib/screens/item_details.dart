@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +22,7 @@ class ItemDetails extends StatefulWidget {
 
 class _ItemDetailsState extends State<ItemDetails> {
   bool isloading = false;
+  bool islike = false;
   @override
   void initState() {
     Future.delayed(
@@ -35,9 +42,59 @@ class _ItemDetailsState extends State<ItemDetails> {
         .getItemById(widget.item_id);
   }
 
+  addAndRemoveItemToBasket(SingleItem item) async {
+    if (item.inBasket == true) {
+      ApiProvider removeItem =
+          await BasketItemProvider().removeToBasket(item.id!);
+      if (removeItem.data != null) {
+        setState(() {
+          item.inBasket = false;
+          showSnackBar(context, removeItem.data['message'], true);
+        });
+      }
+    } else {
+      ApiProvider addItem = await BasketItemProvider().addToBasket(item.id!);
+      if (addItem.data != null) {
+        setState(() {
+          item.inBasket = true;
+          showSnackBar(context, addItem.data['message'], false);
+        });
+      }
+    }
+    await Provider.of<BasketItemProvider>(context, listen: false)
+        .getItemBasket();
+    await Provider.of<HomeItemsProvider>(context, listen: false)
+        .getAllItemHome();
+  }
+
+  favouriteAndUnFavourite(SingleItem product) async {
+    if (product.isFavourited == true) {
+      ApiProvider unFavourite = await Auth().UnFavouriteItem(product.id!);
+      if (unFavourite.data != null) {
+        setState(() {
+          product.isFavourited = false;
+          showSnackBar(context, unFavourite.data['message'], true);
+          Provider.of<ItemProviderORG>(context, listen: false)
+              .getFavouriteItem();
+        });
+      }
+    } else {
+      ApiProvider favourite = await Auth().FavouriteItem(product.id!);
+      if (favourite.data != null) {
+        setState(() {
+          product.isFavourited = true;
+          showSnackBar(context, favourite.data['message'], false);
+        });
+      }
+    }
+    await Provider.of<HomeItemsProvider>(context, listen: false)
+        .getAllItemHome();
+  }
+
   int current = 0;
   @override
   Widget build(BuildContext context) {
+    final islogin = Provider.of<Checkuser>(context).islogin;
     final item = Provider.of<ItemProviderORG>(context).ItemDetails;
     return Scaffold(
         appBar: PreferredSize(
@@ -79,32 +136,36 @@ class _ItemDetailsState extends State<ItemDetails> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                height: 40,
-                                width: 40,
-                                child: Center(
-                                  child: InkWell(
-                                      onTap: () {
-                                        // favouriteAndUnFavourite(
-                                        //     product);
-                                      },
-                                      child: item.isFavourited!
-                                          ? SvgPicture.asset(
-                                              'assets/images/heart-solid.svg',
-                                              width: 15,
-                                              color: Colors.red,
-                                            )
-                                          : SvgPicture.asset(
-                                              'assets/images/heart-regular.svg',
-                                              width: 15,
-                                              color: Colors.red,
-                                            )),
-                                )),
-                          ),
+                          islogin
+                              ? Align(
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 10),
+                                      height: 40,
+                                      width: 40,
+                                      child: Center(
+                                        child: InkWell(
+                                            onTap: () {
+                                              favouriteAndUnFavourite(item);
+                                            },
+                                            child: item.isFavourited!
+                                                ? SvgPicture.asset(
+                                                    'assets/images/heart-solid.svg',
+                                                    width: 25,
+                                                    color: Colors.red,
+                                                  )
+                                                : SvgPicture.asset(
+                                                    'assets/images/heart-regular.svg',
+                                                    width: 25,
+                                                    color: Colors.red,
+                                                  )),
+                                      )),
+                                )
+                              : Container(
+                                  height: 40,
+                                  width: 40,
+                                ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -163,11 +224,10 @@ class _ItemDetailsState extends State<ItemDetails> {
                       minChildSize: 0.25,
                       builder: (context, scrollController) {
                         return Container(
-                          
                           decoration: BoxDecoration(
                               color: Theme.of(context).primaryColorLight,
-                              borderRadius:
-                                  BorderRadius.vertical(top: Radius.circular(32.0)),
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(32.0)),
                               boxShadow: [
                                 BoxShadow(
                                   color: Theme.of(context).shadowColor,
@@ -180,18 +240,19 @@ class _ItemDetailsState extends State<ItemDetails> {
                               margin: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 10),
                               child: Column(
-                                
                                 children: [
-                                   Center(
-                                  child: Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context).scaffoldBackgroundColor,
-                                        borderRadius: BorderRadius.circular(15)),
-                                    height: 4,
-                                    width: 48,
+                                  Center(
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(vertical: 5),
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      height: 4,
+                                      width: 48,
+                                    ),
                                   ),
-                                ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -322,7 +383,16 @@ class _ItemDetailsState extends State<ItemDetails> {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      if (islogin) {
+                                        addAndRemoveItemToBasket(item);
+                                      } else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => SignIn()));
+                                      }
+                                    },
                                     child: Container(
                                       height:
                                           MediaQuery.of(context).size.height *

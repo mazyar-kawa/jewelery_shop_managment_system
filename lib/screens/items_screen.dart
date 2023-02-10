@@ -8,7 +8,7 @@ import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/items_filter.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/mobile_item_responsive.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/web_item_responsive.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/Ipad_item_responsive.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,16 +42,7 @@ class _ItemsScreenState extends State<ItemsScreen>
       RefreshController(initialRefresh: false);
   TextEditingController searchController = TextEditingController();
 
-  bool islogin = false;
-
-  Future isLogin() async {
-    String token = await Auth().getToken();
-    if (token != "") {
-      islogin = true;
-    } else {
-      islogin = false;
-    }
-  }
+  
 
   PageController _pageController = PageController();
   Future? all;
@@ -65,7 +56,6 @@ class _ItemsScreenState extends State<ItemsScreen>
         Provider.of<HomeItemsProvider>(context, listen: false).getCarates();
       },
     );
-    isLogin();
     WidgetsBinding.instance.addPostFrameCallback((_) => all);
     super.initState();
   }
@@ -158,21 +148,20 @@ class _ItemsScreenState extends State<ItemsScreen>
           ),
         ),
         leading: InkWell(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
           },
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             height: 20,
             width: 25,
-            
             child: Icon(Icons.arrow_back_ios_new_rounded,
                 color: Theme.of(context).primaryColorLight),
           ),
         ),
         actions: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             width: 45,
             height: 45,
             decoration: BoxDecoration(
@@ -312,73 +301,85 @@ class _ItemsScreenState extends State<ItemsScreen>
                           });
                         },
                         decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
-                            border: boredruser,
-                            enabledBorder: boredruser,
-                            disabledBorder: boredruser,
-                            hintText:
-                                '${AppLocalizations.of(context)!.search}...',
-                            hintStyle: TextStyle(
-                                fontFamily: 'RobotoR', color: Colors.grey),
-                            prefixIcon: Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: SvgPicture.asset(
-                                'assets/images/search.svg',
-                                width: 5,
-                                height: 5,
-                                color: Theme.of(context).primaryColorLight,
-                              ),
-                            ),
-                            suffixIcon:
-                                MediaQuery.of(context).size.width > websize
-                                    ? Container()
-                                    : MyWidget(
-                                        categories: category,
-                                        active_filter: active_filter,
-                                        searchController: searchController,
-                                        AllItems: AllItems,
-                                        rangeSize: rangeSize,
-                                        rangeCarat: rangeCarat,
-                                        carates: carat,
-                                        categoryId: category_id,
-                                        caratId: carat_id,
-                                        onChangestart_size: (value) {
-                                          setState(() {
-                                            start_size = value;
-                                          });
-                                        },
-                                        onChangeend_size: (value) {
-                                          setState(() {
-                                            end_size = value;
-                                          });
-                                        },
-                                        onChangestart_weight: (value) {
-                                          setState(() {
-                                            start_weight = value;
-                                          });
-                                        },
-                                        onChangeend_weight: (value) {
-                                          setState(() {
-                                            end_weight = value;
-                                          });
-                                        },
-                                        onChanged: (value) {
-                                          setState(() {
-                                            active_filter = value;
-                                          });
-                                        },
-                                        onChangedCarat: (value) {
-                                          setState(() {
-                                            carat_id = value;
-                                          });
-                                        },
-                                        onChangedCategory: (value) {
-                                          setState(() {
-                                            category_id = value;
-                                          });
-                                        },
-                                      )),
+                          suffixIcon:
+                              MediaQuery.of(context).size.width > websize
+                                  ? Container()
+                                  : MyWidget(
+                                      categories: category,
+                                      active_filter: active_filter,
+                                      searchController: searchController,
+                                      AllItems: AllItems,
+                                      rangeSize: rangeSize,
+                                      rangeCarat: rangeCarat,
+                                      carates: carat,
+                                      categoryId: category_id,
+                                      caratId: carat_id,
+                                      onChangestart_size: (value) {
+                                        setState(() {
+                                          start_size = value;
+                                        });
+                                      },
+                                      onChangeend_size: (value) {
+                                        setState(() {
+                                          end_size = value;
+                                        });
+                                      },
+                                      onChangestart_weight: (value) {
+                                        setState(() {
+                                          start_weight = value;
+                                        });
+                                      },
+                                      onChangeend_weight: (value) {
+                                        setState(() {
+                                          end_weight = value;
+                                        });
+                                      },
+                                      onChanged: (value) {
+                                        setState(() {
+                                          active_filter = value;
+                                        });
+                                      },
+                                      onChangedCarat: (value) {
+                                        setState(() {
+                                          carat_id = value;
+                                        });
+                                      },
+                                      onChangedCategory: (value) {
+                                        setState(() {
+                                          category_id = value;
+                                        });
+                                      },
+                                    ),
+                          prefixIcon: Icon(Icons.search,
+                              color: Theme.of(context).primaryColorLight),
+                          filled: true,
+                          fillColor: Theme.of(context).secondaryHeaderColor,
+                          hintText:
+                              '${AppLocalizations.of(context)!.search}...',
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -386,14 +387,12 @@ class _ItemsScreenState extends State<ItemsScreen>
               ),
               issearch == false && active_filter == false
                   ? MediaQuery.of(context).size.width > websize
-                      ? ItemWebResponsive(
+                      ? ItemIpadResponsive(
                           all: all,
-                          islogin: islogin,
                         )
                       : ItemMobileResponsive(
                           all: all,
                           searchController: searchController,
-                          islogin: islogin,
                         )
                   : Container(
                       width: 300,

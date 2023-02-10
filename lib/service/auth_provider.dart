@@ -12,7 +12,6 @@ class Auth {
     required String email,
     required String password,
   }) async {
-
     ApiProvider apiProvider = ApiProvider();
     final body = {
       'email': email,
@@ -84,7 +83,6 @@ class Auth {
     ApiProvider apiProvider = ApiProvider();
     try {
       String token = await getToken();
-
       final response =
           await http.get(Uri.parse(base + 'currentUser'), headers: {
         'Content-Type': 'application/json',
@@ -143,7 +141,7 @@ class Auth {
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
-    
+
     return apiProvider;
   }
 
@@ -170,27 +168,78 @@ class Auth {
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
-    
+
     return apiProvider;
   }
+
+  Future<ApiProvider> UpdateUserData(
+      String name, String username, String email,String phone_no,String address) async {
+    ApiProvider apiProvider = ApiProvider();
+    final body = {'name': name, 'username': username, 'email': email,'phone_no':phone_no,'address':address};
+    try {
+      String token = await getToken();
+      final response = await http.post(Uri.parse(base + "updateProfile"),
+          body: jsonEncode(body),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          });
+      switch (response.statusCode) {
+        case 200:
+          apiProvider.data = AuthUser.fromJson(json.decode(response.body));
+          break;
+        default:
+          apiProvider.error = jsonDecode(response.body);
+          break;
+      }
+    } catch (e) {
+      apiProvider.error = {'message': e.toString()};
+    }
+    return apiProvider;
+  }
+Future<ApiProvider> UpdatePassword(
+      String currentPassword, String newPassword, String retypePassword) async {
+    ApiProvider apiProvider = ApiProvider();
+    final body = {'current_password': currentPassword, 'new_password': newPassword, 'new_password_confirmation': retypePassword};
+    try {
+      String token = await getToken();
+      final response = await http.post(Uri.parse(base + "updatePassword"),
+          body: jsonEncode(body),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          });
+      print(response.statusCode);
+      switch (response.statusCode) {
+        case 200:
+          apiProvider.data = json.decode(response.body);
+          break;
+        default:
+          apiProvider.error = jsonDecode(response.body);
+          break;
+      }
+    } catch (e) {
+      apiProvider.error = {'message': e.toString()};
+    }
+    return apiProvider;
+  }
+
 }
 
-class Checkuser with ChangeNotifier{
-  bool _islogon=false;
+class Checkuser with ChangeNotifier {
+  bool _islogon = false;
 
-  bool get islogin=> _islogon;
+  bool get islogin => _islogon;
 
-
-  Future<bool> checkUser() async{
+  Future<bool> checkUser() async {
     String token = await Auth().getToken();
     if (token == '') {
       _islogon = false;
     } else {
-      _islogon=true;
+      _islogon = true;
     }
     return _islogon;
   }
-
-
-
 }

@@ -103,6 +103,7 @@ class _MyWidgetState extends State<MyWidget> {
       builder: (context) {
         return AlertDialog(
             elevation: 5,
+           backgroundColor: Theme.of(context).secondaryHeaderColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -110,7 +111,7 @@ class _MyWidgetState extends State<MyWidget> {
               height: MediaQuery.of(context).size.height * 0.6,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).secondaryHeaderColor,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

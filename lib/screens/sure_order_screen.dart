@@ -147,7 +147,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             InkWell(
                               onTap: () async {
                                 ApiProvider response =
-                                    await Order().Orders(basketId);
+                                    await Provider.of<Order>(context,listen: false).Orders(basketId);
                                 if (response.data == null) {
                                   showSnackBar(context,
                                       response.error!['message'], true);
@@ -302,6 +302,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                         Expanded(
                             flex: 4,
                             child: Container(
+                              
                               child: SingleChildScrollView(
                                 physics: BouncingScrollPhysics(),
                                 child: ListView.builder(
@@ -342,8 +343,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                             MediaQuery.of(context).size.height *
                                                 0.12,
                                         decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .scaffoldBackgroundColor,
+                                            color: Theme.of(context).secondaryHeaderColor,
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             boxShadow: [

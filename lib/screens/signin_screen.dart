@@ -29,12 +29,11 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
         AnimationController(vsync: this, duration: Duration(seconds: 3));
     animationController
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed)  {
-          
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => LoadingPage()));
+        if (status == AnimationStatus.completed) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) {
+            return LoadingPage();
+          }), (Route<dynamic> route) => false);
         }
       });
     super.initState();
@@ -64,9 +63,6 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
           );
         },
       );
-  
-
-
 
   Map<dynamic, dynamic>? error;
 
@@ -87,7 +83,6 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', user.token ?? '');
     await prefs.setInt('userId', user.id ?? 0);
-   
     RefreshUser refresh = Provider.of<RefreshUser>(context, listen: false);
     await refresh.refreshuser;
     showdialog(context);

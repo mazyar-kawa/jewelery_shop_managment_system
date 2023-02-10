@@ -4,15 +4,13 @@ import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dar
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class ItemWebResponsive extends StatelessWidget {
-  const ItemWebResponsive({
+class ItemIpadResponsive extends StatelessWidget {
+  const ItemIpadResponsive({
     Key? key,
     required this.all,
-    required this.islogin,
   }) : super(key: key);
 
   final Future? all;
-  final bool islogin;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +144,7 @@ class ItemWebResponsive extends StatelessWidget {
                           itemBuilder: (context, i) {
                             return ChangeNotifierProvider.value(
                               value: product[i],
-                              child: HomeSmallCardMobile(index: i, islogin: islogin),
+                              child: HomeSmallCardMobile(index: i),
                             );
                           })
                       : Container(

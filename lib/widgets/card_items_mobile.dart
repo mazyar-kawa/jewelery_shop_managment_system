@@ -19,13 +19,11 @@ class CardItemsMobile extends StatefulWidget {
   CardItemsMobile({
     Key? key,
     required this.index,
-    required this.islogin,
     required this.isbasket,
     required this.issure,
   }) : super(key: key);
 
   final int index;
-  final bool islogin;
   final bool isbasket;
   final bool issure;
 
@@ -47,9 +45,10 @@ class _CardItemsMobileState extends State<CardItemsMobile>
         setState(() {
           product.isFavourited = false;
           showSnackBar(context, unFavourite.data['message'], true);
-          Provider.of<ItemProviderORG>(context,listen: false)
-        .getFavouriteItem();
-          Provider.of<HomeItemsProvider>(context, listen: false).getAllItemHome();
+          Provider.of<ItemProviderORG>(context, listen: false)
+              .getFavouriteItem();
+          Provider.of<HomeItemsProvider>(context, listen: false)
+              .getAllItemHome();
         });
       }
     } else {
@@ -63,7 +62,6 @@ class _CardItemsMobileState extends State<CardItemsMobile>
         });
       }
     }
-   
   }
 
   addAndRemoveItemToBasket(item) async {
@@ -125,6 +123,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
 
   @override
   Widget build(BuildContext context) {
+    final islogin = Provider.of<Checkuser>(context).islogin;
     final product;
     if (widget.isbasket == true) {
       product = Provider.of<ItemBasket>(context);
@@ -141,7 +140,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
             ));
       },
       onDoubleTap: () async {
-        if (widget.islogin != false && widget.isbasket == false) {
+        if (islogin != false && widget.isbasket == false) {
           ApiProvider favourite = await Auth().FavouriteItem(product.id!);
           if (favourite.data != null) {
             setState(() {
@@ -162,9 +161,9 @@ class _CardItemsMobileState extends State<CardItemsMobile>
           width: MediaQuery.of(context).size.width,
           height: 170,
           decoration: BoxDecoration(
-            color: widget.index % 2 == 0
-                ? Theme.of(context).accentColor
-                : Theme.of(context).primaryColor,
+            // color: widget.index % 2 == 0
+            //     ? Theme.of(context).accentColor
+            //     : Theme.of(context).primaryColor,
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context).shadowColor,
@@ -186,7 +185,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                           topLeft: Radius.circular(15),
                           bottomLeft: Radius.circular(15),
                         ),
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color: Theme.of(context).secondaryHeaderColor,
                       ),
                       child: Column(
                         children: [
@@ -194,7 +193,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                             alignment: Alignment.topLeft,
                             child: widget.isbasket
                                 ? Checkbox(
-                                    checkColor: Colors.white,
+                                    checkColor: Theme.of(context).scaffoldBackgroundColor,
                                     fillColor: MaterialStateProperty.all(
                                         Theme.of(context).primaryColorLight),
                                     value: ischecked,
@@ -205,7 +204,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                       });
                                     },
                                   )
-                                : widget.islogin
+                                : islogin
                                     ? Container(
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 10),
@@ -252,7 +251,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                         width: 30,
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
+                                              .secondaryHeaderColor,
                                           borderRadius:
                                               BorderRadius.circular(10000),
                                         ),
@@ -307,6 +306,13 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                         color: widget.index % 2 == 0
                             ? Theme.of(context).accentColor
                             : Theme.of(context).primaryColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).shadowColor,
+                            blurRadius: 2,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -414,26 +420,23 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                     child: widget.isbasket
                                         ? InkWell(
                                             onTap: () {
-                                              if (widget.islogin == false) {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            SignIn()));
-                                              } else {
                                                 addAndRemoveItemToBasket(
                                                     product);
-                                              }
+                                                Provider.of<HomeItemsProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .getAllItemHome();
+                                              
                                             },
                                             child: Icon(
                                               FontAwesome5.trash,
                                               size: 20,
                                               color: Theme.of(context)
-                                                  .backgroundColor,
+                                                  .scaffoldBackgroundColor,
                                             ))
                                         : InkWell(
                                             onTap: () {
-                                              if (widget.islogin == false) {
+                                              if (islogin == false) {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -450,8 +453,9 @@ class _CardItemsMobileState extends State<CardItemsMobile>
                                                     color: Colors.green,
                                                   )
                                                 : SvgPicture.asset(
-                                                    "assets/images/shop.svg",
-                                                    color: Colors.white,
+                                                    "assets/images/basket-shopping-solid.svg",
+                                                    width: 20,
+                                                    color: Theme.of(context).secondaryHeaderColor,
                                                   ),
                                           ),
                                   ),

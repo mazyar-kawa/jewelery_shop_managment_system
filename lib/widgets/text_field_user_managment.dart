@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class TextFieldUserManagment extends StatelessWidget {
   final String lable;
-  final String initialValue;
+  final TextEditingController controller;
 
   const TextFieldUserManagment(
-      {Key? key, required this.lable, required this.initialValue})
+      {Key? key, required this.lable, required this.controller})
       : super(key: key);
 
   @override
@@ -13,7 +13,7 @@ class TextFieldUserManagment extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: TextFormField(
-        initialValue: initialValue,
+        controller: controller,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),
@@ -33,7 +33,7 @@ class TextFieldUserManagment extends StatelessWidget {
           ),
           labelText: lable,
           labelStyle: TextStyle(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColorLight,
           ),
         ),
       ),

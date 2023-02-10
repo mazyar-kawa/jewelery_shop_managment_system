@@ -92,7 +92,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               value: product[i],
                               child: CardItemsMobile(
                                 index: i,
-                                islogin: true,
                                 isbasket: false,
                                 issure: false,
                               ),

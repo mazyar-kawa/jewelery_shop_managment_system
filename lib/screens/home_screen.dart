@@ -23,15 +23,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin {
-
-  final RefreshController refreshController = RefreshController(initialRefresh: false);
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
   int _current = 2;
   int _selectedIndex = 0;
   bool laoding = false;
   final TextEditingController _searchEditText = TextEditingController();
 
   PageController _pageControllerMobile = PageController();
-  PageController _pageControllerWeb = PageController();
+  PageController _pageControllerIpad = PageController();
 
   DateTime now = DateTime.now();
   String? time;
@@ -45,20 +45,7 @@ class _HomeScreenState extends State<HomeScreen>
     } else if (now.hour >= 21 && now.hour <= 24) {
       time = AppLocalizations.of(context)!.goodNight;
     }
-
     return time;
-  }
-
-  bool islogin = false;
-  late AuthUser user;
-  Future isLogin() async {
-    String token = await Auth().getToken();
-    if (token != '') {
-      islogin = true;
-      user = Provider.of<RefreshUser>(context, listen: false).currentUser;
-    } else {
-      islogin = false;
-    }
   }
 
   Future? random;
@@ -68,9 +55,8 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     _pageControllerMobile = PageController(
         initialPage: _current, viewportFraction: 0.95, keepPage: true);
-    _pageControllerWeb = PageController(
-        initialPage: _current, viewportFraction: 0.5, keepPage: true);
-    isLogin();
+    _pageControllerIpad = PageController(
+        initialPage: _current, viewportFraction: 0.7, keepPage: true);
     all = AllItems();
     super.initState();
   }
@@ -94,19 +80,24 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     _pageControllerMobile.dispose();
-    _pageControllerWeb.dispose();
+    _pageControllerIpad.dispose();
     _searchEditText.dispose();
     super.dispose();
   }
 
-  Refresh(){
-  all=  AllItems();
-  refreshController.refreshCompleted();
+  Refresh() {
+    all = AllItems();
+    refreshController.refreshCompleted();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final islogin = Provider.of<Checkuser>(context).islogin;
+    late User user;
+    if (islogin) {
+      user = Provider.of<RefreshUser>(context).currentUser.user!;
+    }
     final provider = Provider.of<HomeItemsProvider>(context);
     final category = provider.categories;
     List<Category> _categories = [
@@ -117,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen>
       _categories.add(Category(id: category[i].id, name: category[i].name));
     }
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SmartRefresher(
         enablePullDown: true,
         controller: refreshController,
@@ -135,8 +127,6 @@ class _HomeScreenState extends State<HomeScreen>
           },
         ),
         onRefresh: Refresh,
-        
-        
         child: FutureBuilder(
             future: all,
             builder: (context, snapshot) {
@@ -146,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen>
                   shrinkWrap: true,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                       child: MediaQuery.of(context).size.width > websize
                           ? null
                           : Row(
@@ -161,16 +152,19 @@ class _HomeScreenState extends State<HomeScreen>
                                           fontSize: 20,
                                           fontFamily: 'RobotoR',
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.grey),
+                                          color: Theme.of(context)
+                                              .primaryColorLight
+                                              .withOpacity(0.5)),
                                     ),
                                     islogin
                                         ? Text(
-                                            '${user.user!.username}',
+                                            '${user.username}',
                                             style: TextStyle(
                                               fontSize: 26,
                                               fontFamily: 'RobotoB',
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black,
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
                                             ),
                                           )
                                         : Container()
@@ -181,10 +175,10 @@ class _HomeScreenState extends State<HomeScreen>
                                         child: CircleAvatar(
                                             radius: 20,
                                             backgroundImage: user
-                                                        .user!.profilePicture !=
+                                                        .profilePicture !=
                                                     null
                                                 ? NetworkImage(
-                                                    user.user!.profilePicture,
+                                                    user.profilePicture,
                                                   )
                                                 : NetworkImage(
                                                     'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
@@ -194,11 +188,8 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width > websize
-                              ? 150
-                              : 25,
-                          vertical: 20),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                       child: SearchInput(
                         hintText: '${AppLocalizations.of(context)!.search}...',
                         textController: _searchEditText,
@@ -209,12 +200,13 @@ class _HomeScreenState extends State<HomeScreen>
                       physics: BouncingScrollPhysics(),
                       child: Container(
                           padding: EdgeInsets.symmetric(
-                              vertical: 15,
-                              horizontal:
-                                  MediaQuery.of(context).size.width > websize
-                                      ? 200
-                                      : 0),
+                            vertical: 15,
+                          ),
                           child: Row(
+                            mainAxisAlignment:
+                                MediaQuery.of(context).size.width > websize
+                                    ? MainAxisAlignment.center
+                                    : MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 35,
@@ -241,8 +233,11 @@ class _HomeScreenState extends State<HomeScreen>
                     FutureBuilder(
                         future: laoding == true ? random : all,
                         builder: (context, snapshot) {
-                          final products = Provider.of<HomeItemsProvider>(context).randomItems;
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          final products =
+                              Provider.of<HomeItemsProvider>(context)
+                                  .randomItems;
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             return Container(
                               padding: EdgeInsets.symmetric(
                                 vertical: 20,
@@ -258,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 physics: BouncingScrollPhysics(),
                                 controller:
                                     MediaQuery.of(context).size.width > websize
-                                        ? _pageControllerWeb
+                                        ? _pageControllerIpad
                                         : _pageControllerMobile,
                                 itemBuilder: (context, index) =>
                                     ChangeNotifierProvider.value(
@@ -271,11 +266,10 @@ class _HomeScreenState extends State<HomeScreen>
                                         scale: _current == index ? 1 : 0.8,
                                         duration: Duration(milliseconds: 500),
                                         child: Container(
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 15),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 15),
                                           child: CardItemsMobile(
                                             index: index,
-                                            islogin: islogin,
                                             isbasket: false,
                                             issure: false,
                                           ),
@@ -298,21 +292,21 @@ class _HomeScreenState extends State<HomeScreen>
                             child: CircularProgressIndicator(),
                           );
                         }),
-      
+
                     HorizantleListView(
-                        title: AppLocalizations.of(context)!.neww,
-                        provder: provider.latestItems,
-                        islogin: islogin),
+                      title: AppLocalizations.of(context)!.neww,
+                      provder: provider.latestItems,
+                    ),
                     // most sale
                     HorizantleListView(
-                        title: AppLocalizations.of(context)!.mostSales,
-                        provder: provider.randomItems,
-                        islogin: islogin),
+                      title: AppLocalizations.of(context)!.mostSales,
+                      provder: provider.randomItems,
+                    ),
                     // most favorite
                     HorizantleListView(
-                        title: AppLocalizations.of(context)!.mostFavourite,
-                        provder: provider.mostFavourite,
-                        islogin: islogin),
+                      title: AppLocalizations.of(context)!.mostFavourite,
+                      provder: provider.mostFavourite,
+                    ),
                   ],
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -353,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen>
             title,
             style: TextStyle(
               color: _selectedIndex == index
-                  ? Colors.white
+                  ? Theme.of(context).secondaryHeaderColor
                   : Theme.of(context).primaryColorLight,
               fontFamily: 'RobotoB',
               fontSize: 14,

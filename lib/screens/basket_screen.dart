@@ -72,8 +72,8 @@ class _BasketScreenState extends State<BasketScreen> {
     final islogin = Provider.of<Checkuser>(context).islogin;
     return Scaffold(
         floatingActionButton: Consumer<BasketItemProvider>(
-          builder: (context, basket, child) {
-            return basket.ready.length != 0
+          builder: (context, baskets, child) {
+            return  baskets.ready.length != 0
                 ? Container(
                     alignment: Alignment.bottomRight,
                     margin: EdgeInsets.symmetric(horizontal: 15),
@@ -190,7 +190,7 @@ class _BasketScreenState extends State<BasketScreen> {
                           child: Text(
                             'LogIn',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).secondaryHeaderColor,
                               fontFamily: 'RobotoB',
                               fontSize: 24,
                             ),
@@ -201,35 +201,8 @@ class _BasketScreenState extends State<BasketScreen> {
                   ],
                 );
               })
-            : basket.baskets.length == 0
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Center(
-                            child: Text(
-                          AppLocalizations.of(context)!.yourBasketisempty,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontFamily: 'RobotoB',
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                        )),
-                      ),
-                      Container(
-                        child: Center(
-                          child: Lottie.asset(
-                            'assets/images/empty-box.json',
-                            width: MediaQuery.of(context).size.width > websize
-                                ? 650
-                                : 350,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                : SmartRefresher(
+            : basket.baskets.length != 0
+                ?  SmartRefresher(
                     enablePullDown: true,
                     enablePullUp: true,
                     controller: refreshController,
@@ -327,7 +300,6 @@ class _BasketScreenState extends State<BasketScreen> {
                                                   value: item[i],
                                                   child: CardItemsMobile(
                                                     index: i,
-                                                    islogin: islogin,
                                                     isbasket: true,
                                                     issure: false,
                                                   ),
@@ -389,6 +361,35 @@ class _BasketScreenState extends State<BasketScreen> {
                         ),
                       ],
                     ),
-                  ));
+                  ):
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Center(
+                            child: Text(
+                          AppLocalizations.of(context)!.yourBasketisempty,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontFamily: 'RobotoB',
+                            color: Theme.of(context).primaryColorLight,
+                          ),
+                        )),
+                      ),
+                      Container(
+                        child: Center(
+                          child: Lottie.asset(
+                            'assets/images/empty-box.json',
+                            width: MediaQuery.of(context).size.width > websize
+                                ? 650
+                                : 350,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                  
+                  );
   }
 }

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
-import 'package:provider/provider.dart';
 
 
 const websize = 600;
-
+// 7dd3fc    sky
 Color scaffoldbackgroundLight = Color(0xffFFFFFF);
 Color primaryColorLight = Color(0xff455A64);
+
+Color secondColorLight = Color(0xffFFFFFF);
 
 Color primaryFadeCardLight = Color(0xffECF1F4);
 Color seconderFadeCardLight = Color(0xffFFEDED);
@@ -22,17 +19,20 @@ Color shadowCardLight = Colors.grey.withOpacity(0.3);
 
 
 
+Color scaffoldbackgroundDark = Color(0xFF000000);
+Color primaryColorDark = Color(0xffFFFFFF);
 
-Color primaryColorDark = Color(0xff7dd3fc);
+Color secondColorDark = Color(0xff262626);
 
-Color primaryFadeCardDark = Color(0xffbae6fd);
-Color seconderFadeCardDark = Color(0xffC6FCE5);
+Color primaryFadeCardDark = Color(0xfffb7185);
+Color seconderFadeCardDark = Color(0xff38bdf8);
 
-Color primaryCardDark = Color(0xffbae6fd);
-Color seconderCardDark = Color(0xFFfecdd3);
+// Color primaryFadeCardDark = Color(0xfff43f5e);
+// Color seconderFadeCardDark = Color(0xffF5F5DC);
+
 //3B3B3B
-Color scaffoldbackgroundDark = Color(0xFF121212);
-Color shadowCardDark = Color(0xffFFFFFF).withOpacity(0.3);
+
+Color shadowCardDark = Color.fromARGB(255, 19, 19, 19);
 
 String base = 'http://192.168.1.32:8000/api/';
 

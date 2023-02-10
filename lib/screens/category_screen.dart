@@ -123,6 +123,8 @@ class _CategoryPageState extends State<CategoryPage>
                                   color:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   child: Card(
+                                    color: 
+                                      Theme.of(context).secondaryHeaderColor,
                                       elevation: 2,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:

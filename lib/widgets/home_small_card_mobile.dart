@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
-import 'package:fluttericon/fontelico_icons.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
@@ -11,18 +9,15 @@ import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeSmallCardMobile extends StatefulWidget {
   HomeSmallCardMobile({
     Key? key,
     this.current,
-    required this.islogin,
     required this.index,
   }) : super(key: key);
 
   int? current;
-  final bool islogin;
   final int index;
 
   @override
@@ -112,6 +107,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
 
   @override
   Widget build(BuildContext context) {
+    final islogin = Provider.of<Checkuser>(context).islogin;
     final product = Provider.of<SingleItem>(context);
     final basket = Provider.of<BasketItemProvider>(context);
     return GestureDetector(
@@ -142,7 +138,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                     spreadRadius: 1.5,
                   ),
                 ],
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: Theme.of(context).secondaryHeaderColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -174,7 +170,7 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                           ),
                         ),
                       ),
-                      widget.islogin
+                      islogin
                           ? Container(
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 10),
@@ -217,8 +213,8 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                               height: 30,
                               width: 30,
                               decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                color: Theme.of(context)
+                                              .secondaryHeaderColor,
                                 borderRadius: BorderRadius.circular(10000),
                               ),
                             ),
@@ -264,74 +260,94 @@ class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
                         ),
                         Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Icon(FontAwesome5.balance_scale,
-                                  color: Theme.of(context).primaryColorLight,
-                                  size: 15),
-                              Text(
-                                '  ${product.weight!}g',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontFamily: 'RobotoM',
-                                  fontSize: 16,
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Icon(FontAwesome5.balance_scale,
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        size: 15),
+                                    Text(
+                                      '  ${product.weight!}g',
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        fontFamily: 'RobotoM',
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  '\$${product.price!.round()}',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontFamily: 'RobotoB',
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   )),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text(
-                            '\$ ${product.price!.round()}',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColorLight,
-                              fontFamily: 'RobotoB',
-                              fontSize: 18,
-                            ),
-                          ),
+                  InkWell(
+                    onTap: () {
+                      if (islogin == false) {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => SignIn()));
+                      } else {
+                        addAndRemoveItemToBasket(product);
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColorLight,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
                         ),
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              border: Border.all(
-                                color: Theme.of(context).primaryColorLight,
-                              )),
-                          child: Center(
-                            child: InkWell(
-                              onTap: () {
-                                if (widget.islogin == false) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => SignIn()));
-                                } else {
-                                  addAndRemoveItemToBasket(product);
-                                }
-                              },
+                      ),
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5),
                               child: product.inBasket!
                                   ? SvgPicture.asset(
                                       "assets/images/check.svg",
                                       color: Colors.green,
                                     )
                                   : SvgPicture.asset(
-                                      "assets/images/shop.svg",
-                                      color: Theme.of(context).primaryColorLight,
+                                      "assets/images/basket-shopping-solid.svg",
+                                      width: 20,
+                                      color: Theme.of(context).secondaryHeaderColor
                                     ),
                             ),
-                          ),
-                        )
-                      ],
+                            Container(
+                              child: Text(
+                              product.inBasket!? "Added"  :"Add to cart",
+                                style: TextStyle(
+                                  color: Theme.of(context).secondaryHeaderColor,
+                                  fontFamily: 'RobotoM',
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   )
                 ],

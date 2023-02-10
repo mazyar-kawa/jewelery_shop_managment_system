@@ -8,9 +8,13 @@ class RefreshUser with ChangeNotifier {
 
   AuthUser get currentUser => _currentUser!;
 
-  Future<void> refreshuser() async {
-    ApiProvider user = await Auth().getUserDetials();
+  Future<void> refreshuser({bool update=false,AuthUser? user}) async {
+    if(!update){
+      ApiProvider user = await Auth().getUserDetials();
     _currentUser = user.data as AuthUser;
+    }else{
+      _currentUser=AuthUser(user: user!.user);
+    }
     notifyListeners();
   }
 }

@@ -7,12 +7,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HorizantleListView extends StatefulWidget {
   final String title;
-  final bool islogin;
   final List<SingleItem> provder;
 
   const HorizantleListView({
     required this.title,
-    required this.islogin,
     required this.provder,
     Key? key,
   }) : super(key: key);
@@ -32,7 +30,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
     _pageControllerMobile = PageController(
         initialPage: _current, viewportFraction: 0.65, keepPage: true);
     _pageControllerWeb = PageController(
-        initialPage: _current, viewportFraction: 0.3, keepPage: true);
+        initialPage: _current, viewportFraction: 0.5, keepPage: true);
     super.initState();
   }
 
@@ -96,7 +94,6 @@ class _HorizantleListViewState extends State<HorizantleListView> {
                                 child: HomeSmallCardMobile(
                                   current: _current,
                                   index: index,
-                                  islogin: widget.islogin,
                                 ),
                               );
                             }

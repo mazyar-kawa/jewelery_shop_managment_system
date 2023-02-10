@@ -38,7 +38,6 @@ class ItemProviderORG with ChangeNotifier {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
-      print(response.body);
       final data = Items.fromJson(json.decode(response.body));
       next_url = data.items.nextPageUrl!;
 

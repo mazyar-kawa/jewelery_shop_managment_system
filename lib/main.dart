@@ -13,10 +13,11 @@ import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
-import 'package:jewelery_shop_managmentsystem/responsive/web_screen_layout.dart';
+import 'package:jewelery_shop_managmentsystem/responsive/ipad_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +75,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: HomeItemsProvider()),
         ChangeNotifierProvider.value(value: Checkuser()),
         ChangeNotifierProvider.value(value: ItemBasket()),
+        ChangeNotifierProvider.value(value: Order()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {
@@ -92,27 +94,27 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData.light().copyWith(
+              scaffoldBackgroundColor: scaffoldbackgroundLight,
               buttonColor: scaffoldbackgroundLight,
               primaryColorLight: primaryColorLight,
               primaryColor: primaryFadeCardLight,
               accentColor: seconderFadeCardLight,
-              backgroundColor: primaryCardLight,
-              secondaryHeaderColor: seconderCardLight,
+              secondaryHeaderColor: secondColorLight,
               shadowColor: shadowCardLight,
             ),
             darkTheme: ThemeData.dark().copyWith(
+              scaffoldBackgroundColor: scaffoldbackgroundDark,
               buttonColor: scaffoldbackgroundDark,
               primaryColorLight: primaryColorDark,
               primaryColor: primaryFadeCardDark,
               accentColor: seconderFadeCardDark,
-              backgroundColor: primaryCardDark,
-              secondaryHeaderColor: seconderCardDark,
               shadowColor: shadowCardDark,
+              secondaryHeaderColor: secondColorDark,
             ),
             themeMode: themeChangeProvider.themeMode,
             home: LayoutScreen(
               mobilescreen: MobileScreenLayout(),
-              webscreen: WebScreenLayout(),
+              webscreen: IpadScreenLayout(),
             ),
             
             routes: {

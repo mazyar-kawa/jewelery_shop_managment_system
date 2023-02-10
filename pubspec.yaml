@@ -37,6 +37,7 @@ dependencies:
   flutter_svg: ^1.1.4
   fluttericon: ^2.0.0
   http: ^0.13.5
+  intl: any
   lottie: ^1.4.0
   provider: ^6.0.3
   pull_to_refresh: ^2.0.0

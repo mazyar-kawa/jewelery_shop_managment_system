@@ -10,12 +10,10 @@ class ItemMobileResponsive extends StatelessWidget {
     Key? key,
     required this.all,
     required this.searchController,
-    required this.islogin,
 
   }) : super(key: key);
 
   final Future? all;
-  final bool islogin;
   final TextEditingController searchController;
 
   @override
@@ -33,7 +31,7 @@ class ItemMobileResponsive extends StatelessWidget {
                     itemBuilder: (context, i) {
                       return ChangeNotifierProvider.value(
                         value: product[i],
-                        child: CardItemsMobile(index: i,islogin: islogin,isbasket: false,issure: false,),
+                        child: CardItemsMobile(index: i,isbasket: false,issure: false,),
                       );
                     })
                 : Container(

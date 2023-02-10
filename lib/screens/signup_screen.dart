@@ -34,12 +34,10 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
     animationController
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => LoadingPage(
-                        // islogin: true,
-                      )));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) {
+            return LoadingPage();
+          }), (Route<dynamic> route) => false);
         }
       });
     super.initState();
@@ -101,6 +99,8 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', user.token ?? '');
     await prefs.setInt('userId', user.id ?? 0);
+    print(user.email);
+    print(user.token);
     RefreshUser refresh = Provider.of<RefreshUser>(context, listen: false);
     await refresh.refreshuser;
     showdialog(context);

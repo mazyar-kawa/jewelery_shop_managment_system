@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/favorite_screen.dart';
+import 'package:jewelery_shop_managmentsystem/screens/myOrders_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/settings_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/user_managment.dart';
@@ -13,11 +15,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final islogin = Provider.of<Checkuser>(context).islogin;
     late User user;
     if (islogin) {
@@ -196,7 +204,13 @@ class ProfileScreen extends StatelessWidget {
                             ProfileCards(
                                 title: "My Orders",
                                 image: "orders.svg",
-                                onPressed: () {}),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MyOrdersScreen()));
+                                }),
                             ProfileCards(
                                 title: "My Favorites",
                                 image: "heart-solid.svg",
@@ -235,64 +249,85 @@ class ProfileScreen extends StatelessWidget {
               )
             : Consumer<ThemeChangeProvider>(
                 builder: (context, provider, chile) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Theme.of(context).primaryColorLight.value ==
-                              4286436348
-                          ? LottieBuilder.asset(
-                              'assets/images/unauthorized_blue.json',
-                              width: 450,
-                            )
-                          : LottieBuilder.asset(
-                              'assets/images/unauthorized_grey.json',
-                              width: 450,
-                            ),
-                    ),
-                    Container(
-                        child: Text(
-                      'Oops!...Unauthorized',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorLight,
-                        fontSize: 24,
-                        fontFamily: 'RobotoB',
+                return SafeArea(
+
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SettingScreen()));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
+                          alignment: Alignment.topRight,
+                          child: SvgPicture.asset('assets/images/settings.svg',color: Theme.of(context).primaryColorLight,),
+                        ),
                       ),
-                    )),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => SignIn()));
-                      },
-                      child: Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorLight,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).shadowColor,
-                                blurRadius: 3,
-                                offset: Offset(2, 3),
+                      Container(
+                        child: Theme.of(context).primaryColorLight.value ==
+                                4286436348
+                            ? LottieBuilder.asset(
+                                'assets/images/unauthorized_blue.json',
+                                width: 450,
                               )
-                            ]),
-                        child: Center(
+                            : LottieBuilder.asset(
+                                'assets/images/unauthorized_grey.json',
+                                width: 450,
+                              ),
+                      ),
+                      Container(
                           child: Text(
-                            'LogIn',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'RobotoB',
-                              fontSize: 24,
+                        'Oops!...Unauthorized',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorLight,
+                          fontSize: 24,
+                          fontFamily: 'RobotoB',
+                        ),
+                      )),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => SignIn()));
+                        },
+                        child: Container(
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColorLight,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context).shadowColor,
+                                  blurRadius: 3,
+                                  offset: Offset(2, 3),
+                                )
+                              ]),
+                          child: Center(
+                            child: Text(
+                              'LogIn',
+                              style: TextStyle(
+                                color: Theme.of(context).secondaryHeaderColor,
+                                fontFamily: 'RobotoB',
+                                fontSize: 24,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 );
               }));
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
