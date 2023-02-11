@@ -14,9 +14,9 @@ import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class CardItemsMobile extends StatefulWidget {
+class CardItems extends StatefulWidget {
   ValueChanged<int>? onChanged;
-  CardItemsMobile({
+  CardItems({
     Key? key,
     required this.index,
     required this.isbasket,
@@ -28,10 +28,10 @@ class CardItemsMobile extends StatefulWidget {
   final bool issure;
 
   @override
-  State<CardItemsMobile> createState() => _CardItemsMobileState();
+  State<CardItems> createState() => _CardItemsState();
 }
 
-class _CardItemsMobileState extends State<CardItemsMobile>
+class _CardItemsState extends State<CardItems>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
 
@@ -59,6 +59,7 @@ class _CardItemsMobileState extends State<CardItemsMobile>
           startAnimation(product);
           product.isFavourited = true;
           showSnackBar(context, favourite.data['message'], false);
+          
         });
       }
     }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -90,7 +90,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         itemBuilder: (context, i) =>
                             ChangeNotifierProvider.value(
                               value: product[i],
-                              child: CardItemsMobile(
+                              child: CardItems(
                                 index: i,
                                 isbasket: false,
                                 issure: false,

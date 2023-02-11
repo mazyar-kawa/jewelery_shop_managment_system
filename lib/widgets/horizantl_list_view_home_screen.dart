@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
+import 'package:jewelery_shop_managmentsystem/screens/mix_item_screen.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/home_small_card.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -61,10 +62,15 @@ class _HorizantleListViewState extends State<HorizantleListView> {
                   widget.title,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                Text(
-                  AppLocalizations.of(context)!.seeMore,
-                  style: TextStyle(
-                      fontSize: 14, color: Theme.of(context).primaryColorLight),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=>MixItemsScreen(title: widget.title,items: products,)));
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.seeMore,
+                    style: TextStyle(
+                        fontSize: 14, color: Theme.of(context).primaryColorLight),
+                  ),
                 ),
               ],
             ),
@@ -73,7 +79,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
             height: MediaQuery.of(context).size.width > websize ? 318 : 350,
             width: double.infinity,
             child: PageView.builder(
-                    itemCount: products.length,
+                    itemCount: 7,
                     onPageChanged: ((value) {
                       setState(() {
                         _current = value;
@@ -91,7 +97,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
                                 curve: Curves.fastOutSlowIn,
                                 scale: _current == index ? 1 : 0.8,
                                 duration: Duration(milliseconds: 500),
-                                child: HomeSmallCardMobile(
+                                child: HomeSmallCard(
                                   current: _current,
                                   index: index,
                                 ),

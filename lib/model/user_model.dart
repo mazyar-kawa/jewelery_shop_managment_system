@@ -22,17 +22,20 @@ class User {
   String? token;
   String? address;
   String? phoneNo;
-  User({
-    this.id,
-    this.name,
-    this.username,
-    this.email,
-    this.profilePicture,
-    this.roleId,
-    this.token,
-    this.address,
-    this.phoneNo,
-  });
+  int? favoriteNo;
+  int? orderNo;
+  User(
+      {this.id,
+      this.name,
+      this.username,
+      this.email,
+      this.profilePicture,
+      this.roleId,
+      this.token,
+      this.address,
+      this.phoneNo,
+      this.favoriteNo,
+      this.orderNo});
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json["id"],
@@ -44,6 +47,8 @@ class User {
       token: json["token"],
       address: json["address"],
       phoneNo: json["phone_no"],
+      favoriteNo: json['faviorate_items_count'],
+      orderNo: json['orders_count'],
     );
   }
 }

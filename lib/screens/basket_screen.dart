@@ -7,7 +7,7 @@ import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/sure_order_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -298,7 +298,7 @@ class _BasketScreenState extends State<BasketScreen> {
                                                 return ChangeNotifierProvider
                                                     .value(
                                                   value: item[i],
-                                                  child: CardItemsMobile(
+                                                  child: CardItems(
                                                     index: i,
                                                     isbasket: true,
                                                     issure: false,

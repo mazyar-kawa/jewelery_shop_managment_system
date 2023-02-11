@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 
 class LayoutScreen extends StatefulWidget {
-  final Widget webscreen;
-  final Widget mobilescreen;
+  final Widget ipadScreen;
+  final Widget mobileScreen;
 
   const LayoutScreen(
-      {Key? key, required this.webscreen, required this.mobilescreen})
+      {Key? key, required this.ipadScreen, required this.mobileScreen})
       : super(key: key);
 
   @override
@@ -19,9 +19,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > websize) {
-          return widget.webscreen;
+          return widget.ipadScreen;
         }
-        return widget.mobilescreen;
+        return widget.mobileScreen;
       },
     );
   }

@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth {
@@ -211,7 +213,6 @@ Future<ApiProvider> UpdatePassword(
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
-      print(response.statusCode);
       switch (response.statusCode) {
         case 200:
           apiProvider.data = json.decode(response.body);
@@ -226,6 +227,9 @@ Future<ApiProvider> UpdatePassword(
     return apiProvider;
   }
 
+  
+
+  
 }
 
 class Checkuser with ChangeNotifier {

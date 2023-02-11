@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/home_small_card_mobile.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/home_small_card.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -144,7 +144,7 @@ class ItemIpadResponsive extends StatelessWidget {
                           itemBuilder: (context, i) {
                             return ChangeNotifierProvider.value(
                               value: product[i],
-                              child: HomeSmallCardMobile(index: i),
+                              child: HomeSmallCard(index: i),
                             );
                           })
                       : Container(

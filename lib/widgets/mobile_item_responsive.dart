@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +31,7 @@ class ItemMobileResponsive extends StatelessWidget {
                     itemBuilder: (context, i) {
                       return ChangeNotifierProvider.value(
                         value: product[i],
-                        child: CardItemsMobile(index: i,isbasket: false,issure: false,),
+                        child: CardItems(index: i,isbasket: false,issure: false,),
                       );
                     })
                 : Container(

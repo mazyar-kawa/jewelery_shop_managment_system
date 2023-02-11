@@ -22,10 +22,10 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin {
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     final islogin = Provider.of<Checkuser>(context).islogin;
     late User user;
     if (islogin) {
@@ -117,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                               child: Column(
                                 children: [
                                   Text(
-                                    '20',
+                                    '${user.favoriteNo}',
                                     style: TextStyle(
                                       color:
                                           Theme.of(context).primaryColorLight,
@@ -155,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                               child: Column(
                                 children: [
                                   Text(
-                                    '03',
+                                    '${user.orderNo}',
                                     style: TextStyle(
                                       color:
                                           Theme.of(context).primaryColorLight,

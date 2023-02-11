@@ -10,8 +10,8 @@ import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class HomeSmallCardMobile extends StatefulWidget {
-  HomeSmallCardMobile({
+class HomeSmallCard extends StatefulWidget {
+  HomeSmallCard({
     Key? key,
     this.current,
     required this.index,
@@ -21,10 +21,10 @@ class HomeSmallCardMobile extends StatefulWidget {
   final int index;
 
   @override
-  State<HomeSmallCardMobile> createState() => _HomeSmallCardMobileState();
+  State<HomeSmallCard> createState() => _HomeSmallCardState();
 }
 
-class _HomeSmallCardMobileState extends State<HomeSmallCardMobile>
+class _HomeSmallCardState extends State<HomeSmallCard>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
 

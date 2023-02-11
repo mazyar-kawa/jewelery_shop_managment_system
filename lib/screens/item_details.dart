@@ -97,6 +97,7 @@ class _ItemDetailsState extends State<ItemDetails> {
     final islogin = Provider.of<Checkuser>(context).islogin;
     final item = Provider.of<ItemProviderORG>(context).ItemDetails;
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColorLight,
         appBar: PreferredSize(
           preferredSize:
               Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
@@ -113,14 +114,14 @@ class _ItemDetailsState extends State<ItemDetails> {
                     },
                     icon: Icon(
                       Icons.arrow_back_ios_rounded,
-                      color: Theme.of(context).primaryColorLight,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     )),
                 Text(
                   "Details",
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'RobotoB',
-                    color: Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                   ),
                 ),
               ],
@@ -200,9 +201,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                                             BorderRadius.circular(1000),
                                         color: current == _
                                             ? Theme.of(context)
-                                                .primaryColorLight
+                                                .scaffoldBackgroundColor
                                             : Theme.of(context)
-                                                .primaryColorLight
+                                                .scaffoldBackgroundColor
                                                 .withOpacity(0.3),
                                       ),
                                     ),
@@ -225,16 +226,10 @@ class _ItemDetailsState extends State<ItemDetails> {
                       builder: (context, scrollController) {
                         return Container(
                           decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColorLight,
+                              color: Theme.of(context).scaffoldBackgroundColor,
                               borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(32.0)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Theme.of(context).shadowColor,
-                                  blurRadius: 5,
-                                  offset: Offset(0, -4),
-                                )
-                              ]),
+                                  top: Radius.circular(15.0)),
+                              ),
                           child: SingleChildScrollView(
                             child: Container(
                               margin: EdgeInsets.symmetric(
@@ -246,7 +241,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                       margin: EdgeInsets.symmetric(vertical: 5),
                                       decoration: BoxDecoration(
                                           color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
+                                              .primaryColorLight,
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       height: 4,
@@ -265,7 +260,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                             item.name!,
                                             style: TextStyle(
                                                 color: Theme.of(context)
-                                                    .scaffoldBackgroundColor,
+                                                    .primaryColorLight,
                                                 fontFamily: 'RobotoB',
                                                 fontSize: 18),
                                           ),
@@ -273,7 +268,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                             item.countryName!,
                                             style: TextStyle(
                                                 color: Theme.of(context)
-                                                    .scaffoldBackgroundColor,
+                                                    .primaryColorLight,
                                                 fontFamily: 'RobotoB',
                                                 fontSize: 16),
                                           ),
@@ -319,7 +314,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                           "\$${item.price!.round()}",
                                           style: TextStyle(
                                               color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
+                                                  .primaryColorLight,
                                               fontFamily: 'RobotoB',
                                               fontSize: 20),
                                         ),
@@ -330,13 +325,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                                             children: [
                                               Icon(FontAwesome5.balance_scale,
                                                   color: Theme.of(context)
-                                                      .scaffoldBackgroundColor,
+                                                      .primaryColorLight,
                                                   size: 15),
                                               Text(
                                                 '  ${item.weight}g',
                                                 style: TextStyle(
                                                   color: Theme.of(context)
-                                                      .scaffoldBackgroundColor,
+                                                      .primaryColorLight,
                                                   fontFamily: 'RobotoM',
                                                   fontSize: 16,
                                                 ),
@@ -353,13 +348,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          margin: EdgeInsets.symmetric(
+                                          margin: const EdgeInsets.symmetric(
                                               vertical: 10),
                                           child: Text(
                                             "Description",
                                             style: TextStyle(
                                                 color: Theme.of(context)
-                                                    .scaffoldBackgroundColor,
+                                                    .primaryColorLight,
                                                 fontFamily: 'RobotoM',
                                                 fontSize: 20),
                                           ),
@@ -367,13 +362,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         Container(
                                           margin: EdgeInsets.symmetric(
                                               vertical: 10),
-                                          child: new Text(
+                                          child:  Text(
                                             item.description!,
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 3,
                                             style: TextStyle(
                                               color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
+                                                  .primaryColorLight,
                                               fontFamily: 'RobotoB',
                                               fontSize: 18,
                                             ),
@@ -401,7 +396,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         color: Theme.of(context)
-                                            .scaffoldBackgroundColor,
+                                            .primaryColorLight,
                                       ),
                                       child: Center(
                                         child: Text(
@@ -410,7 +405,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                               : "Add to basket",
                                           style: TextStyle(
                                             color: Theme.of(context)
-                                                .primaryColorLight,
+                                                .scaffoldBackgroundColor,
                                             fontFamily: 'RobotoB',
                                             fontSize: 20,
                                           ),

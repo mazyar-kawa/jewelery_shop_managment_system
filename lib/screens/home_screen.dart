@@ -6,7 +6,7 @@ import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart'
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items_mobile.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/horizantl_list_view_home_screen.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/rounded_search_input.dart';
 import 'package:lottie/lottie.dart';
@@ -268,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 15),
-                                          child: CardItemsMobile(
+                                          child: CardItems(
                                             index: index,
                                             isbasket: false,
                                             issure: false,

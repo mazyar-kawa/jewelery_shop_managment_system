@@ -75,7 +75,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                         blurRadius: 3,
                       )
                     ],
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: Theme.of(context).secondaryHeaderColor,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -113,8 +113,8 @@ class _MyAppState extends State<MyApp> {
             ),
             themeMode: themeChangeProvider.themeMode,
             home: LayoutScreen(
-              mobilescreen: MobileScreenLayout(),
-              webscreen: IpadScreenLayout(),
+              mobileScreen: MobileScreenLayout(),
+              ipadScreen: IpadScreenLayout(),
             ),
             
             routes: {
