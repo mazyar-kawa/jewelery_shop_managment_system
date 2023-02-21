@@ -15,8 +15,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ItemsScreen extends StatefulWidget {
-  static const routname = "/items";
-  const ItemsScreen({Key? key}) : super(key: key);
+  final int country_id;
+  final String country_name;
+  const ItemsScreen({Key? key,required this.country_id,required this.country_name}) : super(key: key);
 
   @override
   State<ItemsScreen> createState() => _ItemsScreenState();
@@ -48,7 +49,7 @@ class _ItemsScreenState extends State<ItemsScreen>
   Future? all;
   @override
   void initState() {
-    Provider.of<HomeItemsProvider>(context, listen: false).getAllItemHome();
+    
     Future.delayed(
       Duration.zero,
       () {
@@ -70,10 +71,10 @@ class _ItemsScreenState extends State<ItemsScreen>
     int categoryId = 0,
     int caratId = 0,
   }) async {
-    final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
+    // final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
     if (first) {
       await Provider.of<ItemProviderORG>(context, listen: false).getItems(
-          CategoryId,
+          widget.country_id,
           search: search,
           size_start: start_size,
           size_end: end_size,
@@ -132,7 +133,6 @@ class _ItemsScreenState extends State<ItemsScreen>
   Widget build(BuildContext context) {
     final category = Provider.of<HomeItemsProvider>(context).categories;
     final carat = Provider.of<HomeItemsProvider>(context).carates;
-
     final provider = Provider.of<ItemProviderORG>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
@@ -140,7 +140,7 @@ class _ItemsScreenState extends State<ItemsScreen>
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          AppLocalizations.of(context)!.items,
+          widget.country_name,
           style: TextStyle(
             fontSize: 20,
             fontFamily: 'RobotoB',

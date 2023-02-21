@@ -26,7 +26,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       String retypeNewPassword, BuildContext context) async {
     ApiProvider response = await Auth()
         .UpdatePassword(currentPassword, newPassword, retypeNewPassword);
-    if (response.error == null) {
+    if (response.data!=null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {return LoadingPage();}), (Route<dynamic> route) => false);
     } else {
       error = response.error;

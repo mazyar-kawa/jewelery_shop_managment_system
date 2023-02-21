@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
@@ -28,7 +29,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<ItemProviderORG>(context).favouriteItems;
+    List<SingleItem> product = Provider.of<ItemProviderORG>(context).favouriteItems;
+    print(product.length);
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
@@ -93,7 +95,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               child: CardItems(
                                 index: i,
                                 isbasket: false,
-                                issure: false,
+                                
                               ),
                             ))
                 : Column(

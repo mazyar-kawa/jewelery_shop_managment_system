@@ -36,11 +36,8 @@ class Order with ChangeNotifier{
               createdAt: data[i].createdAt,
             ));
           }
-
           _orders = temporaryList;
           notifyListeners();
-         
-
           break;
         default:
       }
@@ -62,6 +59,7 @@ class Order with ChangeNotifier{
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
+          print(response.statusCode);
       switch (response.statusCode) {
         case 200:
           apiProvider.data = json.decode(response.body);
@@ -72,6 +70,7 @@ class Order with ChangeNotifier{
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
+    print(apiProvider.error);
     return apiProvider;
   }
 
@@ -98,6 +97,7 @@ class Order with ChangeNotifier{
       resultResquest.error = {'message': e.toString()};
       print(e.toString());
     }
+    print(resultResquest.error);
     return resultResquest;
   }
 }

@@ -1,14 +1,11 @@
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
 import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/sure_items_card.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/dashed_separator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -146,26 +143,32 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             ),
                             InkWell(
                               onTap: () async {
-                                ApiProvider response =
-                                    await Provider.of<Order>(context,listen: false).Orders(basketId);
-                                if (response.data == null) {
-                                  showSnackBar(context,
-                                      response.error!['message'], true);
+                                ApiProvider response = await Provider.of<Order>(
+                                        context,
+                                        listen: false)
+                                    .Orders(basketId);
+                                if (response.error == null) {
+                                  if (response.data!['message'] != 'New Order Added') {
+                                    for (int i = 0;i < response.data!['errors'].length; i++) {
+                                      showSnackBar( context, response.data!['errors']['basket.${i}'], true);
+                                    }
+                                  } else {
+                                    await Provider.of<HomeItemsProvider>(
+                                            context,
+                                            listen: false)
+                                        .getAllItemHome();
+                                    await Provider.of<BasketItemProvider>(
+                                            context,
+                                            listen: false)
+                                        .getItemBasket();
+                                    Navigator.pop(context);
+                                    showdialog(context);
+                                    setState(() {
+                                      basket.clearItemChecked();
+                                      orederd = true;
+                                    });
+                                  }
                                 }
-                                await Provider.of<HomeItemsProvider>(context,
-                                        listen: false)
-                                    .getAllItemHome();
-
-                                await Provider.of<BasketItemProvider>(context,
-                                        listen: false)
-                                    .getItemBasket();
-
-                                Navigator.pop(context);
-                                showdialog(context);
-                                setState(() {
-                                  basket.clearItemChecked();
-                                  orederd = true;
-                                });
                               },
                               child: Container(
                                 height: 40,
@@ -219,25 +222,15 @@ class _SureOrderScreenState extends State<SureOrderScreen>
 
   @override
   void initState() {
-    loadItem =
-        Provider.of<BasketItemProvider>(context, listen: false).getReadyItem();
+    loadItem = Provider.of<BasketItemProvider>(context, listen: false).getReadyItem();
 
-    animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 3));
-    animationController
-      ..addStatusListener((status) {
+    animationController = AnimationController(vsync: this, duration: Duration(seconds: 3));
+    animationController..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pop(context);
         }
       });
     super.initState();
-  }
-
-  UpdateQuantities(int itemId, int quantity, bool increase) async {
-    ApiProvider updateQuantity = await Order().UpdateQuantity(itemId, quantity);
-    if (updateQuantity.data != null) {
-      showSnackBar(context, updateQuantity.data['message'], increase);
-    }
   }
 
   @override
@@ -248,7 +241,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
 
   @override
   Widget build(BuildContext context) {
-    final item = Provider.of<BasketItemProvider>(context, listen: false);
+    final item = Provider.of<BasketItemProvider>(context, listen: false).ready;
 
     return Scaffold(
         appBar: AppBar(
@@ -302,7 +295,6 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                         Expanded(
                             flex: 4,
                             child: Container(
-                              
                               child: SingleChildScrollView(
                                 physics: BouncingScrollPhysics(),
                                 child: ListView.builder(
@@ -310,252 +302,9 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                   physics: BouncingScrollPhysics(),
                                   itemCount: items.length,
                                   itemBuilder: (context, index) {
-                                    return Slidable(
-                                      endActionPane: ActionPane(
-                                          extentRatio: 1 / 5,
-                                          motion: ScrollMotion(),
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                item.removeItemReady(
-                                                    item.ready[index]);
-                                              },
-                                              child: Container(
-                                                width: 60,
-                                                height: 60,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: Color(0xffFED4D5),
-                                                ),
-                                                child: Center(
-                                                  child: Icon(
-                                                      FontAwesome5.trash,
-                                                      color: Color(0xffFA515C)),
-                                                ),
-                                              ),
-                                            )
-                                          ]),
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 15),
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.12,
-                                        decoration: BoxDecoration(
-                                            color: Theme.of(context).secondaryHeaderColor,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Theme.of(context)
-                                                    .shadowColor,
-                                                blurRadius: 3,
-                                              ),
-                                            ]),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.all(10),
-                                              child: Row(
-                                                children: [
-                                                  AspectRatio(
-                                                      aspectRatio: 1.2,
-                                                      child: Image.network(
-                                                          items[index].img!,
-                                                          fit: BoxFit.contain)),
-                                                  Container(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Expanded(
-                                                          child: Container(
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.4,
-                                                            child: Text(
-                                                              items[index]
-                                                                  .name!,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 1,
-                                                              softWrap: false,
-                                                              style: TextStyle(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColorLight,
-                                                                fontFamily:
-                                                                    'RobotoB',
-                                                                fontSize: 18,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          margin: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 5),
-                                                          child: Text(
-                                                            items[index]
-                                                                .countryName!,
-                                                            style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColorLight,
-                                                              fontFamily:
-                                                                  'RobotoM',
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          margin: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 5),
-                                                          child: Text(
-                                                            '\$${items[index].price!.round()}',
-                                                            style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColorLight,
-                                                              fontFamily:
-                                                                  'RobotoB',
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        items[index].quantity =
-                                                            items[index]
-                                                                    .quantity! -
-                                                                1;
-
-                                                        if (items[index]
-                                                                .quantity! <
-                                                            1) {
-                                                          items[index]
-                                                              .quantity = 1;
-                                                          showSnackBar(
-                                                              context,
-                                                              "You can\'t decrease quantity to 0",
-                                                              true);
-                                                        } else {
-                                                          EasyDebounce.debounce(
-                                                              "decreaseQuantity",
-                                                              Duration(
-                                                                  milliseconds:
-                                                                      250), () {
-                                                            UpdateQuantities(
-                                                                items[index]
-                                                                    .id!,
-                                                                items[index]
-                                                                    .quantity!,
-                                                                true);
-                                                          });
-                                                        }
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      width: 25,
-                                                      height: 25,
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .primaryColorLight,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                      ),
-                                                      child: Icon(
-                                                          FontAwesome5.minus,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .scaffoldBackgroundColor,
-                                                          size: 12),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: Center(
-                                                      child: Text(
-                                                        "${items[index].quantity}",
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontFamily: 'RobotoM',
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColorLight,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        items[index].quantity =
-                                                            items[index]
-                                                                    .quantity! +
-                                                                1;
-                                                      });
-                                                      EasyDebounce.debounce(
-                                                          "increaseQuantity",
-                                                          Duration(
-                                                              milliseconds:
-                                                                  250), () {
-                                                        UpdateQuantities(
-                                                            items[index].id!,
-                                                            items[index]
-                                                                .quantity!,
-                                                            false);
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      width: 25,
-                                                      height: 25,
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .primaryColorLight,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                      ),
-                                                      child: Icon(
-                                                          FontAwesome5.plus,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .scaffoldBackgroundColor,
-                                                          size: 12),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
+                                    return ChangeNotifierProvider.value(
+                                      value: items[index],
+                                      child: SureItemsCard(),
                                     );
                                   },
                                 ),

@@ -31,7 +31,7 @@ class ItemMobileResponsive extends StatelessWidget {
                     itemBuilder: (context, i) {
                       return ChangeNotifierProvider.value(
                         value: product[i],
-                        child: CardItems(index: i,isbasket: false,issure: false,),
+                        child: CardItems(index: i,isbasket: false),
                       );
                     })
                 : Container(

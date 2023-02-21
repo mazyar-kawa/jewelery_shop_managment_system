@@ -5,13 +5,14 @@ import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:provider/provider.dart';
 
 class ItemProviderORG with ChangeNotifier {
-
-  SingleItem ItemDetails=SingleItem();
-
-
   List<SingleItem> _items = [];
+
+  SingleItem _ItemDetails=SingleItem();
+
+SingleItem get ItemDetails => _ItemDetails;
 
   List<SingleItem> get items => [..._items];
 
@@ -49,6 +50,7 @@ class ItemProviderORG with ChangeNotifier {
             size: data.items.data[i].size,
             weight: data.items.data[i].weight,
             img: data.items.data[i].img,
+            description: data.items.data[i].description,
             quantity: data.items.data[i].quantity,
             categoryId: data.items.data[i].categoryId,
             companyId: data.items.data[i].companyId,
@@ -97,6 +99,7 @@ class ItemProviderORG with ChangeNotifier {
             size: data.items.data[i].size,
             weight: data.items.data[i].weight,
             img: data.items.data[i].img,
+            description: data.items.data[i].description,
             quantity: data.items.data[i].quantity,
             categoryId: data.items.data[i].categoryId,
             companyId: data.items.data[i].companyId,
@@ -134,6 +137,7 @@ class ItemProviderORG with ChangeNotifier {
             size: data.items![i].size,
             weight: data.items![i].weight,
             img: data.items![i].img,
+            description: data.items![i].description,
             quantity: data.items![i].quantity,
             categoryId: data.items![i].categoryId,
             companyId: data.items![i].companyId,
@@ -153,8 +157,14 @@ class ItemProviderORG with ChangeNotifier {
     }
   }
 
-  Future<String> getItemById(int item_id) async{
-    String result='';
+  Future deleteFavouriteItem(int item_id) async {
+    _favouriteItems.removeWhere((element) => element.id == item_id);
+    notifyListeners();
+  }
+
+
+  Future<SingleItem> getItemById(int item_id) async{
+
   try {
       String token = await Auth().getToken();
       final response =
@@ -164,7 +174,7 @@ class ItemProviderORG with ChangeNotifier {
         'Authorization': 'Bearer $token',
       });
       final data = SingleItem.fromJson(json.decode(response.body));
-      ItemDetails=SingleItem(
+      _ItemDetails=SingleItem(
         id: data.id,
         img: data.img,
         name: data.name,
@@ -178,14 +188,24 @@ class ItemProviderORG with ChangeNotifier {
         isFavourited: data.isFavourited,
         size: data.size
       );
-      notifyListeners();
-      result="success";
-    
   } catch (e) {
-    result=e.toString();
+    print(e.toString());
   }
-  print(result);
-  return result;
+
+  return ItemDetails;
+
+  }
+
+  Future getItemByIdCountries(int item_id,
+      {bool basket = false, bool favorite = false})async{
+        for (SingleItem item in _items) {
+      if (item.id == item_id) {
+          int index= _items.indexWhere((element) => element.id==item_id);
+        _items[index].isFavourited = favorite;
+        _items[index].inBasket = basket;
+      }
+    }
+    notifyListeners();
 
   }
 }

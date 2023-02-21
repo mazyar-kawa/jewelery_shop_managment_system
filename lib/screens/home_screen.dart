@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
 import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
@@ -98,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (islogin) {
       user = Provider.of<RefreshUser>(context).currentUser.user!;
     }
+     
     final provider = Provider.of<HomeItemsProvider>(context);
     final category = provider.categories;
     List<Category> _categories = [
@@ -271,7 +273,6 @@ class _HomeScreenState extends State<HomeScreen>
                                           child: CardItems(
                                             index: index,
                                             isbasket: false,
-                                            issure: false,
                                           ),
                                         ),
                                       );

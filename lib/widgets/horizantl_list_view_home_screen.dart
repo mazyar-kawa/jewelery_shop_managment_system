@@ -100,6 +100,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
                                 child: HomeSmallCard(
                                   current: _current,
                                   index: index,
+                                  
                                 ),
                               );
                             }

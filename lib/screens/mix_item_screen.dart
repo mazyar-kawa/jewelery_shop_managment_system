@@ -66,7 +66,7 @@ class _MixItemsScreenState extends State<MixItemsScreen> {
                       return CardItems(
                         index: index,
                         isbasket: false,
-                        issure: false,
+                        
                       );
                     },
                   );

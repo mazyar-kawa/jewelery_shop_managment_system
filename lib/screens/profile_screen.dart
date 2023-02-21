@@ -95,88 +95,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 20),
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              width: MediaQuery.of(context).size.width * 0.30,
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Theme.of(context).shadowColor,
-                                        blurRadius: 4,
-                                        offset: Offset(0, 3))
-                                  ]),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '${user.favoriteNo}',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: "RobotoB",
-                                      fontSize: 18,
+                      Consumer<RefreshUser>(
+                        builder: (context, value, child) {
+                          return Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 20),
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                width: MediaQuery.of(context).size.width * 0.30,
+                                decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).scaffoldBackgroundColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Theme.of(context).shadowColor,
+                                          blurRadius: 4,
+                                          offset: Offset(0, 3))
+                                    ]),
+                                child: Column(
+                                  children: [
+                                    // Text(
+                                    //   '${value.favorite<9?'0${value.favorite}': value.favorite}',
+                                    //   style: TextStyle(
+                                    //     color:
+                                    //         Theme.of(context).primaryColorLight,
+                                    //     fontFamily: "RobotoB",
+                                    //     fontSize: 18,
+                                    //   ),
+                                    // ),
+                                    Text(
+                                      'Favorites',
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        fontFamily: "RobotoB",
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    'Favorites',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: "RobotoB",
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 20),
-                                  padding: EdgeInsets.symmetric(vertical: 10),
-                              width: MediaQuery.of(context).size.width * 0.30,
-                              decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Theme.of(context).shadowColor,
-                                        blurRadius: 4,
-                                        offset: Offset(0, 3))
-                                  ]),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '${user.orderNo}',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: "RobotoB",
-                                      fontSize: 18,
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 20),
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                width: MediaQuery.of(context).size.width * 0.30,
+                                decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).scaffoldBackgroundColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Theme.of(context).shadowColor,
+                                          blurRadius: 4,
+                                          offset: Offset(0, 3))
+                                    ]),
+                                child: Column(
+                                  children: [
+                                    // Text(
+                                    //   '${value.order<9?'0${value.order}': value.order}',
+                                    //   style: TextStyle(
+                                    //     color:
+                                    //         Theme.of(context).primaryColorLight,
+                                    //     fontFamily: "RobotoB",
+                                    //     fontSize: 18,
+                                    //   ),
+                                    // ),
+                                    Text(
+                                      'Orders',
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        fontFamily: "RobotoB",
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    'Orders',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: "RobotoB",
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        );
+                        },
+                       
                       ),
                       Container(
                         child: Column(

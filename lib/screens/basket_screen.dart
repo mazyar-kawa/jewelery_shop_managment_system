@@ -7,6 +7,7 @@ import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/sure_order_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/basket_card_items.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -85,24 +86,44 @@ class _BasketScreenState extends State<BasketScreen> {
                               builder: (contextx) => SureOrderScreen(),
                             ));
                       },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        height: 40,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Next",
-                            style: TextStyle(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              fontFamily: 'RobotoM',
-                              fontSize: 16,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            height: 40,
+                            child: Center(
+                              child: Text(
+                                "\$${baskets.TotalPrice()}",
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: 'RobotoM',
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            height: 40,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).primaryColorLight,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Next",
+                                style: TextStyle(
+                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  fontFamily: 'RobotoM',
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -271,24 +292,18 @@ class _BasketScreenState extends State<BasketScreen> {
                                     return item.length != 0
                                         ? Column(children: [
                                             Container(
-                                              alignment: Alignment.centerRight,
+                                              alignment: Alignment.centerLeft,
                                               margin: EdgeInsets.symmetric(
-                                                  horizontal: 10, vertical: 10),
+                                                  horizontal: 15, vertical: 10),
                                               child: Text(
-                                                "${basket.countItemReady()} Selected",
+                                                "My Basket",
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColorLight,
-                                                  fontFamily: 'RobotoM',
-                                                  fontSize: 16,
+                                                  fontFamily: 'RobotoB',
+                                                  fontSize: 20,
                                                 ),
                                               ),
-                                            ),
-                                            Divider(
-                                              indent: 10,
-                                              color: Theme.of(context)
-                                                  .primaryColorLight,
-                                              height: 2,
                                             ),
                                             ListView.builder(
                                               itemCount: item.length,
@@ -298,11 +313,7 @@ class _BasketScreenState extends State<BasketScreen> {
                                                 return ChangeNotifierProvider
                                                     .value(
                                                   value: item[i],
-                                                  child: CardItems(
-                                                    index: i,
-                                                    isbasket: true,
-                                                    issure: false,
-                                                  ),
+                                                  child: BasketCardItem()
                                                 );
                                               },
                                             ),
@@ -389,7 +400,6 @@ class _BasketScreenState extends State<BasketScreen> {
                       )
                     ],
                   )
-                  
                   );
   }
 }

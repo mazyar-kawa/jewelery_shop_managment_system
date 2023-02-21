@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
+import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -111,11 +112,20 @@ class _CategoryPageState extends State<CategoryPage>
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/items',
-                                    arguments: category[index].id,
-                                  );
+                                  // Navigator.pushNamed(
+                                  //   context,
+                                  //   '/items',
+                                  //   arguments: category[index].id,
+                                  // );
+
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => ItemsScreen(
+                                                country_id: category[index].id!,
+                                                country_name: category[index]
+                                                    .namecountries!,
+                                              )));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -123,8 +133,8 @@ class _CategoryPageState extends State<CategoryPage>
                                   color:
                                       Theme.of(context).scaffoldBackgroundColor,
                                   child: Card(
-                                    color: 
-                                      Theme.of(context).secondaryHeaderColor,
+                                      color: Theme.of(context)
+                                          .secondaryHeaderColor,
                                       elevation: 2,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:

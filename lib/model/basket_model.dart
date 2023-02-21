@@ -66,8 +66,5 @@ class ItemBasket with ChangeNotifier {
         price: SingleItem.fromJson(json["item"]).price,
         weight: SingleItem.fromJson(json["item"]).weight,
         inBasket: SingleItem.fromJson(json["item"]).inBasket,
-
-        
-
       );
 }

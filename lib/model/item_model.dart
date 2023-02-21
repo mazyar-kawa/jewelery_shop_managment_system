@@ -1,5 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
+import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
+import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:provider/provider.dart';
 
 class FavouriteItems {
   FavouriteItems({
@@ -123,14 +133,12 @@ class SingleItem with ChangeNotifier {
     this.countryName,
     this.description,
     // this.itemPictures
-
   });
 
   int? id;
   String? name;
   int? size;
   int? weight;
-
   String? img;
   String? description;
   int? quantity;
@@ -144,6 +152,7 @@ class SingleItem with ChangeNotifier {
   String? caratType;
   String? caratMs;
   String? countryName;
+
   // List<Country>? itemPictures;
 
   factory SingleItem.fromJson(Map<String, dynamic> json) => SingleItem(
@@ -166,6 +175,146 @@ class SingleItem with ChangeNotifier {
         caratMs: Carat.fromJson(json["carat"]).carat,
         // itemPictures: List<Country>.from(json["item_pictures"].map((x) => Country.fromJson(x))),
       );
+
+  Future<ApiProvider> FavouriteAndUnfavouriteItem(
+      int itemId, BuildContext context) async {
+    final body = {'item_id': itemId};
+    ApiProvider apiProvider = ApiProvider();
+    try {
+      String token = await Auth().getToken();
+      if (!isFavourited!) {
+        final response = await http.post(Uri.parse(base + 'favorite_item'),
+            body: jsonEncode(body),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            });
+        switch (response.statusCode) {
+          case 200:
+            apiProvider.data = json.decode(response.body);
+            // await Provider.of<RefreshUser>(context, listen: false)
+            //     .increasefavorite();
+            break;
+          default:
+            apiProvider.error = jsonDecode(response.body);
+        }
+      } else {
+        try {
+          final response = await http.post(Uri.parse(base + 'unfavorite_item'),
+              body: jsonEncode(body),
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              });
+          switch (response.statusCode) {
+            case 200:
+              apiProvider.data = json.decode(response.body);
+              // await Provider.of<RefreshUser>(context, listen: false)
+              //     .decreasefavorite();
+              await Provider.of<ItemProviderORG>(context, listen: false)
+                  .deleteFavouriteItem(itemId);
+              break;
+            default:
+              apiProvider.error = jsonDecode(response.body);
+          }
+        } catch (e) {
+          apiProvider.error = {'message': e.toString()};
+        }
+      }
+    } catch (e) {
+      apiProvider.error = {'message': e.toString()};
+    }
+    isFavourited = !isFavourited!;
+    await Provider.of<HomeItemsProvider>(context,listen: false).findItemById(itemId,favorite: isFavourited!);
+    await Provider.of<ItemProviderORG>(context,listen: false).getItemByIdCountries(itemId,favorite: isFavourited!);
+    notifyListeners();
+    return apiProvider;
+  }
+
+  Future<ApiProvider> basketAndUnbasketItems(
+      int itemId, BuildContext context) async {
+    ApiProvider apiProvider = ApiProvider();
+    final body = {'item_id': itemId};
+    String token = await Auth().getToken();
+    if (!inBasket!) {
+      try {
+        final response = await http.post(Uri.parse(base + 'basket/addItem'),
+            body: jsonEncode(body),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            });
+        switch (response.statusCode) {
+          case 200:
+            apiProvider.data = json.decode(response.body);
+
+            break;
+          default:
+            apiProvider.error = jsonDecode(response.body);
+        }
+      } catch (e) {
+        apiProvider.error = {'message': e.toString()};
+      }
+    } else {
+      try {
+        final response = await http.post(Uri.parse(base + 'basket/removeItem'),
+            body: jsonEncode(body),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $token',
+            });
+        switch (response.statusCode) {
+          case 200:
+            apiProvider.data = json.decode(response.body);
+            break;
+          default:
+            apiProvider.error = jsonDecode(response.body);
+        }
+      } catch (e) {
+        apiProvider.error = {'message': e.toString()};
+      }
+    }
+    inBasket = !inBasket!;
+    notifyListeners();
+    await Provider.of<HomeItemsProvider>(context,listen: false).findItemById(itemId,basket: inBasket!);
+    await Provider.of<BasketItemProvider>(context, listen: false)
+        .getItemBasket();
+    await Provider.of<ItemProviderORG>(context,listen: false).getItemByIdCountries(itemId,basket: inBasket!);
+    return apiProvider;
+  }
+
+  Future<ApiProvider> UnbasketItems(int itemId, BuildContext context) async {
+    ApiProvider apiProvider = ApiProvider();
+    final body = {'item_id': itemId};
+    String token = await Auth().getToken();
+    try {
+      final response = await http.post(Uri.parse(base + 'basket/removeItem'),
+          body: jsonEncode(body),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          });
+      switch (response.statusCode) {
+        case 200:
+          apiProvider.data = json.decode(response.body);
+          await Provider.of<BasketItemProvider>(context, listen: false)
+                  .deleteItemBasket(itemId,context);
+           await Provider.of<HomeItemsProvider>(context,listen: false).findItemById(itemId,basket: false);
+          break;
+        default:
+          apiProvider.error = jsonDecode(response.body);
+      }
+    } catch (e) {
+      apiProvider.error = {'message': e.toString()};
+    }
+    notifyListeners();
+    return apiProvider;
+  }
 }
 
 enum Type { GOLD, SILVER }
@@ -188,11 +337,7 @@ class EnumValues<T> {
 }
 
 class Country {
-  Country({
-    this.id,
-    this.name,
-    this.itemId
-  });
+  Country({this.id, this.name, this.itemId});
 
   int? id;
   String? name;

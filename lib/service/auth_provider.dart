@@ -101,7 +101,7 @@ class Auth {
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
-    
+
     return apiProvider;
   }
 
@@ -174,10 +174,16 @@ class Auth {
     return apiProvider;
   }
 
-  Future<ApiProvider> UpdateUserData(
-      String name, String username, String email,String phone_no,String address) async {
+  Future<ApiProvider> UpdateUserData(String name, String username, String email,
+      String phone_no, String address) async {
     ApiProvider apiProvider = ApiProvider();
-    final body = {'name': name, 'username': username, 'email': email,'phone_no':phone_no,'address':address};
+    final body = {
+      'name': name,
+      'username': username,
+      'email': email,
+      'phone_no': phone_no,
+      'address': address
+    };
     try {
       String token = await getToken();
       final response = await http.post(Uri.parse(base + "updateProfile"),
@@ -200,10 +206,15 @@ class Auth {
     }
     return apiProvider;
   }
-Future<ApiProvider> UpdatePassword(
+
+  Future<ApiProvider> UpdatePassword(
       String currentPassword, String newPassword, String retypePassword) async {
     ApiProvider apiProvider = ApiProvider();
-    final body = {'current_password': currentPassword, 'new_password': newPassword, 'new_password_confirmation': retypePassword};
+    final body = {
+      'current_password': currentPassword,
+      'new_password': newPassword,
+      'new_password_confirmation': retypePassword
+    };
     try {
       String token = await getToken();
       final response = await http.post(Uri.parse(base + "updatePassword"),
@@ -213,6 +224,7 @@ Future<ApiProvider> UpdatePassword(
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
+          print(response.statusCode);
       switch (response.statusCode) {
         case 200:
           apiProvider.data = json.decode(response.body);
@@ -224,12 +236,10 @@ Future<ApiProvider> UpdatePassword(
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
+    print(apiProvider.data);
+    print(apiProvider.error);
     return apiProvider;
   }
-
-  
-
-  
 }
 
 class Checkuser with ChangeNotifier {
@@ -247,3 +257,4 @@ class Checkuser with ChangeNotifier {
     return _islogon;
   }
 }
+

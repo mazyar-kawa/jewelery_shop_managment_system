@@ -41,7 +41,7 @@ void showSnackBar(BuildContext context, message, undon) {
     dismissDirection: DismissDirection.startToEnd,
     clipBehavior: Clip.antiAlias,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    content: Text(message),
+    content: Text('${message}'),
     backgroundColor: undon ? Colors.red : Colors.green,
     behavior: SnackBarBehavior.floating,
     duration: Duration(milliseconds: 1000),

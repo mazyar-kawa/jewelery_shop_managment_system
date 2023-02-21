@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,8 +13,6 @@ import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dar
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/ipad_screen_layout.dart';
-import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
-import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
 import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
@@ -117,9 +114,9 @@ class _MyAppState extends State<MyApp> {
               ipadScreen: IpadScreenLayout(),
             ),
             
-            routes: {
-              ItemsScreen.routname: (context) => ItemsScreen(),
-            },
+            // routes: {
+            //   ItemsScreen.routname: (context) => ItemsScreen(),
+            // },
           );
         });
       }),

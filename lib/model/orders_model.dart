@@ -11,7 +11,7 @@ class MyOrders with ChangeNotifier {
 
   int? id;
   int? userId;
-  double? total;
+  dynamic? total;
   String? status;
   DateTime? createdAt;
 
