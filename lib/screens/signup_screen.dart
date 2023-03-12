@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
+import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/text_form_field.dart';
 import 'package:lottie/lottie.dart';
@@ -99,8 +99,6 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', user.token ?? '');
     await prefs.setInt('userId', user.id ?? 0);
-    print(user.email);
-    print(user.token);
     RefreshUser refresh = Provider.of<RefreshUser>(context, listen: false);
     await refresh.refreshuser;
     showdialog(context);
@@ -194,7 +192,7 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                               contentPadding: EdgeInsets.all(10),
                               hintText:
                                   AppLocalizations.of(context)!.passwordconfirm,
-                              border: boredruser,
+                            border: boredruser,
                               enabledBorder: boredruser,
                               focusedBorder: boredruser,
                             ),

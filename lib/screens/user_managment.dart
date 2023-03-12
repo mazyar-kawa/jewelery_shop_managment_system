@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/screens/change_password.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/text_field_user_managment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -35,16 +35,18 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
     if (_pickedFile != null) {
       setState(() {
         _image = File(_pickedFile!.path);
+        
       });
     }
   }
 
   Map<dynamic, dynamic>? error;
 
-  void updateUser(String name, String username, String email, String phone_no,
+  void updateUser(File image ,String name, String username, String email, String phone_no,
       String address) async {
+    
     ApiProvider response =
-        await Auth().UpdateUserData(name, username, email, phone_no, address);
+        await Auth().UpdateUserData(image,name, username, email, phone_no, address);
     if (response.error == null) {
       saveUser(response.data);
     } else {
@@ -136,7 +138,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                                   radius: 64,
                                   backgroundImage: user.user!.profilePicture !=
                                           null
-                                      ? NetworkImage(user.user!.profilePicture)
+                                      ? NetworkImage("http://192.168.1.32:8000"+user.user!.profilePicture,)
                                       : NetworkImage(
                                           'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
                                 ),
@@ -155,7 +157,8 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                               child: IconButton(
                                 onPressed: () {
                                   showModalBottomSheet(
-                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                    backgroundColor: Theme.of(context)
+                                        .scaffoldBackgroundColor,
                                     context: context,
                                     elevation: 10,
                                     builder: (BuildContext context) {
@@ -165,39 +168,66 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                                           child: Column(
                                             children: [
                                               InkWell(
-                                                onTap: (){
-                                                  _pickImage(ImageSource.camera);
+                                                onTap: () {
+                                                  _pickImage(
+                                                      ImageSource.camera);
                                                 },
                                                 child: Container(
-                                                  margin: EdgeInsets.symmetric(vertical: 15,horizontal: 15),
-                                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                                  margin: EdgeInsets.symmetric(
+                                                      vertical: 15,
+                                                      horizontal: 15),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
                                                   child: Row(
                                                     children: [
-                                                      Icon(Icons.camera_alt,color: Theme.of(context).primaryColorLight,),
-                                                      Text('Camera',style: TextStyle(
-                                                        color: Theme.of(context).primaryColorLight,
-                                                        fontFamily: "RobotoM",
-                                                        fontSize: 18
-                                                      ),)
+                                                      Icon(
+                                                        Icons.camera_alt,
+                                                        color: Theme.of(context)
+                                                            .primaryColorLight,
+                                                      ),
+                                                      Text(
+                                                        'Camera',
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColorLight,
+                                                            fontFamily:
+                                                                "RobotoM",
+                                                            fontSize: 18),
+                                                      )
                                                     ],
                                                   ),
                                                 ),
                                               ),
                                               InkWell(
-                                                onTap: (){
-                                                   _pickImage(ImageSource.gallery);
+                                                onTap: () {
+                                                  _pickImage(
+                                                      ImageSource.gallery);
                                                 },
                                                 child: Container(
-                                                  margin: EdgeInsets.symmetric(vertical: 15,horizontal: 15),
-                                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                                  margin: EdgeInsets.symmetric(
+                                                      vertical: 15,
+                                                      horizontal: 15),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
                                                   child: Row(
                                                     children: [
-                                                      Icon(Icons.photo_library_rounded,color: Theme.of(context).primaryColorLight,),
-                                                      Text('Gallery',style: TextStyle(
-                                                        color: Theme.of(context).primaryColorLight,
-                                                        fontFamily: "RobotoM",
-                                                        fontSize: 18
-                                                      ),)
+                                                      Icon(
+                                                        Icons
+                                                            .photo_library_rounded,
+                                                        color: Theme.of(context)
+                                                            .primaryColorLight,
+                                                      ),
+                                                      Text(
+                                                        'Gallery',
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColorLight,
+                                                            fontFamily:
+                                                                "RobotoM",
+                                                            fontSize: 18),
+                                                      )
                                                     ],
                                                   ),
                                                 ),
@@ -333,7 +363,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                   InkWell(
                     onTap: () {
                       if (formkey.currentState!.validate()) {
-                        updateUser(_name!.text, _username!.text, _email!.text,
+                        updateUser(_image!,_name!.text, _username!.text, _email!.text,
                             _phone!.text, _address!.text);
                       }
                     },

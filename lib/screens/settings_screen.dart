@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:jewelery_shop_managmentsystem/service/language_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
 
 import 'package:provider/provider.dart';
 
@@ -18,37 +18,36 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          centerTitle: true,
-          title: Text(
-            AppLocalizations.of(context)!.settings,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'RobotoB',
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.of(context)!.settings,
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'RobotoB',
+            color: Theme.of(context).primaryColorLight,
+          ),
+        ),
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            height: 20,
+            width: 25,
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
               color: Theme.of(context).primaryColorLight,
             ),
           ),
-          leading: InkWell(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              height: 20,
-              width: 25,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Theme.of(context).primaryColorLight,
-              ),
-            ),
-          ),
         ),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
         child: ListView(
           children: [
-           
             Container(
               margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               child: Column(
@@ -92,9 +91,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                     ),
                                   ),
                                   Container(
-                                    child: Consumer<LanguageProvider>(builder:
+                                    child: Consumer<LanguageServ>(builder:
                                         (context, providerLanguage, child) {
                                       return DropdownButton(
+                                        dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                                         value: providerLanguage.currentLanguage,
                                         items: [
                                           DropdownMenuItem(
@@ -180,6 +180,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                         builder:
                                             (context, providerTheme, child) {
                                       return DropdownButton(
+                                        dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                                           value: providerTheme.currentTheme,
                                           underline: Container(),
                                           items: [
@@ -203,7 +204,6 @@ class _SettingScreenState extends State<SettingScreen> {
                                             ),
                                           ],
                                           onChanged: (String? value) {
-                                           
                                             providerTheme
                                                 .setThemeProvider(value!);
                                           });

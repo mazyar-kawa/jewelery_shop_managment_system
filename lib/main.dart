@@ -1,25 +1,26 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/provider/language_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/ipad_screen_layout.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/countries_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/language_service.dart';
+
 import 'package:jewelery_shop_managmentsystem/service/order.dart';
+import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_kurdish_localization/flutter_kurdish_localization.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,19 +39,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeChangeProvider _themeChangeProvider = ThemeChangeProvider();
-  LanguageProvider languageProvider = LanguageProvider();
+  // LanguageService LanguageService = LanguageService();
+  LanguageServ LanguageService=LanguageServ();
 
   @override
   void initState() {
     getlanguage();
     changeTheme();
     super.initState();
-    
   }
 
   getlanguage() async {
-    languageProvider
-        .setLanguage(await languageProvider.languagePrefrences.getLanguage());
+    LanguageService.setLanguage(
+        await LanguageService.languagePrefrences.getLanguage());
   }
 
   changeTheme() async {
@@ -63,20 +64,20 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => _themeChangeProvider),
-        ChangeNotifierProvider(create: (_) => languageProvider),
-        ChangeNotifierProvider.value(value: BasketItemProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageService),
+        ChangeNotifierProvider.value(value: BasketItemService()),
         ChangeNotifierProvider.value(value: RefreshUser()),
-        ChangeNotifierProvider.value(value: CountriesProvider()),
-        ChangeNotifierProvider.value(value: ItemProviderORG()),
+        ChangeNotifierProvider.value(value: CountriesService()),
+        ChangeNotifierProvider.value(value: ItemService()),
         ChangeNotifierProvider.value(value: SingleItem()),
-        ChangeNotifierProvider.value(value: HomeItemsProvider()),
+        ChangeNotifierProvider.value(value: HomeItemsService()),
         ChangeNotifierProvider.value(value: Checkuser()),
         ChangeNotifierProvider.value(value: ItemBasket()),
-        ChangeNotifierProvider.value(value: Order()),
+        ChangeNotifierProvider.value(value: OrderService()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {
-        return Consumer<LanguageProvider>(builder: (child, provider, value) {
+        return Consumer<LanguageServ>(builder: (child, provider, value) {
           return MaterialApp(
             localizationsDelegates: const [
               KurdishMaterialLocalizations.delegate,
@@ -92,12 +93,14 @@ class _MyAppState extends State<MyApp> {
             title: 'Flutter Demo',
             theme: ThemeData.light().copyWith(
               scaffoldBackgroundColor: scaffoldbackgroundLight,
-              buttonColor: scaffoldbackgroundLight,
+              buttonColor: primaryColorLight,
               primaryColorLight: primaryColorLight,
               primaryColor: primaryFadeCardLight,
               accentColor: seconderFadeCardLight,
               secondaryHeaderColor: secondColorLight,
               shadowColor: shadowCardLight,
+              canvasColor: primaryColorLight,
+              primaryColorDark: scaffoldbackgroundLight,
             ),
             darkTheme: ThemeData.dark().copyWith(
               scaffoldBackgroundColor: scaffoldbackgroundDark,
@@ -107,13 +110,15 @@ class _MyAppState extends State<MyApp> {
               accentColor: seconderFadeCardDark,
               shadowColor: shadowCardDark,
               secondaryHeaderColor: secondColorDark,
+              canvasColor: scaffoldbackgroundDark,
+              primaryColorDark: primaryColorDark
             ),
             themeMode: themeChangeProvider.themeMode,
             home: LayoutScreen(
               mobileScreen: MobileScreenLayout(),
               ipadScreen: IpadScreenLayout(),
             ),
-            
+
             // routes: {
             //   ItemsScreen.routname: (context) => ItemsScreen(),
             // },

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
+import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
 import 'package:provider/provider.dart';
 
 class SureItemsCard extends StatefulWidget {
@@ -13,42 +14,39 @@ class SureItemsCard extends StatefulWidget {
 }
 
 class _SureItemsCardState extends State<SureItemsCard> {
- 
-
   @override
   Widget build(BuildContext context) {
     final item = Provider.of<ItemBasket>(context, listen: false);
     return InkWell(
-      onTap: (){
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => ItemDetails(item_id: item.id!),
-        //     ));
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItemDetails(item_id: item.id!,ishiddin: true),
+            ));
       },
       child: Slidable(
         endActionPane:
             ActionPane(extentRatio: 1 / 5, motion: ScrollMotion(), children: [
-          Consumer<BasketItemProvider>(
+          Consumer<BasketItemService>(
             builder: (context, basket, child) {
               return InkWell(
-              onTap: () {
-                basket.removeItemReady(item);
-              },
-              child: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xffFED4D5),
+                onTap: () {
+                  basket.removeItemReady(item);
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Color(0xffFED4D5),
+                  ),
+                  child: Center(
+                    child: Icon(FontAwesome5.trash, color: Color(0xffFA515C)),
+                  ),
                 ),
-                child: Center(
-                  child: Icon(FontAwesome5.trash, color: Color(0xffFA515C)),
-                ),
-              ),
-            );
+              );
             },
-            
           )
         ]),
         child: Container(
@@ -56,7 +54,7 @@ class _SureItemsCardState extends State<SureItemsCard> {
           height: MediaQuery.of(context).size.height * 0.12,
           decoration: BoxDecoration(
               color: Theme.of(context).secondaryHeaderColor,
-              borderRadius: BorderRadius.circular(5),
+               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
                   color: Theme.of(context).shadowColor,

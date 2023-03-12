@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/screens/favorite_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/myOrders_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/settings_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/user_managment.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/settings_card.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -58,10 +57,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       MediaQuery.of(context).size.width * 0.12,
                                   backgroundImage: user.profilePicture != null
                                       ? NetworkImage(
-                                          user.profilePicture,
+                                         "http://192.168.1.32:8000"+user.profilePicture,
                                         )
                                       : NetworkImage(
-                                          'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
+                                          'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')
+                                          ),
                             )
                           ],
                         ),
@@ -98,90 +98,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Consumer<RefreshUser>(
                         builder: (context, value, child) {
                           return Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 20),
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                width: MediaQuery.of(context).size.width * 0.30,
-                                decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).scaffoldBackgroundColor,
-                                    borderRadius: BorderRadius.circular(5),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Theme.of(context).shadowColor,
-                                          blurRadius: 4,
-                                          offset: Offset(0, 3))
-                                    ]),
-                                child: Column(
-                                  children: [
-                                    // Text(
-                                    //   '${value.favorite<9?'0${value.favorite}': value.favorite}',
-                                    //   style: TextStyle(
-                                    //     color:
-                                    //         Theme.of(context).primaryColorLight,
-                                    //     fontFamily: "RobotoB",
-                                    //     fontSize: 18,
-                                    //   ),
-                                    // ),
-                                    Text(
-                                      'Favorites',
-                                      style: TextStyle(
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        fontFamily: "RobotoB",
-                                        fontSize: 18,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 20),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.30,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                Theme.of(context).shadowColor,
+                                            blurRadius: 4,
+                                            offset: Offset(0, 3))
+                                      ]),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '${value.favorite<9?'0${value.favorite}': value.favorite}',
+                                        style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColorLight,
+                                          fontFamily: "RobotoB",
+                                          fontSize: 18,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 20),
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                width: MediaQuery.of(context).size.width * 0.30,
-                                decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).scaffoldBackgroundColor,
-                                    borderRadius: BorderRadius.circular(5),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Theme.of(context).shadowColor,
-                                          blurRadius: 4,
-                                          offset: Offset(0, 3))
-                                    ]),
-                                child: Column(
-                                  children: [
-                                    // Text(
-                                    //   '${value.order<9?'0${value.order}': value.order}',
-                                    //   style: TextStyle(
-                                    //     color:
-                                    //         Theme.of(context).primaryColorLight,
-                                    //     fontFamily: "RobotoB",
-                                    //     fontSize: 18,
-                                    //   ),
-                                    // ),
-                                    Text(
-                                      'Orders',
-                                      style: TextStyle(
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        fontFamily: "RobotoB",
-                                        fontSize: 18,
+                                      Text(
+                                        'Favorites',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          fontFamily: "RobotoB",
+                                          fontSize: 18,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 20),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.30,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                Theme.of(context).shadowColor,
+                                            blurRadius: 4,
+                                            offset: Offset(0, 3))
+                                      ]),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '${value.Order<9?'0${value.Order}': value.Order}',
+                                        style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColorLight,
+                                          fontFamily: "RobotoB",
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Orders',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          fontFamily: "RobotoB",
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                         },
-                       
                       ),
                       Container(
                         child: Column(
@@ -208,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 }),
                             ProfileCards(
                                 title: "My Orders",
-                                image: "orders.svg",
+                                image: "myorders.svg",
                                 onPressed: () {
                                   Navigator.push(
                                       context,
@@ -255,22 +258,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : Consumer<ThemeChangeProvider>(
                 builder: (context, provider, chile) {
                 return SafeArea(
-
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SettingScreen()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SettingScreen()));
                         },
                         child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
+                          margin: EdgeInsets.symmetric(
+                              vertical: 25, horizontal: 15),
                           alignment: Alignment.topRight,
-                          child: SvgPicture.asset('assets/images/settings.svg',color: Theme.of(context).primaryColorLight,),
+                          child: SvgPicture.asset(
+                            'assets/images/settings.svg',
+                            color: Theme.of(context).primaryColorLight,
+                          ),
                         ),
                       ),
                       Container(
@@ -300,8 +305,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               MaterialPageRoute(builder: (_) => SignIn()));
                         },
                         child: Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 30),
                           width: double.infinity,
                           height: MediaQuery.of(context).size.height * 0.06,
                           decoration: BoxDecoration(
@@ -331,7 +336,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               }));
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/home_small_card.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class ItemIpadResponsive extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColorLight,
-              borderRadius: BorderRadius.only(
+               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(15),
                 bottomRight: Radius.circular(15),
               ),
@@ -128,7 +128,7 @@ class ItemIpadResponsive extends StatelessWidget {
               future: all,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  final product = Provider.of<ItemProviderORG>(context).items;
+                  final product = Provider.of<ItemService>(context).items;
                   return product.length != 0
                       ? GridView.builder(
                           shrinkWrap: true,

@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth {
@@ -174,25 +175,28 @@ class Auth {
     return apiProvider;
   }
 
-  Future<ApiProvider> UpdateUserData(String name, String username, String email,
-      String phone_no, String address) async {
+  Future<ApiProvider> UpdateUserData(File image, String name, String username,
+      String email, String phone_no, String address) async {
     ApiProvider apiProvider = ApiProvider();
     final body = {
       'name': name,
       'username': username,
       'email': email,
       'phone_no': phone_no,
-      'address': address
+      'address': address,
+      'profile_picture': image.path
     };
     try {
       String token = await getToken();
+
       final response = await http.post(Uri.parse(base + "updateProfile"),
           body: jsonEncode(body),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/json',
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
+
       switch (response.statusCode) {
         case 200:
           apiProvider.data = AuthUser.fromJson(json.decode(response.body));
@@ -224,7 +228,7 @@ class Auth {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
-          print(response.statusCode);
+      print(response.statusCode);
       switch (response.statusCode) {
         case 200:
           apiProvider.data = json.decode(response.body);
@@ -257,4 +261,3 @@ class Checkuser with ChangeNotifier {
     return _islogon;
   }
 }
-

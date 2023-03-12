@@ -25,21 +25,20 @@ class Basket {
 }
 
 class ItemBasket with ChangeNotifier {
-  ItemBasket({
-     this.basketId,
-     this.userId,
-     this.id,
-     this.name,
-     this.quantity,
-     this.img,
-     this.countryName,
-     this.caratMs,
-     this.caratType,
-     this.price,
-     this.weight,
-     this.inBasket,
-     
-  });
+  ItemBasket(
+      {this.basketId,
+      this.userId,
+      this.id,
+      this.name,
+      this.quantity,
+      this.img,
+      this.countryName,
+      this.caratMs,
+      this.caratType,
+      this.price,
+      this.weight,
+      this.inBasket,
+      this.instack});
   int? basketId;
   int? userId;
   int? id;
@@ -52,7 +51,8 @@ class ItemBasket with ChangeNotifier {
   double? price;
   int? weight;
   bool? inBasket;
-  
+  int? instack;
+
   factory ItemBasket.fromJson(Map<String, dynamic> json) => ItemBasket(
         basketId: json["id"],
         userId: json["user_id"],
@@ -66,5 +66,6 @@ class ItemBasket with ChangeNotifier {
         price: SingleItem.fromJson(json["item"]).price,
         weight: SingleItem.fromJson(json["item"]).weight,
         inBasket: SingleItem.fromJson(json["item"]).inBasket,
+        instack: SingleItem.fromJson(json["item"]).quantity,
       );
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
@@ -23,42 +23,41 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   }
 
   LoagingFavoriteItems() async {
-    await Provider.of<ItemProviderORG>(context,listen: false)
-        .getFavouriteItem();
+    await Provider.of<ItemService>(context, listen: false).getFavouriteItem();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<SingleItem> product = Provider.of<ItemProviderORG>(context).favouriteItems;
+    List<SingleItem> product = Provider.of<ItemService>(context).favouriteItems;
     print(product.length);
     return Scaffold(
       appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          centerTitle: true,
-          title: Text(
-            AppLocalizations.of(context)!.favourite,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'RobotoB',
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.of(context)!.favourite,
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'RobotoB',
+            color: Theme.of(context).primaryColorLight,
+          ),
+        ),
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            height: 20,
+            width: 25,
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
               color: Theme.of(context).primaryColorLight,
             ),
           ),
-          leading: InkWell(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              height: 20,
-              width: 25,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Theme.of(context).primaryColorLight,
-              ),
-            ),
-          ),
         ),
+      ),
       body: FutureBuilder(
         future: loadData,
         builder: (context, snapshot) {
@@ -95,7 +94,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               child: CardItems(
                                 index: i,
                                 isbasket: false,
-                                
                               ),
                             ))
                 : Column(
@@ -142,8 +140,3 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     );
   }
 }
-/*
-
-
-
-*/

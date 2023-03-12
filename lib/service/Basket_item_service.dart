@@ -1,16 +1,11 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
-class BasketItemProvider with ChangeNotifier {
+class BasketItemService with ChangeNotifier {
   List<ItemBasket> _basket = [];
 
   List<ItemBasket> get baskets => [..._basket];
@@ -50,8 +45,8 @@ class BasketItemProvider with ChangeNotifier {
         quantity: items.quantity,
         name: items.name,
         countryName: items.countryName,
-        caratMs: items.caratMs,
-        caratType: items.caratType,
+        // caratMs: items.caratMs,
+        // caratType: items.caratType,
         img: items.img,
         price: items.price,
         weight: items.weight));
@@ -88,26 +83,29 @@ class BasketItemProvider with ChangeNotifier {
           final data = await Basket.fromJson(json.decode(response.body));
           List<ItemBasket> temporaryList = [];
           next_url = data.nextPageUrl == null ? "No data" : data.nextPageUrl;
-          for (var i = 0; i < data.data!.length; i++) {
-            final dataOrganize = data.data![i];
-            if (dataOrganize.quantity != 0) {
-              temporaryList.add(ItemBasket(
-                basketId: dataOrganize.basketId,
-                userId: dataOrganize.userId,
-                id: dataOrganize.id,
-                quantity: dataOrganize.quantity,
-                name: dataOrganize.name,
-                
-                countryName: dataOrganize.countryName,
-                caratMs: dataOrganize.caratMs,
-                caratType: dataOrganize.caratType,
-                img: dataOrganize.img,
-                price: dataOrganize.price,
-                weight: dataOrganize.weight,
-                inBasket: dataOrganize.inBasket,
-              ));
-            } 
+          for (ItemBasket item in data.data!){
+            temporaryList.add(item);
           }
+          // for (var i = 0; i < data.data!.length; i++) {
+          //   final dataOrganize = data.data![i];
+          //   if (dataOrganize.quantity != 0) {
+          //     temporaryList.add(ItemBasket(
+          //       basketId: dataOrganize.basketId,
+          //       userId: dataOrganize.userId,
+          //       id: dataOrganize.id,
+          //       quantity: dataOrganize.quantity,
+          //       name: dataOrganize.name,
+                
+          //       countryName: dataOrganize.countryName,
+          //       caratMs: dataOrganize.caratMs,
+          //       caratType: dataOrganize.caratType,
+          //       img: dataOrganize.img,
+          //       price: dataOrganize.price,
+          //       weight: dataOrganize.weight,
+          //       inBasket: dataOrganize.inBasket,
+          //     ));
+          //   } 
+          // }
 
           _basket = temporaryList;
 
@@ -138,23 +136,26 @@ class BasketItemProvider with ChangeNotifier {
       });
       final data = await Basket.fromJson(json.decode(response.body));
       this.next_url = data.nextPageUrl == null ? "No data" : data.nextPageUrl;
-      for (var i = 0; i < data.data!.length; i++) {
-        final dataOrganize = data.data![i];
-        _basket.add(ItemBasket(
-          basketId: dataOrganize.basketId,
-          userId: dataOrganize.userId,
-          id: dataOrganize.id,
-          quantity: dataOrganize.quantity,
-          name: dataOrganize.name,
-          countryName: dataOrganize.countryName,
-          caratMs: dataOrganize.caratMs,
-          caratType: dataOrganize.caratType,
-          img: dataOrganize.img,
-          price: dataOrganize.price,
-          weight: dataOrganize.weight,
-          inBasket: dataOrganize.inBasket,
-        ));
-      }
+      for (ItemBasket item in data.data!){
+            _basket.add(item);
+          }
+      // for (var i = 0; i < data.data!.length; i++) {
+      //   final dataOrganize = data.data![i];
+      //   _basket.add(ItemBasket(
+      //     basketId: dataOrganize.basketId,
+      //     userId: dataOrganize.userId,
+      //     id: dataOrganize.id,
+      //     quantity: dataOrganize.quantity,
+      //     name: dataOrganize.name,
+      //     countryName: dataOrganize.countryName,
+      //     caratMs: dataOrganize.caratMs,
+      //     caratType: dataOrganize.caratType,
+      //     img: dataOrganize.img,
+      //     price: dataOrganize.price,
+      //     weight: dataOrganize.weight,
+      //     inBasket: dataOrganize.inBasket,
+      //   ));
+      // }
       notifyListeners();
     } catch (e) {
       print(e.toString());

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
+
 import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/sure_items_card.dart';
@@ -126,7 +127,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Consumer<BasketItemProvider>(
+                    child: Consumer<BasketItemService>(
                       builder: (context, basket, child) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,21 +144,24 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             ),
                             InkWell(
                               onTap: () async {
-                                ApiProvider response = await Provider.of<Order>(
-                                        context,
-                                        listen: false)
-                                    .Orders(basketId);
+                                ApiProvider response = await Provider.of<OrderService>(context,listen: false).OrderById(basketId,context);
                                 if (response.error == null) {
-                                  if (response.data!['message'] != 'New Order Added') {
-                                    for (int i = 0;i < response.data!['errors'].length; i++) {
-                                      showSnackBar( context, response.data!['errors']['basket.${i}'], true);
+                                  if (response.data!['message'] !=
+                                      'New Order Added') {
+                                    for (int i = 0;
+                                        i < response.data!['errors'].length;
+                                        i++) {
+                                      showSnackBar(
+                                          context,
+                                          response.data!['errors']
+                                              ['basket.${i}'],
+                                          true);
                                     }
                                   } else {
-                                    await Provider.of<HomeItemsProvider>(
-                                            context,
+                                    await Provider.of<HomeItemsService>(context,
                                             listen: false)
                                         .getAllItemHome();
-                                    await Provider.of<BasketItemProvider>(
+                                    await Provider.of<BasketItemService>(
                                             context,
                                             listen: false)
                                         .getItemBasket();
@@ -206,7 +210,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
         builder: (context) {
           return Dialog(
             child: LottieBuilder.asset(
-              'assets/images/Complete Order.json',
+              'assets/images/complete_order.json',
               controller: animationController,
               onLoaded: (complet) {
                 animationController.forward();
@@ -222,10 +226,13 @@ class _SureOrderScreenState extends State<SureOrderScreen>
 
   @override
   void initState() {
-    loadItem = Provider.of<BasketItemProvider>(context, listen: false).getReadyItem();
+    loadItem =
+        Provider.of<BasketItemService>(context, listen: false).getReadyItem();
 
-    animationController = AnimationController(vsync: this, duration: Duration(seconds: 3));
-    animationController..addStatusListener((status) {
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 3));
+    animationController
+      ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pop(context);
         }
@@ -241,8 +248,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
 
   @override
   Widget build(BuildContext context) {
-    final item = Provider.of<BasketItemProvider>(context, listen: false).ready;
-
+    final item = Provider.of<BasketItemService>(context, listen: false).ready;
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -274,7 +280,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
         body: FutureBuilder(
           future: loadItem,
           builder: (context, snapshot) {
-            final items = Provider.of<BasketItemProvider>(context).ready;
+            final items = Provider.of<BasketItemService>(context).ready;
             if (snapshot.connectionState == ConnectionState.done) {
               return items.length != 0
                   ? Column(
@@ -312,7 +318,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             )),
                         Expanded(
                             flex: 1,
-                            child: Consumer<BasketItemProvider>(
+                            child: Consumer<BasketItemService>(
                               builder: (context, basket, child) {
                                 return Container(
                                   margin: EdgeInsets.symmetric(horizontal: 15),
@@ -427,7 +433,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             Container(
                               child: Center(
                                   child: Text(
-                                "Thank\'s for your order, Please check your orders",
+                                "Thank\'s for your Order, Please check your Orders",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 24,
@@ -439,7 +445,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             Container(
                               child: Center(
                                 child: Lottie.asset(
-                                  'assets/images/order_complete.json',
+                                  'assets/images/ordered_confirm.json',
                                   width: MediaQuery.of(context).size.width >
                                           websize
                                       ? 650

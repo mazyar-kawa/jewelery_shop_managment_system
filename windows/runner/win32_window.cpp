@@ -169,7 +169,7 @@ Win32Window::MessageHandler(HWND hwnd,
       LONG newHeight = newRectSize->bottom - newRectSize->top;
 
       SetWindowPos(hwnd, nullptr, newRectSize->left, newRectSize->top, newWidth,
-                   newHeight, SWP_NOZORDER | SWP_NOACTIVATE);
+                   newHeight, SWP_NOZOrder | SWP_NOACTIVATE);
 
       return 0;
     }

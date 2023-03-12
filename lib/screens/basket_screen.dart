@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
-import 'package:jewelery_shop_managmentsystem/screens/sure_order_screen.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/screens/sure_Order_screen.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/basket_card_items.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -34,11 +31,10 @@ class _BasketScreenState extends State<BasketScreen> {
 
   Future LoadingAllItem(bool isfirst) async {
     if (isfirst) {
-      await Provider.of<BasketItemProvider>(context, listen: false)
+      await Provider.of<BasketItemService>(context, listen: false)
           .getItemBasket();
     } else {
-      await Provider.of<BasketItemProvider>(context, listen: false)
-          .pagination();
+      await Provider.of<BasketItemService>(context, listen: false).pagination();
     }
   }
 
@@ -69,12 +65,12 @@ class _BasketScreenState extends State<BasketScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final basket = Provider.of<BasketItemProvider>(context, listen: false);
+    final basket = Provider.of<BasketItemService>(context, listen: false);
     final islogin = Provider.of<Checkuser>(context).islogin;
     return Scaffold(
-        floatingActionButton: Consumer<BasketItemProvider>(
+        floatingActionButton: Consumer<BasketItemService>(
           builder: (context, baskets, child) {
-            return  baskets.ready.length != 0
+            return baskets.ready.length != 0
                 ? Container(
                     alignment: Alignment.bottomRight,
                     margin: EdgeInsets.symmetric(horizontal: 15),
@@ -103,7 +99,6 @@ class _BasketScreenState extends State<BasketScreen> {
                               ),
                             ),
                           ),
-                          
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 15),
                             height: 40,
@@ -116,7 +111,8 @@ class _BasketScreenState extends State<BasketScreen> {
                               child: Text(
                                 "Next",
                                 style: TextStyle(
-                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   fontFamily: 'RobotoM',
                                   fontSize: 16,
                                 ),
@@ -143,7 +139,7 @@ class _BasketScreenState extends State<BasketScreen> {
             ),
           ),
           leading: InkWell(
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
             },
             child: Container(
@@ -223,7 +219,7 @@ class _BasketScreenState extends State<BasketScreen> {
                 );
               })
             : basket.baskets.length != 0
-                ?  SmartRefresher(
+                ? SmartRefresher(
                     enablePullDown: true,
                     enablePullUp: true,
                     controller: refreshController,
@@ -285,7 +281,7 @@ class _BasketScreenState extends State<BasketScreen> {
                                 future: items,
                                 builder: (context, snapshot) {
                                   final item =
-                                      Provider.of<BasketItemProvider>(context)
+                                      Provider.of<BasketItemService>(context)
                                           .baskets;
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {
@@ -312,9 +308,9 @@ class _BasketScreenState extends State<BasketScreen> {
                                               itemBuilder: (context, i) {
                                                 return ChangeNotifierProvider
                                                     .value(
-                                                  value: item[i],
-                                                  child: BasketCardItem()
-                                                );
+                                                        value: item[i],
+                                                        child:
+                                                            BasketCardItem());
                                               },
                                             ),
                                           ])
@@ -361,10 +357,11 @@ class _BasketScreenState extends State<BasketScreen> {
                                             width: 200),
                                       ),
                                     );
+                                  } else {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
                                   }
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
                                 },
                               ),
                             ],
@@ -372,8 +369,8 @@ class _BasketScreenState extends State<BasketScreen> {
                         ),
                       ],
                     ),
-                  ):
-                  Column(
+                  )
+                : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
@@ -399,7 +396,6 @@ class _BasketScreenState extends State<BasketScreen> {
                         ),
                       )
                     ],
-                  )
-                  );
+                  ));
   }
 }

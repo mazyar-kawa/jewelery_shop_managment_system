@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:provider/provider.dart';
 
-class ItemProviderORG with ChangeNotifier {
+class ItemService with ChangeNotifier {
   List<SingleItem> _items = [];
 
   SingleItem _ItemDetails=SingleItem();
@@ -41,32 +40,17 @@ SingleItem get ItemDetails => _ItemDetails;
           });
       final data = Items.fromJson(json.decode(response.body));
       next_url = data.items.nextPageUrl!;
-
       final List<SingleItem> temporaryList = [];
-      for (var i = 0; i < data.items.data.length; i++) {
-        temporaryList.add(SingleItem(
-            id: data.items.data[i].id,
-            name: data.items.data[i].name,
-            size: data.items.data[i].size,
-            weight: data.items.data[i].weight,
-            img: data.items.data[i].img,
-            description: data.items.data[i].description,
-            quantity: data.items.data[i].quantity,
-            categoryId: data.items.data[i].categoryId,
-            companyId: data.items.data[i].companyId,
-            countryId: data.items.data[i].countryId,
-            caratId: data.items.data[i].caratId,
-            isFavourited: data.items.data[i].isFavourited,
-            price: data.items.data[i].price,
-            inBasket: data.items.data[i].inBasket,
-            caratMs: data.items.data[i].caratMs,
-            caratType: data.items.data[i].caratType,
-            countryName: data.items.data[i].countryName));
+
+      for (SingleItem item in data.items.data){
+          temporaryList.add(item);
       }
       _items = temporaryList;
+      
 
       notifyListeners();
     } catch (e) {
+      
       print(e.toString());
     }
   }
@@ -89,32 +73,14 @@ SingleItem get ItemDetails => _ItemDetails;
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
-
       final data = Items.fromJson(json.decode(response.body));
       this.next_url = data.items.nextPageUrl!;
-      for (var i = 0; i < data.items.data.length; i++) {
-        _items.add(SingleItem(
-            id: data.items.data[i].id,
-            name: data.items.data[i].name,
-            size: data.items.data[i].size,
-            weight: data.items.data[i].weight,
-            img: data.items.data[i].img,
-            description: data.items.data[i].description,
-            quantity: data.items.data[i].quantity,
-            categoryId: data.items.data[i].categoryId,
-            companyId: data.items.data[i].companyId,
-            countryId: data.items.data[i].countryId,
-            caratId: data.items.data[i].caratId,
-            isFavourited: data.items.data[i].isFavourited,
-            price: data.items.data[i].price,
-            inBasket: data.items.data[i].inBasket,
-            caratMs: data.items.data[i].caratMs,
-            caratType: data.items.data[i].caratType,
-            countryName: data.items.data[i].countryName));
+      for (SingleItem item in data.items.data){
+          _items.add(item);
       }
-
       notifyListeners();
     } catch (e) {
+      
       print(e.toString());
     }
   }
@@ -130,25 +96,8 @@ SingleItem get ItemDetails => _ItemDetails;
       });
       final data = FavouriteItems.fromJson(json.decode(response.body));
       final List<SingleItem> temporaryList = [];
-      for (var i = 0; i < data.items!.length; i++) {
-        temporaryList.add(SingleItem(
-            id: data.items![i].id,
-            name: data.items![i].name,
-            size: data.items![i].size,
-            weight: data.items![i].weight,
-            img: data.items![i].img,
-            description: data.items![i].description,
-            quantity: data.items![i].quantity,
-            categoryId: data.items![i].categoryId,
-            companyId: data.items![i].companyId,
-            countryId: data.items![i].countryId,
-            caratId: data.items![i].caratId,
-            isFavourited: data.items![i].isFavourited,
-            price: data.items![i].price,
-            inBasket: data.items![i].inBasket,
-            caratMs: data.items![i].caratMs,
-            caratType: data.items![i].caratType,
-            countryName: data.items![i].countryName));
+      for (SingleItem item in data.items!){
+          temporaryList.add(item);
       }
       _favouriteItems = temporaryList;
       notifyListeners();
@@ -174,20 +123,7 @@ SingleItem get ItemDetails => _ItemDetails;
         'Authorization': 'Bearer $token',
       });
       final data = SingleItem.fromJson(json.decode(response.body));
-      _ItemDetails=SingleItem(
-        id: data.id,
-        img: data.img,
-        name: data.name,
-        countryName: data.countryName,
-        caratType: data.caratType,
-        caratMs: data.caratMs,
-        weight: data.weight,
-        price: data.price,
-        description: data.description,
-        inBasket: data.inBasket,
-        isFavourited: data.isFavourited,
-        size: data.size
-      );
+      _ItemDetails=data;
   } catch (e) {
     print(e.toString());
   }
@@ -208,4 +144,8 @@ SingleItem get ItemDetails => _ItemDetails;
     notifyListeners();
 
   }
+
+
+
+ 
 }

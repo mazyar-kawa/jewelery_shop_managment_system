@@ -79,7 +79,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
             height: MediaQuery.of(context).size.width > websize ? 318 : 350,
             width: double.infinity,
             child: PageView.builder(
-                    itemCount: 7,
+                    itemCount: products.length,
                     onPageChanged: ((value) {
                       setState(() {
                         _current = value;

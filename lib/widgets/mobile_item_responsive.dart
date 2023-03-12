@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
+import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class ItemMobileResponsive extends StatelessWidget {
-  
   const ItemMobileResponsive({
     Key? key,
     required this.all,
     required this.searchController,
-
   }) : super(key: key);
 
   final Future? all;
@@ -21,7 +19,7 @@ class ItemMobileResponsive extends StatelessWidget {
     return FutureBuilder(
         future: all,
         builder: (context, snapshot) {
-          final product = Provider.of<ItemProviderORG>(context).items;
+          final product = Provider.of<ItemService>(context).items;
           if (snapshot.connectionState == ConnectionState.done) {
             return product.length != 0
                 ? ListView.builder(
@@ -31,7 +29,7 @@ class ItemMobileResponsive extends StatelessWidget {
                     itemBuilder: (context, i) {
                       return ChangeNotifierProvider.value(
                         value: product[i],
-                        child: CardItems(index: i,isbasket: false),
+                        child: CardItems(index: i, isbasket: false),
                       );
                     })
                 : Container(

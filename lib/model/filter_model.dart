@@ -1,36 +1,54 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 
 class Filter {
     Filter({
-         this.carats,
-         this.categories,
+        required this.carats,
+        required this.caratTypes,
+        required this.categories,
     });
 
-    List<Carat>? carats;
-    List<Category>? categories;
+    List<String> carats;
+    List<String> caratTypes;
+    List<Category> categories;
 
     factory Filter.fromJson(Map<String, dynamic> json) => Filter(
-        carats: List<Carat>.from(json["carats"].map((x) => Carat.fromJson(x))),
+        carats: List<String>.from(json["carats"].map((x) => x)),
+        caratTypes: List<String>.from(json["caratTypes"].map((x) => x)),
         categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
     );
 
 }
 
-class Carat with ChangeNotifier{
-    Carat({
+class Carats with ChangeNotifier{
+    Carats({
          this.id,
          this.carat,
-         this.type,
+         
     });
 
     int? id;
     String? carat;
-    String? type;
 
-    factory Carat.fromJson(Map<String, dynamic> json) => Carat(
+    factory Carats.fromJson(Map<String, dynamic> json) => Carats(
         id: json["id"],
         carat: json["carat"],
-        type: json["type"],
+    );
+}
+
+class CaratType with ChangeNotifier{
+    CaratType({
+         this.id,
+         this.caratType,
+         
+    });
+
+    int? id;
+    String? caratType;
+
+    factory CaratType.fromJson(Map<String, dynamic> json) => CaratType(
+        id: json["id"],
+        caratType: json["caratType"],
     );
 }
 

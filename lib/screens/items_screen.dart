@@ -1,10 +1,9 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/items_filter.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/mobile_item_responsive.dart';
@@ -17,7 +16,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ItemsScreen extends StatefulWidget {
   final int country_id;
   final String country_name;
-  const ItemsScreen({Key? key,required this.country_id,required this.country_name}) : super(key: key);
+  const ItemsScreen(
+      {Key? key, required this.country_id, required this.country_name})
+      : super(key: key);
 
   @override
   State<ItemsScreen> createState() => _ItemsScreenState();
@@ -43,18 +44,15 @@ class _ItemsScreenState extends State<ItemsScreen>
       RefreshController(initialRefresh: false);
   TextEditingController searchController = TextEditingController();
 
-  
-
   PageController _pageController = PageController();
   Future? all;
   @override
   void initState() {
-    
     Future.delayed(
       Duration.zero,
       () {
         all = AllItems(isloading);
-        Provider.of<HomeItemsProvider>(context, listen: false).getCarates();
+        Provider.of<HomeItemsService>(context, listen: false).getCarates();
       },
     );
     WidgetsBinding.instance.addPostFrameCallback((_) => all);
@@ -73,7 +71,7 @@ class _ItemsScreenState extends State<ItemsScreen>
   }) async {
     // final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
     if (first) {
-      await Provider.of<ItemProviderORG>(context, listen: false).getItems(
+      await Provider.of<ItemService>(context, listen: false).getItems(
           widget.country_id,
           search: search,
           size_start: start_size,
@@ -83,7 +81,7 @@ class _ItemsScreenState extends State<ItemsScreen>
           category_id: categoryId,
           carat_id: caratId);
     } else {
-      await Provider.of<ItemProviderORG>(context, listen: false).refresh(
+      await Provider.of<ItemService>(context, listen: false).refresh(
           search: search,
           size_start: start_size,
           size_end: end_size,
@@ -131,9 +129,10 @@ class _ItemsScreenState extends State<ItemsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final category = Provider.of<HomeItemsProvider>(context).categories;
-    final carat = Provider.of<HomeItemsProvider>(context).carates;
-    final provider = Provider.of<ItemProviderORG>(context, listen: false);
+    final category = Provider.of<HomeItemsService>(context).categories;
+    final carat = Provider.of<HomeItemsService>(context).carates;
+    final type = Provider.of<HomeItemsService>(context).type;
+    final provider = Provider.of<ItemService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -184,8 +183,8 @@ class _ItemsScreenState extends State<ItemsScreen>
                   right: 5,
                   height: 18,
                   width: 18,
-                  child: Consumer<BasketItemProvider>(
-                      builder: (context, basket, child) {
+                  child: Consumer<BasketItemService>(
+                      builder: (context, basket, coild) {
                     return Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(1000),
@@ -312,6 +311,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                                       rangeSize: rangeSize,
                                       rangeCarat: rangeCarat,
                                       carates: carat,
+                                      caratTypes: type,
                                       categoryId: category_id,
                                       caratId: carat_id,
                                       onChangestart_size: (value) {

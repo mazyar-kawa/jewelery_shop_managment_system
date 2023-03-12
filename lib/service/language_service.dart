@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:jewelery_shop_managmentsystem/sharedpreferences/language_prefrence.dart';
 
-class LanguageProvider with ChangeNotifier {
+class LanguageServ with ChangeNotifier {
   LanguagePrefrences languagePrefrences = LanguagePrefrences();
 
   String currentLanguage = 'en';

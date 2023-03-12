@@ -5,12 +5,10 @@ import 'package:jewelery_shop_managmentsystem/model/countries_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 
-class CountriesProvider with ChangeNotifier {
+class CountriesService with ChangeNotifier {
   List<CountriesModel> _countries = [];
 
   List<CountriesModel> get countries => [..._countries];
-
-  bool loadingState = false;
 
   Future<void> getCountries() async {
     
@@ -25,12 +23,8 @@ class CountriesProvider with ChangeNotifier {
 
         final List<CountriesModel> temporaryList = [];
 
-        for (int i = 0; i < data.countries.length; i++) {
-          temporaryList.add(CountriesModel(
-            id: data.countries[i].id,
-            namecountries: data.countries[i].namecountries,
-            picturecountries: data.countries[i].picturecountries,
-          ));
+        for (CountriesModel country in data.countries){
+          temporaryList.add(country);
         }
         _countries = temporaryList;
       } catch (e) {}

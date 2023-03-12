@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 
 class MyWidget extends StatefulWidget {
   final ValueChanged<bool> onChanged;
@@ -11,7 +12,8 @@ class MyWidget extends StatefulWidget {
   final ValueChanged<double> onChangestart_weight;
   final ValueChanged<double> onChangeend_weight;
   final List<Category> categories;
-  final List<Carat> carates;
+  final List<String> carates;
+  final List<String> caratTypes;
   bool active_filter;
   TextEditingController searchController;
   Function(
@@ -40,6 +42,7 @@ class MyWidget extends StatefulWidget {
     required this.rangeCarat,
     required this.onChanged,
     required this.carates,
+    required this.caratTypes,
     required this.categoryId,
     required this.caratId,
     required this.onChangestart_size,
@@ -89,26 +92,28 @@ class _MyWidgetState extends State<MyWidget> {
             name: widget.categories.map((e) => e.name).toList().elementAt(i))
     ];
 
-    List<Carat> _carates = [
-      Carat(id: 0, type: "All", carat: ""),
+    List<Carats> _carates = [
+      Carats(id: 0,carat: "All"),
       for (int i = 0; i < widget.carates.length; i++)
-        Carat(
-          id: widget.carates.map((e) => e.id).toList().elementAt(i),
-          carat: widget.carates.map((e) => e.carat).toList().elementAt(i),
-          type: widget.carates.map((e) => e.type).toList().elementAt(i),
-        ),
+         Carats(id: i+1,carat: widget.carates.map((e) => e).toList().elementAt(i))
+    ];
+
+    List<CaratType> _carattype = [
+      CaratType(id: 0,caratType: "All"),
+      for (int i = 0; i < widget.caratTypes.length; i++)
+         CaratType(id: i+1,caratType: widget.caratTypes.map((e) => e).toList().elementAt(i))
     ];
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
             elevation: 5,
-           backgroundColor: Theme.of(context).secondaryHeaderColor,
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+               borderRadius: BorderRadius.circular(10),
             ),
             content: Container(
-              height: MediaQuery.of(context).size.height * 0.6,
+              height: MediaQuery.of(context).size.height * 0.65,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Theme.of(context).secondaryHeaderColor,
@@ -181,15 +186,38 @@ class _MyWidgetState extends State<MyWidget> {
                           items: _carates
                               .map((e) => DropdownMenuItem(
                                   value: e.id,
-                                  child: Text(e.type![0].toUpperCase() +
-                                      e.type.toString().substring(1) +
-                                      ' ' +
-                                      e.carat!.toString())))
+                                  child: Text(e.carat!),
+                                  // child: Text(e[0].toUpperCase() +
+                                  //     e.toString().substring(1))
+                                      ))
                               .toList(),
-                          onChanged: (int? value) {
-                            setState(() {
-                              currentCarat = value!;
-                            });
+                          onChanged: (value) {
+                           currentCarat=value as int;
+                          },
+                        ),
+                      ),
+                      Text(
+                        "Carat Types",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorLight,
+                          fontFamily: 'RobotoM',
+                          fontSize: 16,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: DropdownButtonFormField(
+                          value: currentCarat,
+                          items: _carattype
+                              .map((e) => DropdownMenuItem(
+                                  value: e.id,
+                                  // child: Text(e.caratType!),
+                                  child: Text(e.caratType![0].toUpperCase() +
+                                      e.caratType.toString().substring(1))
+                                      ))
+                              .toList(),
+                          onChanged: (value) {
+                           currentCarat=value as int;
                           },
                         ),
                       ),
@@ -218,8 +246,8 @@ class _MyWidgetState extends State<MyWidget> {
                                   widget.onChangeend_weight(0);
                                   widget.onChangedCarat(0);
                                   widget.onChangedCategory(0);
-                                  currentCarat=0;
-                                  currentType=0;
+                                  currentCarat = 0;
+                                  currentType = 0;
                                   Navigator.pop(context);
                                 });
                                 widget.AllItems(true);
@@ -253,7 +281,7 @@ class _MyWidgetState extends State<MyWidget> {
                                 caratId: currentCarat,
                               );
                               widget.onChangedCarat(currentCarat);
-                               widget.onChangedCategory(currentType);
+                              widget.onChangedCategory(currentType);
                               Future.delayed(Duration(milliseconds: 500), () {
                                 setState(() {
                                   widget.active_filter = false;
@@ -265,7 +293,7 @@ class _MyWidgetState extends State<MyWidget> {
                               width: 75,
                               height: 40,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                 borderRadius: BorderRadius.circular(10),
                                 color: Theme.of(context).primaryColorLight,
                               ),
                               child: Center(

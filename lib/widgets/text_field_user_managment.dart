@@ -17,11 +17,11 @@ class TextFieldUserManagment extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),
-            borderRadius: BorderRadius.circular(15),
+             borderRadius: BorderRadius.circular(15),
           ),
           disabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),
-            borderRadius: BorderRadius.circular(15),
+             borderRadius: BorderRadius.circular(15),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xffE9E9E9), width: 2),

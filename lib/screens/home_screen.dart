@@ -1,11 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
-import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/horizantl_list_view_home_screen.dart';
@@ -28,8 +28,9 @@ class _HomeScreenState extends State<HomeScreen>
       RefreshController(initialRefresh: false);
   int _current = 2;
   int _selectedIndex = 0;
-  bool laoding = false;
-  final TextEditingController _searchEditText = TextEditingController();
+  bool isLoading = false;
+  
+  TextEditingController searchEditText = TextEditingController();
 
   PageController _pageControllerMobile = PageController();
   PageController _pageControllerIpad = PageController();
@@ -63,26 +64,20 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   AllItems() async {
-    await Provider.of<HomeItemsProvider>(context, listen: false)
+    await Provider.of<HomeItemsService>(context, listen: false)
         .getAllItemHome();
   }
 
   randomItem({int id = 0}) async {
-    if (id != 0) {
-      await Provider.of<HomeItemsProvider>(context, listen: false)
-          .getRandomItems(id: _selectedIndex);
-    } else {
-      await Provider.of<HomeItemsProvider>(context, listen: false)
-          .getRandomItems();
-    }
-    _current = 2;
+    await Provider.of<HomeItemsService>(context, listen: false)
+        .getRandomItems(id: _selectedIndex);
   }
 
   @override
   void dispose() {
     _pageControllerMobile.dispose();
     _pageControllerIpad.dispose();
-    _searchEditText.dispose();
+    searchEditText.dispose();
     super.dispose();
   }
 
@@ -99,8 +94,8 @@ class _HomeScreenState extends State<HomeScreen>
     if (islogin) {
       user = Provider.of<RefreshUser>(context).currentUser.user!;
     }
-     
-    final provider = Provider.of<HomeItemsProvider>(context);
+
+    final provider = Provider.of<HomeItemsService>(context);
     final category = provider.categories;
     List<Category> _categories = [
       Category(id: 0, name: 'all'),
@@ -175,12 +170,13 @@ class _HomeScreenState extends State<HomeScreen>
                                 islogin
                                     ? Container(
                                         child: CircleAvatar(
-                                            radius: 20,
+                                            radius: 25,
                                             backgroundImage: user
                                                         .profilePicture !=
                                                     null
                                                 ? NetworkImage(
-                                                    user.profilePicture,
+                                                    "http://192.168.1.32:8000" +
+                                                        user.profilePicture,
                                                   )
                                                 : NetworkImage(
                                                     'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
@@ -189,14 +185,47 @@ class _HomeScreenState extends State<HomeScreen>
                               ],
                             ),
                     ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                      child: SearchInput(
-                        hintText: '${AppLocalizations.of(context)!.search}...',
-                        textController: _searchEditText,
-                      ),
-                    ),
+                        
+                        InkWell(
+                          onTap: (){
+                            showSearch(
+                              context: context,
+                              delegate: MySearchDelegate()
+                            );
+                          },
+                          child: Container(
+                            height: 55,
+                            margin: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).secondaryHeaderColor,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                              BoxShadow(
+                                  offset: const Offset(12, 26),
+                                  blurRadius: 50,
+                                  spreadRadius: 0,
+                                  color: Colors.grey.withOpacity(.1)),
+                            ]),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left: 15),
+                                  child: Icon(Icons.search,
+                                color: Theme.of(context).primaryColorLight),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Text('${AppLocalizations.of(context)!.search}...',style: TextStyle(
+                                    color: Colors.grey
+                                  ),)
+                                ),
+                              ],
+                            )
+                          ),
+                        ),
+                        
+                      
+                    
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       physics: BouncingScrollPhysics(),
@@ -233,10 +262,10 @@ class _HomeScreenState extends State<HomeScreen>
                           )),
                     ),
                     FutureBuilder(
-                        future: laoding == true ? random : all,
+                        future: isLoading == true ? random : all,
                         builder: (context, snapshot) {
                           final products =
-                              Provider.of<HomeItemsProvider>(context)
+                              Provider.of<HomeItemsService>(context)
                                   .randomItems;
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
@@ -328,9 +357,9 @@ class _HomeScreenState extends State<HomeScreen>
     return InkWell(
       onTap: () {
         setState(() {
+          isLoading = true;
           _selectedIndex = index;
           random = randomItem(id: _selectedIndex);
-          laoding = true;
         });
       },
       child: Container(
@@ -360,6 +389,24 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+}
+class MySearchDelegate extends SearchDelegate{
+  @override
+  List<Widget>? buildActions(BuildContext context) =>null;
+
+  @override
+  Widget? buildLeading(BuildContext context) => IconButton(onPressed: (){
+    close(context, null);
+  }, icon: Icon(Icons.arrow_back_ios));
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) =>Container();
+
 }

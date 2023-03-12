@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 const websize = 600;
 // 7dd3fc    sky
 Color scaffoldbackgroundLight = Color(0xffFFFFFF);
@@ -15,9 +14,6 @@ Color primaryCardLight = Color(0xffDBE5E7);
 Color seconderCardLight = Color(0xffFFDAD9);
 
 Color shadowCardLight = Colors.grey.withOpacity(0.3);
-
-
-
 
 Color scaffoldbackgroundDark = Color(0xFF000000);
 Color primaryColorDark = Color(0xffFFFFFF);
@@ -58,5 +54,3 @@ final boredruser = OutlineInputBorder(
   ),
   borderRadius: BorderRadius.circular(15),
 );
-
- 

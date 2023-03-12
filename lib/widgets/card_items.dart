@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +58,7 @@ class _CardItemsState extends State<CardItems>
   }
 
   additemReady(ItemBasket itemBasket, bool checked) {
-    final provider = Provider.of<BasketItemProvider>(context, listen: false);
+    final provider = Provider.of<BasketItemService>(context, listen: false);
     if (checked == true) {
       provider.addItemReady(itemBasket);
     } else {
@@ -148,8 +148,7 @@ class _CardItemsState extends State<CardItems>
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
                                               .scaffoldBackgroundColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10000),
+                                           borderRadius: BorderRadius.circular(10000),
                                           boxShadow: [
                                             BoxShadow(
                                               color:
@@ -197,8 +196,7 @@ class _CardItemsState extends State<CardItems>
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
                                               .secondaryHeaderColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10000),
+                                          borderRadius: BorderRadius.circular(10000),
                                         ),
                                       ),
                               ),
@@ -223,7 +221,7 @@ class _CardItemsState extends State<CardItems>
                                             ? Color(0xffFFD700).withOpacity(0.1)
                                             : Color(0xffC0C0C0)
                                                 .withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(5),
+                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Center(
                                         child: Text(
@@ -247,7 +245,7 @@ class _CardItemsState extends State<CardItems>
                         flex: 3,
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
+                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(15),
                               bottomRight: Radius.circular(15),
                             ),
@@ -356,7 +354,7 @@ class _CardItemsState extends State<CardItems>
                                       height: 35,
                                       width: 35,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
+                                         borderRadius: BorderRadius.circular(10),
                                         color:
                                             Theme.of(context).primaryColorLight,
                                       ),

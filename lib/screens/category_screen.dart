@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:jewelery_shop_managmentsystem/provider/countries_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/items_screen.dart';
+import 'package:jewelery_shop_managmentsystem/service/countries_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class _CategoryPageState extends State<CategoryPage>
   }
 
   fetchCategory() async {
-    await Provider.of<CountriesProvider>(context, listen: false).getCountries();
+    await Provider.of<CountriesService>(context, listen: false).getCountries();
   }
 
   void Refresh() async {
@@ -80,11 +80,11 @@ class _CategoryPageState extends State<CategoryPage>
           ),
           onRefresh: Refresh,
           child: FutureBuilder(
-              future: Provider.of<CountriesProvider>(context, listen: false)
+              future: Provider.of<CountriesService>(context, listen: false)
                   .getCountries(),
               builder: (context, snapshot) {
                 final category =
-                    Provider.of<CountriesProvider>(context).countries;
+                    Provider.of<CountriesService>(context).countries;
                 if (snapshot.connectionState == ConnectionState.done) {
                   return ListView(
                     shrinkWrap: true,

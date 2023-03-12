@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/screens/item_details.dart';
 import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -31,31 +30,6 @@ class _HomeSmallCardState extends State<HomeSmallCard>
   late AnimationController animationController;
 
   bool islike = false;
-
-  // favouriteAndUnFavourite(SingleItem product) async {
-  //   final user=Provider.of<RefreshUser>(context,listen: false);
-  //   if (product.isFavourited == true) {
-  //     ApiProvider unFavourite = await Auth().UnFavouriteItem(product.id!);
-  //     if (unFavourite.data != null) {
-  //       setState(() {
-  //         product.isFavourited = false;
-  //         showSnackBar(context, unFavourite.data['message'], true);
-  //         user.decreasefavorite();
-  //       });
-  //     }
-  //   } else {
-  //     ApiProvider favourite = await Auth().FavouriteItem(product.id!);
-  //     if (favourite.data != null) {
-  //       setState(() {
-  //         islike = true;
-  //         startAnimation(product);
-  //         product.isFavourited = true;
-  //         showSnackBar(context, favourite.data['message'], false);
-  //         user.increasefavorite();
-  //       });
-  //     }
-  //   }
-  // }
 
   @override
   void initState() {
@@ -91,7 +65,7 @@ class _HomeSmallCardState extends State<HomeSmallCard>
   Widget build(BuildContext context) {
     final islogin = Provider.of<Checkuser>(context).islogin;
     final product = Provider.of<SingleItem>(context);
-    final basket = Provider.of<BasketItemProvider>(context);
+    final basket = Provider.of<BasketItemService>(context);
     return Consumer<SingleItem>(
       builder: (context, value, child) {
         return GestureDetector(

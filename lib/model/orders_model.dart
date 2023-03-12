@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class MyOrders with ChangeNotifier {
-  MyOrders({
+class MyOrder with ChangeNotifier {
+  MyOrder({
     this.id,
     this.userId,
     this.total,
@@ -15,7 +15,8 @@ class MyOrders with ChangeNotifier {
   String? status;
   DateTime? createdAt;
 
-  factory MyOrders.fromJson(Map<String, dynamic> json) => MyOrders(
+  factory MyOrder.fromJson(Map<String, dynamic> json) =>
+      MyOrder(
         id: json["id"],
         userId: json["user_id"],
         total: json["total"],
@@ -24,12 +25,13 @@ class MyOrders with ChangeNotifier {
       );
 }
 
-enum Status { Requested, Accepted, Completed }
+enum Status { Requested, Accepted, Completed , Rejected}
 
 final statusValues = EnumValues({
   "requested": Status.Requested.name,
   "accepted": Status.Accepted.name,
-  "completed": Status.Completed.name
+  "completed": Status.Completed.name,
+  "rejected":Status.Rejected.name,
 });
 
 class EnumValues<T> {

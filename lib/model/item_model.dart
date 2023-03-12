@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/home_items_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/item_provider_org.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:provider/provider.dart';
 
@@ -193,8 +193,8 @@ class SingleItem with ChangeNotifier {
         switch (response.statusCode) {
           case 200:
             apiProvider.data = json.decode(response.body);
-            // await Provider.of<RefreshUser>(context, listen: false)
-            //     .increasefavorite();
+            await Provider.of<RefreshUser>(context, listen: false)
+                .increasefavorite();
             break;
           default:
             apiProvider.error = jsonDecode(response.body);
@@ -211,9 +211,9 @@ class SingleItem with ChangeNotifier {
           switch (response.statusCode) {
             case 200:
               apiProvider.data = json.decode(response.body);
-              // await Provider.of<RefreshUser>(context, listen: false)
-              //     .decreasefavorite();
-              await Provider.of<ItemProviderORG>(context, listen: false)
+              await Provider.of<RefreshUser>(context, listen: false)
+                  .decreasefavorite();
+              await Provider.of<ItemService>(context, listen: false)
                   .deleteFavouriteItem(itemId);
               break;
             default:
@@ -227,8 +227,10 @@ class SingleItem with ChangeNotifier {
       apiProvider.error = {'message': e.toString()};
     }
     isFavourited = !isFavourited!;
-    await Provider.of<HomeItemsProvider>(context,listen: false).findItemById(itemId,favorite: isFavourited!);
-    await Provider.of<ItemProviderORG>(context,listen: false).getItemByIdCountries(itemId,favorite: isFavourited!);
+    await Provider.of<HomeItemsService>(context, listen: false)
+        .findItemById(itemId, favorite: isFavourited!);
+    await Provider.of<ItemService>(context, listen: false)
+        .getItemByIdCountries(itemId, favorite: isFavourited!);
     notifyListeners();
     return apiProvider;
   }
@@ -280,10 +282,12 @@ class SingleItem with ChangeNotifier {
     }
     inBasket = !inBasket!;
     notifyListeners();
-    await Provider.of<HomeItemsProvider>(context,listen: false).findItemById(itemId,basket: inBasket!);
-    await Provider.of<BasketItemProvider>(context, listen: false)
+    await Provider.of<HomeItemsService>(context, listen: false)
+        .findItemById(itemId, basket: inBasket!);
+    await Provider.of<BasketItemService>(context, listen: false)
         .getItemBasket();
-    await Provider.of<ItemProviderORG>(context,listen: false).getItemByIdCountries(itemId,basket: inBasket!);
+    await Provider.of<ItemService>(context, listen: false)
+        .getItemByIdCountries(itemId, basket: inBasket!);
     return apiProvider;
   }
 
@@ -302,9 +306,10 @@ class SingleItem with ChangeNotifier {
       switch (response.statusCode) {
         case 200:
           apiProvider.data = json.decode(response.body);
-          await Provider.of<BasketItemProvider>(context, listen: false)
-                  .deleteItemBasket(itemId,context);
-           await Provider.of<HomeItemsProvider>(context,listen: false).findItemById(itemId,basket: false);
+          await Provider.of<BasketItemService>(context, listen: false)
+              .deleteItemBasket(itemId, context);
+          await Provider.of<HomeItemsService>(context, listen: false)
+              .findItemById(itemId, basket: false);
           break;
         default:
           apiProvider.error = jsonDecode(response.body);
@@ -317,10 +322,10 @@ class SingleItem with ChangeNotifier {
   }
 }
 
-enum Type { GOLD, SILVER }
+enum Type { GOLD, SILVER , LIRA }
 
 final typeValues =
-    EnumValues({"gold": Type.GOLD.name, "silver": Type.SILVER.name});
+    EnumValues({"gold": Type.GOLD.name, "silver": Type.SILVER.name,"lira":Type.LIRA.name});
 
 class EnumValues<T> {
   Map<String, T>? map;
@@ -371,4 +376,22 @@ class EnumValuesCountryName<T> {
     reverseMap = map!.map((k, v) => MapEntry(v, k));
     return reverseMap!;
   }
+}
+
+class Carat with ChangeNotifier{
+    Carat({
+         this.id,
+         this.carat,
+         this.type,
+    });
+
+    int? id;
+    String? carat;
+    String? type;
+
+    factory Carat.fromJson(Map<String, dynamic> json) => Carat(
+        id: json["id"],
+        carat: json["carat"],
+        type: json["type"],
+    );
 }

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
-import 'package:jewelery_shop_managmentsystem/provider/Basket_item_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
-import 'package:jewelery_shop_managmentsystem/provider/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/screens/basket_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/category_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/home_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/notfication_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/profile_screen.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
-import 'package:jewelery_shop_managmentsystem/service/order.dart';
+import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +49,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     pageController = PageController();
     adduser().then((value) {
-      Provider.of<BasketItemProvider>(context, listen: false)
+      Provider.of<BasketItemService>(context, listen: false)
           .getItemBasket()
           .then((value) {
         setState(() {
@@ -91,170 +90,165 @@ class _LoadingPageState extends State<LoadingPage> {
     return splash
         ? Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: MediaQuery.of(context).size.width > websize? Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    islogin
-                                        ? Container(
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.symmetric(horizontal: 10),
-                                                  child: CircleAvatar(
-                                                      radius: 30,
-                                                      backgroundImage: user
-                                                                  .user!
-                                                                  .profilePicture !=
-                                                              null
-                                                          ? NetworkImage(
-                                                              user.user!
-                                                                  .profilePicture,
-                                                            )
-                                                          : NetworkImage(
-                                                              'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
-                                                ),
-                                                Container(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(user.user!.username!,
-                                                          style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColorLight,
-                                                              fontFamily:
-                                                                  'RobotoB',
-                                                              fontSize: 20)),
-                                                      Text(user.user!.email!,
-                                                          style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColorLight
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              fontFamily:
-                                                                  'RobotoM',
-                                                              fontSize: 18)),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        : Container(),
-                                    Container(
-                                      child: Column(
-                                        children: [
-                                          ItemBarSide(
-                                              icon: 'assets/images/home.svg',
-                                              title: 'Home',
-                                              width: 33,
-                                              height: 33,
-                                              selected: _selectedIndex == 0,
-                                              onPressed: () {
-                                                onTapped(0);
-                                              }),
-                                          ItemBarSide(
-                                              icon:
-                                                  'assets/images/category.svg',
-                                              title: 'Countries',
-                                              width: 30,
-                                              height: 30,
-                                              selected: _selectedIndex == 1,
-                                              onPressed: () {
-                                                onTapped(1);
-                                              }),
-                                          ItemBarSide(
-                                              icon:
-                                                  'assets/images/basket-shopping-solid.svg',
-                                              title: 'My cart',
-                                              width: 30,
-                                              height: 30,
-                                              selected: _selectedIndex == 2,
-                                              onPressed: () {
-                                                onTapped(2);
-                                              }),
-                                          ItemBarSide(
-                                              icon:
-                                                  'assets/images/bell-solid.svg',
-                                              title: 'Notfications',
-                                              width: 30,
-                                              height: 30,
-                                              selected: _selectedIndex == 3,
-                                              onPressed: () {
-                                                onTapped(3);
-                                              }),
-                                          ItemBarSide(
-                                              icon:
-                                                  'assets/images/user-solid.svg',
-                                              title: 'My profile',
-                                              width: 30,
-                                              height: 30,
-                                              selected: _selectedIndex == 4,
-                                              onPressed: () {
-                                                onTapped(4);
-                                              }),
-                                        ],
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 10),
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
+            body: MediaQuery.of(context).size.width > websize
+                ? Row(
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                islogin
+                                    ? Container(
                                         child: Row(
                                           children: [
-                                            SvgPicture.asset(
-                                              'assets/images/logout.svg',
-                                              color: Theme.of(context)
-                                                  .primaryColorLight,
-                                              width: 30,
-                                              height: 30,
-                                            ),
                                             Container(
                                               margin: EdgeInsets.symmetric(
                                                   horizontal: 10),
-                                              child: Text("Logout",
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .primaryColorLight,
-                                                      fontFamily: 'RobotoB',
-                                                      fontSize: 20)),
+                                              child: CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundImage: user.user!
+                                                              .profilePicture !=
+                                                          null
+                                                      ? NetworkImage(
+                                                          "http://192.168.1.32:8000"+user.user!
+                                                              .profilePicture,
+                                                        )
+                                                      : NetworkImage(
+                                                          'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
+                                            ),
+                                            Container(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(user.user!.username!,
+                                                      style: TextStyle(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColorLight,
+                                                          fontFamily: 'RobotoB',
+                                                          fontSize: 20)),
+                                                  Text(user.user!.email!,
+                                                      style: TextStyle(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColorLight
+                                                              .withOpacity(0.5),
+                                                          fontFamily: 'RobotoM',
+                                                          fontSize: 18)),
+                                                ],
+                                              ),
                                             )
                                           ],
                                         ),
-                                      ),
-                                    ),
-                                  ],
+                                      )
+                                    : Container(),
+                                Container(
+                                  child: Column(
+                                    children: [
+                                      ItemBarSide(
+                                          icon: 'assets/images/home.svg',
+                                          title: 'Home',
+                                          width: 33,
+                                          height: 33,
+                                          selected: _selectedIndex == 0,
+                                          onPressed: () {
+                                            onTapped(0);
+                                          }),
+                                      ItemBarSide(
+                                          icon: 'assets/images/category.svg',
+                                          title: 'Countries',
+                                          width: 30,
+                                          height: 30,
+                                          selected: _selectedIndex == 1,
+                                          onPressed: () {
+                                            onTapped(1);
+                                          }),
+                                      ItemBarSide(
+                                          icon:
+                                              'assets/images/basket-shopping-solid.svg',
+                                          title: 'My cart',
+                                          width: 30,
+                                          height: 30,
+                                          selected: _selectedIndex == 2,
+                                          onPressed: () {
+                                            onTapped(2);
+                                          }),
+                                      ItemBarSide(
+                                          icon: 'assets/images/bell-solid.svg',
+                                          title: 'Notfications',
+                                          width: 30,
+                                          height: 30,
+                                          selected: _selectedIndex == 3,
+                                          onPressed: () {
+                                            onTapped(3);
+                                          }),
+                                      ItemBarSide(
+                                          icon: 'assets/images/user-solid.svg',
+                                          title: 'My profile',
+                                          width: 30,
+                                          height: 30,
+                                          selected: _selectedIndex == 4,
+                                          onPressed: () {
+                                            onTapped(4);
+                                          }),
+                                    ],
+                                  ),
                                 ),
-                              )),
-                          Expanded(
-                              flex: 2,
-                              child: PageView(
-                                controller: pageController,
-                                onPageChanged: _onPageChanged,
-                                children: screens,
-                              ),
-                          )
-                        ],
-                      ) :PageView(
-              controller: pageController,
-              onPageChanged: _onPageChanged,
-              children:  screens,
-            ),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 10),
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/images/logout.svg',
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: Text("Logout",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColorLight,
+                                                  fontFamily: 'RobotoB',
+                                                  fontSize: 20)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                      Expanded(
+                        flex: 2,
+                        child: PageView(
+                          controller: pageController,
+                          onPageChanged: _onPageChanged,
+                          children: screens,
+                        ),
+                      )
+                    ],
+                  )
+                : PageView(
+                    controller: pageController,
+                    onPageChanged: _onPageChanged,
+                    children: screens,
+                  ),
             bottomNavigationBar: MediaQuery.of(context).size.width < websize
                 ? Container(
                     padding: EdgeInsets.only(top: 10),
@@ -285,7 +279,7 @@ class _LoadingPageState extends State<LoadingPage> {
                                 onPressed: () {
                                   onTapped(1);
                                 }),
-                            Consumer<BasketItemProvider>(
+                            Consumer<BasketItemService>(
                                 builder: (context, basket, child) {
                               return Stack(
                                 children: [

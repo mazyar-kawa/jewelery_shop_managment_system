@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/provider/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
-import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
-import 'package:jewelery_shop_managmentsystem/service/auth_provider.dart';
-import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
+import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
+import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/text_field_user_managment.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -26,14 +24,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       String retypeNewPassword, BuildContext context) async {
     ApiProvider response = await Auth()
         .UpdatePassword(currentPassword, newPassword, retypeNewPassword);
-    if (response.data!=null) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {return LoadingPage();}), (Route<dynamic> route) => false);
+    if (response.data != null) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+        return LoadingPage();
+      }), (Route<dynamic> route) => false);
     } else {
       error = response.error;
     }
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +120,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 if (formkey.currentState!.validate()) {
                   chnagePassword(_currentPassword.text, _newPassword.text,
                       _retypeNewPassword.text, context);
-                      Auth().logOut();
-                      
+                  Auth().logOut();
                 }
               },
               child: Container(
