@@ -44,27 +44,36 @@ class _BasketCardItemState extends State<BasketCardItem> {
   Widget build(BuildContext context) {
     final item = Provider.of<ItemBasket>(context, listen: false);
     return Container(
-      height: 120,
-      margin: EdgeInsets.symmetric(vertical: 10),
+      height: 140,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColorLight.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      margin: EdgeInsets.only(top: 10, left: 15, bottom: 10, right: 10),
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 25),
             width: MediaQuery.of(context).size.width * 0.3,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                color: Colors.black,
-              )
-            ),
+                color: Theme.of(context).primaryColorDark,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 2,
+                    offset: Offset(2, 0),
+                  )
+                ],
+                border: Border.all(
+                  color: Theme.of(context).primaryColorLight,
+                )),
             child: Stack(
               children: [
                 Positioned(
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Checkbox(
-                      checkColor:Colors.white,
+                      checkColor: Colors.white,
                       fillColor: MaterialStateProperty.all(Colors.black),
                       value: ischecked,
                       onChanged: (bool? value) {
@@ -87,15 +96,10 @@ class _BasketCardItemState extends State<BasketCardItem> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 10),
             width: MediaQuery.of(context).size.width * 0.6,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorLight.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(15)
-            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -121,18 +125,16 @@ class _BasketCardItemState extends State<BasketCardItem> {
                               ),
                             ),
                             Container(
-                                      child: Text(
-                                        '\$ ${item.price!.round()}',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                          fontFamily: 'RobotoB',
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ),
+                              child: Text(
+                                '\$ ${item.price!.round()}',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: 'RobotoB',
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
                           ],
-                          
                         ),
                         Container(
                           child: Text(
@@ -146,19 +148,20 @@ class _BasketCardItemState extends State<BasketCardItem> {
                           ),
                         ),
                         Container(
+                          padding: EdgeInsets.symmetric(vertical: 5),
                             child: Row(children: [
-                              Icon(FontAwesome5.balance_scale,
-                                  color: Theme.of(context).primaryColorLight,
-                                  size: 15),
-                              Text(
-                                '  ${item.weight!}g',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontFamily: 'RobotoM',
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ])),
+                          Icon(FontAwesome5.balance_scale,
+                              color: Theme.of(context).primaryColorLight,
+                              size: 15),
+                          Text(
+                            '  ${item.weight!}g',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColorLight,
+                              fontFamily: 'RobotoM',
+                              fontSize: 16,
+                            ),
+                          ),
+                        ])),
                       ],
                     ),
                   ),
@@ -196,10 +199,14 @@ class _BasketCardItemState extends State<BasketCardItem> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: Center(
-                                  child: Icon(Icons.minimize,
-                                      color:
-                                          Theme.of(context).scaffoldBackgroundColor,
-                                      size: 16)),
+                                  child: Text(
+                                "-",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  fontSize: 18,
+                                ),
+                              )),
                             ),
                           ),
                           Container(
@@ -242,31 +249,31 @@ class _BasketCardItemState extends State<BasketCardItem> {
                               ),
                               child: Center(
                                   child: Icon(Icons.add,
-                                      color:
-                                          Theme.of(context).scaffoldBackgroundColor,
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
                                       size: 16)),
                             ),
                           ),
                         ],
                       ),
                       InkWell(
-                            onTap: () {
-                              setState(() {
-                                Provider.of<SingleItem>(context,listen: false).UnbasketItems(item.id!, context);
-                                ischecked=false;
-                                addItemToReady(item, ischecked);
-                              });
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              child: Center(
-                                  child: Icon(FontAwesome5.trash,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      size: 16)),
-                            ),
-                          ),
+                        onTap: () {
+                          setState(() {
+                            Provider.of<SingleItem>(context, listen: false)
+                                .UnbasketItems(item.id!, context);
+                            ischecked = false;
+                            addItemToReady(item, ischecked);
+                          });
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          child: Center(
+                              child: Icon(FontAwesome5.trash,
+                                  color: Theme.of(context).primaryColorLight,
+                                  size: 16)),
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemMobileResponsive extends StatelessWidget {
   const ItemMobileResponsive({
@@ -32,7 +34,7 @@ class ItemMobileResponsive extends StatelessWidget {
                         child: CardItems(index: i, isbasket: false),
                       );
                     })
-                : Container(
+                : searchController.text != "" ? Container(
                     width: 300,
                     height: 500,
                     child: Column(
@@ -64,6 +66,32 @@ class ItemMobileResponsive extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ):Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Center(
+                            child: Text(
+                          AppLocalizations.of(context)!.thisCountryHasNoItems,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontFamily: 'RobotoB',
+                            color: Theme.of(context).primaryColorLight,
+                          ),
+                        )),
+                      ),
+                      Container(
+                        child: Center(
+                          child: Lottie.asset(
+                            'assets/images/empty-box.json',
+                            width: MediaQuery.of(context).size.width > websize
+                                ? 650
+                                : 350,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    ],
                   );
           } else {
             return Center(

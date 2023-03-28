@@ -20,8 +20,13 @@ Color primaryColorDark = Color(0xffFFFFFF);
 
 Color secondColorDark = Color(0xff262626);
 
-Color primaryFadeCardDark = Color(0xfffb7185);
-Color seconderFadeCardDark = Color(0xff38bdf8);
+
+// Color primaryFadeCardDark = Color(0xFF0099F8);
+// Color seconderFadeCardDark = Color(0xFFFF0000);
+// Color primaryFadeCardDark = Color(0xfffb7185);
+// Color seconderFadeCardDark = Color(0xff38bdf8);
+Color primaryFadeCardDark = Color(0xff262626);
+Color seconderFadeCardDark = Color(0xff262626);
 
 // Color primaryFadeCardDark = Color(0xfff43f5e);
 // Color seconderFadeCardDark = Color(0xffF5F5DC);

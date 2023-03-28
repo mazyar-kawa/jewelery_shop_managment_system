@@ -22,4 +22,5 @@ class LanguageServ with ChangeNotifier {
     languagePrefrences.setLanguage(language);
     notifyListeners();
   }
+
 }

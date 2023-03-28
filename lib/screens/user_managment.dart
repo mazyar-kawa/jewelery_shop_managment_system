@@ -91,7 +91,8 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           centerTitle: true,
           title: Text(
-            AppLocalizations.of(context)!.userManagement,
+           
+            AppLocalizations.of(context)!.userInformation,
             style: TextStyle(
               fontSize: 20,
               fontFamily: 'RobotoB',
@@ -106,9 +107,12 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
               margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               height: 20,
               width: 25,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Theme.of(context).primaryColorLight,
+              child: RotatedBox(
+                quarterTurns: 90,
+                child: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Theme.of(context).primaryColorLight,
+                ),
               ),
             ),
           ),
@@ -251,7 +255,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                     child: Column(
                       children: [
                         TextFieldUserManagment(
-                          lable: "Name",
+                          lable: AppLocalizations.of(context)!.name,
                           controller: _name!,
                         ),
                         for (var _error in error?['errors']?['name'] ?? [])
@@ -266,7 +270,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                             ),
                           ),
                         TextFieldUserManagment(
-                          lable: "User Name",
+                          lable: AppLocalizations.of(context)!.username,
                           controller: _username!,
                         ),
                         for (var _error in error?['errors']?['username'] ?? [])
@@ -351,7 +355,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                             )
                           ]),
                       child: Center(
-                        child: Text('Change Password',
+                        child: Text(AppLocalizations.of(context)!.changePassword,
                             style: TextStyle(
                               color: Theme.of(context).scaffoldBackgroundColor,
                               fontSize: 20,

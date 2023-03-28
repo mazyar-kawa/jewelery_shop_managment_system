@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 
 class Basket {

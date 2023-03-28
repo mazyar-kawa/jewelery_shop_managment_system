@@ -54,6 +54,7 @@ class _LoadingPageState extends State<LoadingPage> {
           .then((value) {
         setState(() {
           splash = true;
+          
         });
       });
     });
@@ -87,6 +88,7 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     final islogin = Provider.of<Checkuser>(context).islogin;
+  
     return splash
         ? Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -112,8 +114,9 @@ class _LoadingPageState extends State<LoadingPage> {
                                                               .profilePicture !=
                                                           null
                                                       ? NetworkImage(
-                                                          "http://192.168.1.32:8000"+user.user!
-                                                              .profilePicture,
+                                                          "http://192.168.1.32:8000" +
+                                                              user.user!
+                                                                  .profilePicture,
                                                         )
                                                       : NetworkImage(
                                                           'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
@@ -251,112 +254,114 @@ class _LoadingPageState extends State<LoadingPage> {
                   ),
             bottomNavigationBar: MediaQuery.of(context).size.width < websize
                 ? Container(
-                    padding: EdgeInsets.only(top: 10),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                    ),
-                    child: BottomAppBar(
-                      elevation: 0,
-                      color: Colors.transparent,
-                      child: SizedBox(
-                        height: 60,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            IconBottomAppBar(
-                                icon: 'assets/images/home.svg',
-                                width: 33,
-                                height: 33,
-                                selected: _selectedIndex == 0,
-                                onPressed: () {
-                                  onTapped(0);
-                                }),
-                            IconBottomAppBar(
-                                icon: 'assets/images/category.svg',
-                                width: 30,
-                                height: 30,
-                                selected: _selectedIndex == 1,
-                                onPressed: () {
-                                  onTapped(1);
-                                }),
-                            Consumer<BasketItemService>(
-                                builder: (context, basket, child) {
-                              return Stack(
-                                children: [
-                                  IconBottomAppBar(
-                                      icon:
-                                          'assets/images/basket-shopping-solid.svg',
-                                      width: 30,
-                                      height: 30,
-                                      selected: _selectedIndex == 2,
-                                      onPressed: () {
-                                        onTapped(2);
-                                      }),
-                                  Positioned(
-                                    right: 0,
-                                    height: 18,
-                                    width: 18,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(1000),
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor),
-                                      child: Center(
-                                        child: Text(
-                                            basket.countItem() > 9
-                                                ? '9+'
-                                                : '${basket.countItem()}',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColorLight,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                            Stack(
+                        padding: EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                        child: BottomAppBar(
+                          elevation: 0,
+                          color: Colors.transparent,
+                          child: SizedBox(
+                            height: 60,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Container(
-                                  child: IconBottomAppBar(
-                                      icon: 'assets/images/bell-solid.svg',
-                                      width: 30,
-                                      height: 30,
-                                      selected: _selectedIndex == 3,
-                                      onPressed: () {
-                                        onTapped(3);
-                                      }),
+                                IconBottomAppBar(
+                                    icon: 'assets/images/home.svg',
+                                    width: 33,
+                                    height: 33,
+                                    selected: _selectedIndex == 0,
+                                    onPressed: () {
+                                      onTapped(0);
+                                    }),
+                                IconBottomAppBar(
+                                    icon: 'assets/images/category.svg',
+                                    width: 30,
+                                    height: 30,
+                                    selected: _selectedIndex == 1,
+                                    onPressed: () {
+                                      onTapped(1);
+                                    }),
+                                Consumer<BasketItemService>(
+                                    builder: (context, basket, child) {
+                                  return Stack(
+                                    children: [
+                                      IconBottomAppBar(
+                                          icon:
+                                              'assets/images/basket-shopping-solid.svg',
+                                          width: 30,
+                                          height: 30,
+                                          selected: _selectedIndex == 2,
+                                          onPressed: () {
+                                            onTapped(2);
+                                          }),
+                                      Positioned(
+                                        right: 0,
+                                        height: 18,
+                                        width: 18,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(1000),
+                                              color: Theme.of(context)
+                                                  .scaffoldBackgroundColor),
+                                          child: Center(
+                                            child: Text(
+                                                basket.countItem() > 9
+                                                    ? '9+'
+                                                    : '${basket.countItem()}',
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .primaryColorLight,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                                Stack(
+                                  children: [
+                                    Container(
+                                      child: IconBottomAppBar(
+                                          icon: 'assets/images/bell-solid.svg',
+                                          width: 30,
+                                          height: 30,
+                                          selected: _selectedIndex == 3,
+                                          onPressed: () {
+                                            onTapped(3);
+                                          }),
+                                    ),
+                                    Positioned(
+                                        right: 0,
+                                        child: Container(
+                                          width: 12,
+                                          height: 12,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(1000),
+                                              color: Color(0xffEF4444)),
+                                        ))
+                                  ],
                                 ),
-                                Positioned(
-                                    right: 0,
-                                    child: Container(
-                                      width: 12,
-                                      height: 12,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(1000),
-                                          color: Color(0xffEF4444)),
-                                    ))
+                                IconBottomAppBar(
+                                    icon: 'assets/images/user-solid.svg',
+                                    width: 30,
+                                    height: 30,
+                                    selected: _selectedIndex == 4,
+                                    onPressed: () {
+                                      onTapped(4);
+                                    }),
                               ],
                             ),
-                            IconBottomAppBar(
-                                icon: 'assets/images/user-solid.svg',
-                                width: 30,
-                                height: 30,
-                                selected: _selectedIndex == 4,
-                                onPressed: () {
-                                  onTapped(4);
-                                }),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  )
+                      )
                 : null,
           )
         : Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             body: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

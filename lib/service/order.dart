@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
+import 'package:jewelery_shop_managmentsystem/model/orderDetails_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/orders_model.dart';
+import 'package:jewelery_shop_managmentsystem/screens/orderDetails_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
@@ -12,6 +15,15 @@ class OrderService with ChangeNotifier {
   List<MyOrder> _Orders = [];
 
   List<MyOrder> get Orders => [..._Orders];
+
+  List<SingleItem> _items = [];
+
+  List<SingleItem> get items => [..._items];
+
+
+  OrderDetailsModel _orderdetails= OrderDetailsModel();
+
+  OrderDetailsModel get orderdetails => _orderdetails;
 
   Future<void> getMyOrders() async {
     String token = await Auth().getToken();
@@ -132,5 +144,29 @@ class OrderService with ChangeNotifier {
     await Provider.of<RefreshUser>(context, listen: false).decreaseOrder();
     notifyListeners();
 
+  }
+
+
+  Future<void> orderDetails(int orderId) async {
+    String token = await Auth().getToken();
+    try {
+      final response = await http.get(Uri.parse(base + "myOrder/${orderId}"), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+      final data = OrderDetailsModel.fromJson(json.decode(response.body));
+      for(int i=0;i<data.orderItems!.length;i++){
+        _orderdetails=OrderDetailsModel(id: data.id, total: data.total, status: data.status, orderItems: data.orderItems);
+      }
+      _items=[];
+      
+      for(int j=0;j<data.orderItems!.length;j++){
+        _items.add(data.orderItems![j].item);
+      }
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

@@ -52,7 +52,7 @@ class _CategoryPageState extends State<CategoryPage>
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 50, horizontal: 15),
             child: Text(
-              AppLocalizations.of(context)!.categories,
+              AppLocalizations.of(context)!.countries,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 28,

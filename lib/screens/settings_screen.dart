@@ -37,9 +37,12 @@ class _SettingScreenState extends State<SettingScreen> {
             margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             height: 20,
             width: 25,
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Theme.of(context).primaryColorLight,
+            child: RotatedBox(
+              quarterTurns: 90,
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
           ),
         ),

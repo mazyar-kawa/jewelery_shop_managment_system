@@ -5,7 +5,8 @@ import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 
 class MyWidget extends StatefulWidget {
   final ValueChanged<bool> onChanged;
-  final ValueChanged<int> onChangedCarat;
+  final ValueChanged<String> onChangedCaratType;
+  final ValueChanged<String> onChangedCaratNo;
   final ValueChanged<int> onChangedCategory;
   final ValueChanged<double> onChangestart_size;
   final ValueChanged<double> onChangeend_size;
@@ -23,15 +24,13 @@ class MyWidget extends StatefulWidget {
     double size_end,
     double weight_start,
     double weight_end,
-    int categoryId,
-    int caratId,
+    int categoryId,   
   }) AllItems;
 
   dynamic rangeSize;
   dynamic rangeCarat;
 
   int categoryId;
-  int caratId;
   MyWidget({
     super.key,
     required this.categories,
@@ -44,14 +43,16 @@ class MyWidget extends StatefulWidget {
     required this.carates,
     required this.caratTypes,
     required this.categoryId,
-    required this.caratId,
     required this.onChangestart_size,
     required this.onChangeend_size,
     required this.onChangestart_weight,
     required this.onChangeend_weight,
-    required this.onChangedCarat,
     required this.onChangedCategory,
+    required this.onChangedCaratType,
+    required this.onChangedCaratNo,
+
   });
+
 
   @override
   State<MyWidget> createState() => _MyWidgetState();
@@ -59,11 +60,14 @@ class MyWidget extends StatefulWidget {
 
 class _MyWidgetState extends State<MyWidget> {
   int currentType = 0;
-  int currentCarat = 0;
+  int currentCaratType = 0;
+  int currentCaratNo = 0;
   double startSize = 0;
   double endSize = 0;
   double startWeight = 0;
   double endWeight = 0;
+  String type='';
+  String caratNo='';
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +171,7 @@ class _MyWidgetState extends State<MyWidget> {
                           onChanged: (int? value) {
                             setState(() {
                               currentType = value!;
+
                             });
                           },
                         ),
@@ -182,17 +187,22 @@ class _MyWidgetState extends State<MyWidget> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: DropdownButtonFormField(
-                          value: currentCarat,
+                          value: currentCaratNo,
                           items: _carates
                               .map((e) => DropdownMenuItem(
                                   value: e.id,
                                   child: Text(e.carat!),
-                                  // child: Text(e[0].toUpperCase() +
-                                  //     e.toString().substring(1))
                                       ))
                               .toList(),
                           onChanged: (value) {
-                           currentCarat=value as int;
+                           currentCaratNo=value as int;
+                          int index= _carates.indexWhere((element) => element.id==currentCaratNo);
+                         if(_carates[index].carat=='All'){
+                          caratNo='';
+                         }else{
+                          caratNo=_carates[index].carat!;
+                         }
+                         widget.onChangedCaratNo(caratNo);
                           },
                         ),
                       ),
@@ -207,7 +217,7 @@ class _MyWidgetState extends State<MyWidget> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: DropdownButtonFormField(
-                          value: currentCarat,
+                          value: currentCaratType,
                           items: _carattype
                               .map((e) => DropdownMenuItem(
                                   value: e.id,
@@ -217,7 +227,15 @@ class _MyWidgetState extends State<MyWidget> {
                                       ))
                               .toList(),
                           onChanged: (value) {
-                           currentCarat=value as int;
+                           currentCaratType=value as int;
+                          int index= _carattype.indexWhere((element) => element.id==currentCaratType);
+                         if(_carattype[index].caratType=='All'){
+                          type='';
+                         }else{
+                          type=_carattype[index].caratType!;
+                         }
+                         widget.onChangedCaratType(type);
+                         
                           },
                         ),
                       ),
@@ -244,9 +262,11 @@ class _MyWidgetState extends State<MyWidget> {
                                   endWeight = 0;
                                   widget.onChangestart_weight(0);
                                   widget.onChangeend_weight(0);
-                                  widget.onChangedCarat(0);
                                   widget.onChangedCategory(0);
-                                  currentCarat = 0;
+                                  widget.onChangedCaratNo('');
+                                  widget.onChangedCaratType('');
+                                  currentCaratType = 0;
+                                  currentCaratNo=0;
                                   currentType = 0;
                                   Navigator.pop(context);
                                 });
@@ -278,10 +298,10 @@ class _MyWidgetState extends State<MyWidget> {
                                 weight_start: startWeight,
                                 weight_end: endWeight,
                                 categoryId: currentType,
-                                caratId: currentCarat,
                               );
-                              widget.onChangedCarat(currentCarat);
+                              widget.onChangedCaratNo(caratNo);
                               widget.onChangedCategory(currentType);
+                              widget.onChangedCaratType(type);
                               Future.delayed(Duration(milliseconds: 500), () {
                                 setState(() {
                                   widget.active_filter = false;
@@ -300,7 +320,7 @@ class _MyWidgetState extends State<MyWidget> {
                                 child: Text(
                                   "Filter",
                                   style: TextStyle(
-                                    color: Theme.of(context).buttonColor,
+                                    color: Theme.of(context).scaffoldBackgroundColor,
                                     fontFamily: 'RobotoM',
                                   ),
                                 ),

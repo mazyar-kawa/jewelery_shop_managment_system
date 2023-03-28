@@ -5,8 +5,8 @@ import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/dashed_separator.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemDetialsWidget extends StatefulWidget {
   final ishiddin;
@@ -225,7 +225,7 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                           ],
                         ),
                       ),
-                      Container(
+                    widget.ishiddin?Container() :Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -272,7 +272,7 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                      item.inBasket! ? "Added" : "Add to cart",
+                                      item.inBasket! ?  AppLocalizations.of(context)!.added :  AppLocalizations.of(context)!.addtocart,
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .buttonColor,
@@ -320,74 +320,3 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                           );
   }
 }
-
-
-
-/*
-
- Flex(
-                          children: List.generate(3, (_) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 25),
-                              width: current == _
-                                  ? MediaQuery.of(context).size.width * 0.05
-                                  : 6,
-                              height: 6,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                   borderRadius: BorderRadius.circular(1000),
-                                  color: current == _
-                                      ? Theme.of(context)
-                                          .scaffoldBackgroundColor
-                                      : Theme.of(context)
-                                          .scaffoldBackgroundColor
-                                          .withOpacity(0.3),
-                                ),
-                              ),
-                            );
-                          }),
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          direction: Axis.horizontal,
-                        ),
-
-
-*/
-/*
-ApiProvider response = await value
-                                            .FavouriteAndUnfavouriteItem(
-                                                item.id!, context);
-                                        if (response.data != null) {
-                                          showSnackBar(
-                                              context,
-                                              response.data['message'],
-                                              response.data['message']
-                                                      .contains("added")
-                                                  ? false
-                                                  : true);
-                                        }
-
-*/
-
-
-/*
-if (islogin) {
-                                  ApiProvider response =
-                                      await value.basketAndUnbasketItems(
-                                          item.id!, context);
-                                  if (response.data != null) {
-                                    showSnackBar(
-                                        context,
-                                        response.data['message'],
-                                        response.data['message']
-                                                .contains("Added")
-                                            ? false
-                                            : true);
-                                  }
-                                } else {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => SignIn()));
-                                }
-*/

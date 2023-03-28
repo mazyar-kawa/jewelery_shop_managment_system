@@ -22,17 +22,20 @@ SingleItem get ItemDetails => _ItemDetails;
 
   Future<void> getItems(int country_id,
       {String search = '',
+      String type='',
       double size_start = 0,
       double size_end = 0,
       double weight_start = 0,
       double weight_end = 0,
       int category_id = 0,
-      int carat_id = 0}) async {
+      String carat='',
+      }) async {
     try {
+      print(type);
       String token = await Auth().getToken();
       final response = await http.get(
           Uri.parse(base +
-              'country_items/$country_id?search=$search&category_id=${category_id == 0 ? '' : category_id}&carat_id=${carat_id == 0 ? '' : carat_id}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${weight_start == 0 ? '' : weight_start}&weight_end=${weight_end == 0 ? '' : weight_end}'),
+              'country_items/$country_id?search=$search&category_id=${category_id == 0 ? '' : category_id}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${weight_start == 0 ? '' : weight_start}&weight_end=${weight_end == 0 ? '' : weight_end}&type=${type}&carat=${carat}'),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -62,12 +65,13 @@ SingleItem get ItemDetails => _ItemDetails;
       double weight_start = 0,
       double weight_end = 0,
       int category_id = 0,
-      int carat_id = 0}) async {
+      String type='',
+      String carat='',}) async {
     try {
       String token = await Auth().getToken();
       final response = await http.get(
           Uri.parse(next_url +
-              '&search=$search&category_id=${category_id == 0 ? '' : category_id}&carat_id=${carat_id == 0 ? '' : carat_id}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${weight_start == 0 ? '' : weight_start}&weight_end=${weight_end == 0 ? '' : weight_end}'),
+              '&search=$search&category_id=${category_id == 0 ? '' : category_id}&size_start=${size_start == 0 ? '' : size_start}&size_end=${size_end == 0 ? '' : size_end}&weight_start=${weight_start == 0 ? '' : weight_start}&weight_end=${weight_end == 0 ? '' : weight_end}&type=${type}&carat=${carat}'),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',

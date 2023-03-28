@@ -27,56 +27,59 @@ class _MixItemsScreenState extends State<MixItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        centerTitle: true,
-        title: Text(
-          widget.title,
-          style: TextStyle(
-            fontSize: 20,
-            fontFamily: 'RobotoB',
-            color: Theme.of(context).primaryColorLight,
-          ),
-        ),
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            height: 20,
-            width: 25,
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: true,
+          title: Text(
+            widget.title,
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'RobotoB',
               color: Theme.of(context).primaryColorLight,
             ),
           ),
-        ),
-      ),
-      body: loading
-          ? Container(
-              child: ListView.builder(
-                itemCount: widget.items.length,
-                itemBuilder: (context, index) {
-                  return ChangeNotifierProvider.value(
-                    value: widget.items[index],
-                    builder: (context, child) {
-                      return CardItems(
-                        index: index,
-                        isbasket: false,
-                        
-                      );
-                    },
-                  );
-                },
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              height: 20,
+              width: 25,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Theme.of(context).primaryColorLight,
               ),
-            )
-          : Center(
-              child:
-                  Lottie.asset('assets/images/loader_daimond.json', width: 200),
             ),
+          ),
+        ),
+        body: loading
+            ? Container(
+                child: ListView.builder(
+                  itemCount: widget.items.length,
+                  itemBuilder: (context, index) {
+                    return ChangeNotifierProvider.value(
+                      value: widget.items[index],
+                      builder: (context, child) {
+                        return CardItems(
+                          index: index,
+                          isbasket: false,
+                          
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
+            : Center(
+                child:
+                    Lottie.asset('assets/images/loader_daimond.json', width: 200),
+              ),
+      ),
     );
   }
 }

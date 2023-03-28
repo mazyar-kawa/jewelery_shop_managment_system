@@ -64,7 +64,6 @@ class Auth {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       });
-
       switch (response.statusCode) {
         case 200:
           apiProvider.data = User.fromJson(json.decode(response.body));
@@ -75,9 +74,7 @@ class Auth {
           break;
       }
     } catch (e) {
-      // apiProvider.error = {'message': e.toString()};
-      // print('catch');
-      print(e.toString());
+      apiProvider.error = {'message': e.toString()};
     }
     return apiProvider;
   }

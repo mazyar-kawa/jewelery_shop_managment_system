@@ -96,7 +96,6 @@ class _CardItemsState extends State<CardItems>
                 setState(() {
                   islike = true;
                   startAnimation(product);
-                  product.isFavourited = true;
                 });
                 showSnackBar(context, response.data['message'],
                     response.data['message'].contains("added") ? false : true);

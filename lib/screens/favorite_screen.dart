@@ -29,7 +29,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
     List<SingleItem> product = Provider.of<ItemService>(context).favouriteItems;
-    print(product.length);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -51,9 +50,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             height: 20,
             width: 25,
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Theme.of(context).primaryColorLight,
+            child: RotatedBox(
+              quarterTurns: 90,
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
           ),
         ),

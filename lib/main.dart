@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
+import 'package:jewelery_shop_managmentsystem/model/orderDetails_model.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/ipad_screen_layout.dart';
+import 'package:jewelery_shop_managmentsystem/screens/orderDetails_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/countries_service.dart';
@@ -74,6 +76,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: Checkuser()),
         ChangeNotifierProvider.value(value: ItemBasket()),
         ChangeNotifierProvider.value(value: OrderService()),
+        ChangeNotifierProvider.value(value: OrderDetailsModel()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {
@@ -118,10 +121,7 @@ class _MyAppState extends State<MyApp> {
               mobileScreen: MobileScreenLayout(),
               ipadScreen: IpadScreenLayout(),
             ),
-
-            // routes: {
-            //   ItemsScreen.routname: (context) => ItemsScreen(),
-            // },
+            
           );
         });
       }),

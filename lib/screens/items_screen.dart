@@ -4,10 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/language_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/items_filter.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/mobile_item_responsive.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/Ipad_item_responsive.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,6 +30,7 @@ class _ItemsScreenState extends State<ItemsScreen>
   double end_size = 0;
   double start_weight = 0;
   double end_weight = 0;
+  
 
   RangeValues rangeCarat = RangeValues(12, 24);
   RangeValues rangeSize = RangeValues(7, 32);
@@ -40,6 +41,8 @@ class _ItemsScreenState extends State<ItemsScreen>
   int _current = 2;
   int category_id = 0;
   int carat_id = 0;
+  String typecarat='';
+  String caratNo='';
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
   TextEditingController searchController = TextEditingController();
@@ -59,15 +62,18 @@ class _ItemsScreenState extends State<ItemsScreen>
     super.initState();
   }
 
+  
   AllItems(
     bool first, {
     String search = '',
+    String type='',
+    String carat='',
     double size_start = 0,
     double size_end = 0,
     double weight_start = 0,
     double weight_end = 0,
     int categoryId = 0,
-    int caratId = 0,
+
   }) async {
     // final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
     if (first) {
@@ -79,7 +85,9 @@ class _ItemsScreenState extends State<ItemsScreen>
           weight_start: start_weight,
           weight_end: end_weight,
           category_id: categoryId,
-          carat_id: caratId);
+          type: typecarat,
+          carat: caratNo,
+          );
     } else {
       await Provider.of<ItemService>(context, listen: false).refresh(
           search: search,
@@ -88,7 +96,9 @@ class _ItemsScreenState extends State<ItemsScreen>
           weight_start: start_weight,
           weight_end: end_weight,
           category_id: categoryId,
-          carat_id: caratId);
+          type: typecarat,
+          carat: caratNo,
+          );
     }
   }
 
@@ -146,17 +156,27 @@ class _ItemsScreenState extends State<ItemsScreen>
             color: Theme.of(context).primaryColorLight,
           ),
         ),
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
+        leading: Consumer<LanguageServ>(
+          builder: (context, value, child) {
+            return InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              
+              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              height: 20,
+              width: 25,
+              child: RotatedBox(
+                quarterTurns: 90,
+                child: Icon(
+                 Icons.arrow_forward_ios_rounded,
+                    color: Theme.of(context).primaryColorLight),
+              ),
+            ),
+          );
           },
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            height: 20,
-            width: 25,
-            child: Icon(Icons.arrow_back_ios_new_rounded,
-                color: Theme.of(context).primaryColorLight),
-          ),
+          
         ),
         actions: [
           Container(
@@ -290,9 +310,9 @@ class _ItemsScreenState extends State<ItemsScreen>
                               size_start: start_size,
                               size_end: end_size,
                               weight_start: start_weight,
-                              caratId: carat_id,
                               weight_end: end_weight,
                               categoryId: category_id,
+                              type: typecarat,
                             );
                             setState(() {
                               issearch = false;
@@ -304,6 +324,16 @@ class _ItemsScreenState extends State<ItemsScreen>
                               MediaQuery.of(context).size.width > websize
                                   ? Container()
                                   : MyWidget(
+                                    onChangedCaratNo: (value) {
+                                      setState(() {
+                                        caratNo=value;
+                                      });
+                                    },
+                                    onChangedCaratType: (value) {
+                                      setState(() {
+                                        typecarat=value;
+                                      });
+                                    },
                                       categories: category,
                                       active_filter: active_filter,
                                       searchController: searchController,
@@ -313,7 +343,6 @@ class _ItemsScreenState extends State<ItemsScreen>
                                       carates: carat,
                                       caratTypes: type,
                                       categoryId: category_id,
-                                      caratId: carat_id,
                                       onChangestart_size: (value) {
                                         setState(() {
                                           start_size = value;
@@ -339,11 +368,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                                           active_filter = value;
                                         });
                                       },
-                                      onChangedCarat: (value) {
-                                        setState(() {
-                                          carat_id = value;
-                                        });
-                                      },
+                                      
                                       onChangedCategory: (value) {
                                         setState(() {
                                           category_id = value;
@@ -386,11 +411,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                 ],
               ),
               issearch == false && active_filter == false
-                  ? MediaQuery.of(context).size.width > websize
-                      ? ItemIpadResponsive(
-                          all: all,
-                        )
-                      : ItemMobileResponsive(
+                  ?  ItemMobileResponsive(
                           all: all,
                           searchController: searchController,
                         )

@@ -10,6 +10,7 @@ import 'package:jewelery_shop_managmentsystem/widgets/sure_items_card.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/dashed_separator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SureOrderScreen extends StatefulWidget {
   const SureOrderScreen({super.key});
@@ -31,174 +32,177 @@ class _SureOrderScreenState extends State<SureOrderScreen>
           for (int i = 0; i < items.length; i++) {
             basketId.add(items[i].basketId!);
           }
-          return Dialog(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                              icon: Icon(Icons.close),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              }),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            "Check Out",
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColorLight,
-                              fontFamily: 'RobotoB',
-                              fontSize: 18,
+          return Directionality(
+            textDirection: TextDirection.ltr,
+            child: Dialog(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              AppLocalizations.of(context)!.checkOut,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColorLight,
+                                fontFamily: 'RobotoB',
+                                fontSize: 18,
+                              ),
                             ),
                           ),
-                        ),
-                        ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: items.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${index + 1}. ${items[index].name}',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                          fontFamily: 'RobotoM',
-                                          fontSize: 14,
+                          ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: items.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${index + 1}. ${items[index].name}',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            fontFamily: 'RobotoM',
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.close,
-                                              size: 14,
-                                              color: Theme.of(context)
-                                                  .primaryColorLight,
-                                            ),
-                                            Text(
-                                              '${items[index].quantity}',
-                                              style: TextStyle(
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.close,
+                                                size: 14,
                                                 color: Theme.of(context)
                                                     .primaryColorLight,
-                                                fontFamily: 'RobotoM',
-                                                fontSize: 14,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Text(
-                                    "\$${items[index].price!.round()}",
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontFamily: 'RobotoM',
-                                      fontSize: 14,
+                                              Text(
+                                                '${items[index].quantity}',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColorLight,
+                                                  fontFamily: 'RobotoM',
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                                    Text(
+                                      "\$${items[index].price!.round()}",
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        fontFamily: 'RobotoM',
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Consumer<BasketItemService>(
-                      builder: (context, basket, child) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Text(
-                                "Total: \$${basket.TotalPrice()}",
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontFamily: 'RobotoB',
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                ApiProvider response = await Provider.of<OrderService>(context,listen: false).OrderById(basketId,context);
-                                if (response.error == null) {
-                                  if (response.data!['message'] !=
-                                      'New Order Added') {
-                                    for (int i = 0;
-                                        i < response.data!['errors'].length;
-                                        i++) {
-                                      showSnackBar(
-                                          context,
-                                          response.data!['errors']
-                                              ['basket.${i}'],
-                                          true);
-                                    }
-                                  } else {
-                                    await Provider.of<HomeItemsService>(context,
-                                            listen: false)
-                                        .getAllItemHome();
-                                    await Provider.of<BasketItemService>(
-                                            context,
-                                            listen: false)
-                                        .getItemBasket();
-                                    Navigator.pop(context);
-                                    showdialog(context);
-                                    setState(() {
-                                      basket.clearItemChecked();
-                                      orederd = true;
-                                    });
-                                  }
-                                }
-                              },
-                              child: Container(
-                                height: 40,
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColorLight,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                    child: Text(
-                                  "Buy Now",
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Consumer<BasketItemService>(
+                        builder: (context, basket, child) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Text(
+                                  "${AppLocalizations.of(context)!.total}: \$${basket.TotalPrice()}",
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    fontFamily: "RobotoB",
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontFamily: 'RobotoB',
                                     fontSize: 18,
                                   ),
-                                )),
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  )
-                ],
+                              InkWell(
+                                onTap: () async {
+                                  ApiProvider response = await Provider.of<OrderService>(context,listen: false).OrderById(basketId,context);
+                                  if (response.error == null) {
+                                    if (response.data!['message'] !=
+                                        'New Order Added') {
+                                      for (int i = 0;
+                                          i < response.data!['errors'].length;
+                                          i++) {
+                                        showSnackBar(
+                                            context,
+                                            response.data!['errors']
+                                                ['basket.${i}'],
+                                            true);
+                                      }
+                                    } else {
+                                      await Provider.of<HomeItemsService>(context,
+                                              listen: false)
+                                          .getAllItemHome();
+                                      await Provider.of<BasketItemService>(
+                                              context,
+                                              listen: false)
+                                          .getItemBasket();
+                                      Navigator.pop(context);
+                                      showdialog(context);
+                                      setState(() {
+                                        basket.clearItemChecked();
+                                        orederd = true;
+                                      });
+                                    }
+                                  }
+                                },
+                                child: Container(
+                                  height: 40,
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColorLight,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    AppLocalizations.of(context)!.buyNow,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      fontFamily: "RobotoB",
+                                      fontSize: 18,
+                                    ),
+                                  )),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -255,7 +259,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           centerTitle: true,
           title: Text(
-            "Check out",
+            AppLocalizations.of(context)!.checkOut,
             style: TextStyle(
               fontSize: 20,
               fontFamily: 'RobotoB',
@@ -270,9 +274,12 @@ class _SureOrderScreenState extends State<SureOrderScreen>
               margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               height: 20,
               width: 25,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Theme.of(context).primaryColorLight,
+              child: RotatedBox(
+                quarterTurns: 90,
+                child: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Theme.of(context).primaryColorLight,
+                ),
               ),
             ),
           ),
@@ -290,7 +297,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                               vertical: 10, horizontal: 15),
                           alignment: Alignment.topLeft,
                           child: Text(
-                            "Your Order",
+                            AppLocalizations.of(context)!.yourOrders,
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'RobotoB',
@@ -337,7 +344,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                           children: [
                                             Container(
                                               child: Text(
-                                                'Total: ',
+                                               AppLocalizations.of(context)!.total+": ",
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColorLight
@@ -380,7 +387,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                                           ),
                                           child: Center(
                                             child: Text(
-                                              "Checkout",
+                                              AppLocalizations.of(context)!.checkOut,
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .scaffoldBackgroundColor,
@@ -405,7 +412,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             Container(
                               child: Center(
                                   child: Text(
-                                "Ops! it is empty",
+                                 AppLocalizations.of(context)!.oopsItIsEmpty,
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontFamily: 'RobotoB',
@@ -433,7 +440,7 @@ class _SureOrderScreenState extends State<SureOrderScreen>
                             Container(
                               child: Center(
                                   child: Text(
-                                "Thank\'s for your Order, Please check your Orders",
+                                AppLocalizations.of(context)!.thanksForYourOrderPleaseCheckMyOrdersSection,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 24,

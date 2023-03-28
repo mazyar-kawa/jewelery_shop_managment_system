@@ -114,7 +114,7 @@ class ItemsClass {
 }
 
 class SingleItem with ChangeNotifier {
-  SingleItem({
+  SingleItem( {
     this.id,
     this.name,
     this.size,

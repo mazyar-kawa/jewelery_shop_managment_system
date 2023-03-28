@@ -13,6 +13,7 @@ import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart
 import 'package:jewelery_shop_managmentsystem/widgets/settings_card.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -21,10 +22,10 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
+    super.build(context);
     final islogin = Provider.of<Checkuser>(context).islogin;
     late User user;
     if (islogin) {
@@ -130,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       ),
                                       Text(
-                                        'Favorites',
+                                        AppLocalizations.of(context)!.favourites,
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .primaryColorLight,
@@ -170,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       ),
                                       Text(
-                                        'Orders',
+                                        AppLocalizations.of(context)!.orders,
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .primaryColorLight,
@@ -190,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(
                           children: [
                             ProfileCards(
-                                title: "Settings",
+                                title:  AppLocalizations.of(context)!.settings,
                                 image: "settings.svg",
                                 onPressed: () {
                                   Navigator.push(
@@ -200,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               SettingScreen()));
                                 }),
                             ProfileCards(
-                                title: "Account information",
+                                title: AppLocalizations.of(context)!.userInformation,
                                 image: "user.svg",
                                 onPressed: () {
                                   Navigator.push(
@@ -210,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               UserManagmentScreen()));
                                 }),
                             ProfileCards(
-                                title: "My Orders",
+                                title: AppLocalizations.of(context)!.myOrders,
                                 image: "myorders.svg",
                                 onPressed: () {
                                   Navigator.push(
@@ -220,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               MyOrdersScreen()));
                                 }),
                             ProfileCards(
-                                title: "My Favorites",
+                                title: AppLocalizations.of(context)!.favourites,
                                 image: "heart-solid.svg",
                                 onPressed: () {
                                   Navigator.push(
@@ -231,12 +232,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 }),
                             user.roleId! == 1
                                 ? ProfileCards(
-                                    title: "Admin",
+                                    title: AppLocalizations.of(context)!.admin,
                                     image: "user-group-solid.svg",
                                     onPressed: () {})
                                 : Container(),
                             ProfileCards(
-                                title: "LogOut",
+                                title: AppLocalizations.of(context)!.logOut,
                                 image: "logout.svg",
                                 onPressed: () {
                                   Auth().logOut();
@@ -292,7 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       Container(
                           child: Text(
-                        'Oops!...Unauthorized',
+                        AppLocalizations.of(context)!.ops,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontSize: 24,

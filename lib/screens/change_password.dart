@@ -3,6 +3,7 @@ import 'package:jewelery_shop_managmentsystem/screens/bottom_navBar.dart';
 import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/text_field_user_managment.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
@@ -24,7 +25,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       String retypeNewPassword, BuildContext context) async {
     ApiProvider response = await Auth()
         .UpdatePassword(currentPassword, newPassword, retypeNewPassword);
-    if (response.data != null) {
+    
+    if (response.error == null) {
+      Auth().logOut();
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
         return LoadingPage();
       }), (Route<dynamic> route) => false);
@@ -42,7 +45,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          "Change Password",
+          AppLocalizations.of(context)!.changePassword,
           style: TextStyle(
             fontSize: 20,
             fontFamily: 'RobotoB',
@@ -57,9 +60,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             height: 20,
             width: 25,
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Theme.of(context).primaryColorLight,
+            child: RotatedBox(
+              quarterTurns: 90,
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
           ),
         ),
@@ -70,7 +76,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           physics: BouncingScrollPhysics(),
           children: [
             TextFieldUserManagment(
-              lable: "Current password",
+              lable: AppLocalizations.of(context)!.currentPassword,
               controller: _currentPassword,
             ),
             for (var _error in error?['errors']?['current_password'] ?? [])
@@ -85,7 +91,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
               ),
             TextFieldUserManagment(
-              lable: "New password",
+              lable: AppLocalizations.of(context)!.newPassword,
               controller: _newPassword,
             ),
             for (var _error in error?['errors']?['new_password'] ?? [])
@@ -100,7 +106,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
               ),
             TextFieldUserManagment(
-              lable: "Retype New password",
+              lable: AppLocalizations.of(context)!.retypeNewPassword,
               controller: _retypeNewPassword,
             ),
             for (var _error
@@ -120,7 +126,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 if (formkey.currentState!.validate()) {
                   chnagePassword(_currentPassword.text, _newPassword.text,
                       _retypeNewPassword.text, context);
-                  Auth().logOut();
+                  
                 }
               },
               child: Container(
@@ -138,7 +144,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       )
                     ]),
                 child: Center(
-                  child: Text('Update Password',
+                  child: Text(AppLocalizations.of(context)!.updatePassword,
                       style: TextStyle(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         fontSize: 20,
@@ -169,7 +175,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       )
                     ]),
                 child: Center(
-                  child: Text('Cancle',
+                  child: Text(AppLocalizations.of(context)!.cancle,
                       style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
                         fontSize: 20,

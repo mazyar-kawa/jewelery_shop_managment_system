@@ -10,6 +10,7 @@ import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeSmallCard extends StatefulWidget {
   HomeSmallCard({
@@ -84,7 +85,6 @@ class _HomeSmallCardState extends State<HomeSmallCard>
                 setState(() {
                   islike = true;
                   startAnimation(product);
-                  product.isFavourited = true;
                 });
                 showSnackBar(context, response.data['message'],
                     response.data['message'].contains("added") ? false : true);
@@ -155,7 +155,7 @@ class _HomeSmallCardState extends State<HomeSmallCard>
                                     boxShadow: [
                                       BoxShadow(
                                         color: Theme.of(context).shadowColor,
-                                        blurRadius: 5,
+                                        blurRadius: 3,
                                         spreadRadius: 2,
                                         offset: Offset(1, 2),
                                       )
@@ -332,7 +332,7 @@ class _HomeSmallCardState extends State<HomeSmallCard>
                                 ),
                                 Container(
                                   child: Text(
-                                    product.inBasket! ? "Added" : "Add to cart",
+                                    product.inBasket! ? AppLocalizations.of(context)!.added :  AppLocalizations.of(context)!.addtocart,
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .secondaryHeaderColor,
