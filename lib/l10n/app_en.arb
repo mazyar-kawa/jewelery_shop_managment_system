@@ -76,5 +76,13 @@
     "yourOrders": "Your orders",
     "yes": "Yes",
     "yourOrdersisempty": "Your Orders is empty",
-    "oopsItIsEmpty": "Oops!.. It is empty"
+    "oopsItIsEmpty": "Oops!.. It is empty",
+
+    "filters": "Filters",
+    "types": "Types",
+    "carat": "Carat",
+    "caratTypes": "Carat Types",
+    "size": "Size",
+    "weight": "Weight",
+    "filter": "Filter"
 }

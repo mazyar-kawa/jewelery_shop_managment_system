@@ -11,10 +11,12 @@ class ItemMobileResponsive extends StatelessWidget {
     Key? key,
     required this.all,
     required this.searchController,
+    required this.isfilter
   }) : super(key: key);
 
   final Future? all;
   final TextEditingController searchController;
+  final bool isfilter;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class ItemMobileResponsive extends StatelessWidget {
                         child: CardItems(index: i, isbasket: false),
                       );
                     })
-                : searchController.text != "" ? Container(
+                : searchController.text != "" || isfilter ? Container(
                     width: 300,
                     height: 500,
                     child: Column(
@@ -42,9 +44,9 @@ class ItemMobileResponsive extends StatelessWidget {
                       children: [
                         Container(
                           child: Center(
-                              child: searchController.text != ''
+                              child: searchController.text != '' || isfilter
                                   ? Text(
-                                      'Not data found with "${searchController.text}"',
+                                    searchController.text != ''?  'Not data found with "${searchController.text}"' :'Filter not found data',
                                       style: TextStyle(
                                         color: Color(0xff7dd3fc),
                                         fontSize: 20,

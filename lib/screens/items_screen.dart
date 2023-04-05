@@ -38,6 +38,7 @@ class _ItemsScreenState extends State<ItemsScreen>
   int _selectedTypeIndex = 0;
   bool isloading = true;
   bool issearch = false;
+  bool isfilter=false;
   int _current = 2;
   int category_id = 0;
   int carat_id = 0;
@@ -324,6 +325,11 @@ class _ItemsScreenState extends State<ItemsScreen>
                               MediaQuery.of(context).size.width > websize
                                   ? Container()
                                   : MyWidget(
+                                    onChangedfilter: (value){
+                                      setState(() {
+                                        isfilter=value;
+                                      });
+                                    },
                                     onChangedCaratNo: (value) {
                                       setState(() {
                                         caratNo=value;
@@ -414,6 +420,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                   ?  ItemMobileResponsive(
                           all: all,
                           searchController: searchController,
+                          isfilter: isfilter,
                         )
                   : Container(
                       width: 300,

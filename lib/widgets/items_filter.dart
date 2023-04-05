@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
-import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyWidget extends StatefulWidget {
   final ValueChanged<bool> onChanged;
@@ -15,6 +15,7 @@ class MyWidget extends StatefulWidget {
   final List<Category> categories;
   final List<String> carates;
   final List<String> caratTypes;
+  final ValueChanged<bool> onChangedfilter;
   bool active_filter;
   TextEditingController searchController;
   Function(
@@ -50,7 +51,7 @@ class MyWidget extends StatefulWidget {
     required this.onChangedCategory,
     required this.onChangedCaratType,
     required this.onChangedCaratNo,
-
+   required this.onChangedfilter
   });
 
 
@@ -117,7 +118,7 @@ class _MyWidgetState extends State<MyWidget> {
                borderRadius: BorderRadius.circular(10),
             ),
             content: Container(
-              height: MediaQuery.of(context).size.height * 0.65,
+              height: MediaQuery.of(context).size.height * 0.75,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Theme.of(context).secondaryHeaderColor,
@@ -129,7 +130,7 @@ class _MyWidgetState extends State<MyWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Filtters",
+                         AppLocalizations.of(context)!.filters,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontSize: 20,
@@ -151,7 +152,7 @@ class _MyWidgetState extends State<MyWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Types",
+                         AppLocalizations.of(context)!.types,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontFamily: 'RobotoM',
@@ -161,6 +162,7 @@ class _MyWidgetState extends State<MyWidget> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: DropdownButtonFormField(
+                           dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                           value: currentType,
                           items: _categories
                               .map((e) => DropdownMenuItem(
@@ -177,7 +179,7 @@ class _MyWidgetState extends State<MyWidget> {
                         ),
                       ),
                       Text(
-                        "Carat",
+                         AppLocalizations.of(context)!.carat,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontFamily: 'RobotoM',
@@ -187,6 +189,7 @@ class _MyWidgetState extends State<MyWidget> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: DropdownButtonFormField(
+                           dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                           value: currentCaratNo,
                           items: _carates
                               .map((e) => DropdownMenuItem(
@@ -207,7 +210,7 @@ class _MyWidgetState extends State<MyWidget> {
                         ),
                       ),
                       Text(
-                        "Carat Types",
+                         AppLocalizations.of(context)!.caratTypes,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontFamily: 'RobotoM',
@@ -217,6 +220,7 @@ class _MyWidgetState extends State<MyWidget> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: DropdownButtonFormField(
+                           dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                           value: currentCaratType,
                           items: _carattype
                               .map((e) => DropdownMenuItem(
@@ -240,9 +244,9 @@ class _MyWidgetState extends State<MyWidget> {
                         ),
                       ),
                       Text_rangeSlider(
-                          context, "Size", widget.rangeSize, 7, 32, 50),
+                          context,  AppLocalizations.of(context)!.size, widget.rangeSize, 7, 32, 50),
                       Text_rangeSlider(
-                          context, "Weight", widget.rangeCarat, 12, 24, 12),
+                          context,  AppLocalizations.of(context)!.weight , widget.rangeCarat, 12, 24, 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -278,6 +282,7 @@ class _MyWidgetState extends State<MyWidget> {
                                     setState(() {
                                       widget.active_filter = false;
                                       widget.onChanged(widget.active_filter);
+                                       widget.onChangedfilter(false);
                                     });
                                   },
                                 );
@@ -288,6 +293,7 @@ class _MyWidgetState extends State<MyWidget> {
                               setState(() {
                                 widget.active_filter = true;
                                 widget.onChanged(widget.active_filter);
+                                 widget.onChangedfilter(true);
                                 Navigator.pop(context);
                               });
                               widget.AllItems(
@@ -306,6 +312,7 @@ class _MyWidgetState extends State<MyWidget> {
                                 setState(() {
                                   widget.active_filter = false;
                                   widget.onChanged(widget.active_filter);
+                                  // widget.onChangedfilter(true);
                                 });
                               });
                             },
@@ -318,7 +325,7 @@ class _MyWidgetState extends State<MyWidget> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Filter",
+                                   AppLocalizations.of(context)!.filter,
                                   style: TextStyle(
                                     color: Theme.of(context).scaffoldBackgroundColor,
                                     fontFamily: 'RobotoM',

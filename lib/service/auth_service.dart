@@ -99,7 +99,6 @@ class Auth {
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
-
     return apiProvider;
   }
 
@@ -175,36 +174,45 @@ class Auth {
   Future<ApiProvider> UpdateUserData(File image, String name, String username,
       String email, String phone_no, String address) async {
     ApiProvider apiProvider = ApiProvider();
-    final body = {
-      'name': name,
-      'username': username,
-      'email': email,
-      'phone_no': phone_no,
-      'address': address,
-      'profile_picture': image.path
-    };
     try {
       String token = await getToken();
+      final url = Uri.parse(base + "updateProfile");
+      final request;
+      if(image.path==''){
+         request = http.MultipartRequest('POST', url)
+        ..fields['name'] = name
+        ..fields['username'] = username
+        ..fields['email'] = email
+        ..fields['phone_no'] = phone_no
+        ..fields['address'] = address
+        ..headers['Accept'] = 'application/json'..headers['Authorization']='Bearer $token';
+      }else{
+         request = http.MultipartRequest('POST', url)
+        ..fields['name'] = name
+        ..fields['username'] = username
+        ..fields['email'] = email
+        ..fields['phone_no'] = phone_no
+        ..fields['address'] = address
+        ..files.add(
+            await http.MultipartFile.fromPath('profile_picture', image.path))
+        ..headers['Accept'] = 'application/json'..headers['Authorization']='Bearer $token';
+      }
+      final response = await request.send();
+      
 
-      final response = await http.post(Uri.parse(base + "updateProfile"),
-          body: jsonEncode(body),
-          headers: {
-            'Content-Type': 'multipart/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          });
-
+      final responseData = await response.stream.bytesToString();
       switch (response.statusCode) {
         case 200:
-          apiProvider.data = AuthUser.fromJson(json.decode(response.body));
+          apiProvider.data = AuthUser.fromJson(json.decode(responseData));
           break;
         default:
-          apiProvider.error = jsonDecode(response.body);
+          apiProvider.error = jsonDecode(responseData);
           break;
       }
     } catch (e) {
       apiProvider.error = {'message': e.toString()};
     }
+    
     return apiProvider;
   }
 
@@ -248,13 +256,19 @@ class Checkuser with ChangeNotifier {
 
   bool get islogin => _islogon;
 
-  Future<bool> checkUser() async {
+  Future<bool> checkUser({bool iserror = false}) async {
     String token = await Auth().getToken();
-    if (token == '') {
+
+    if(iserror){
+      _islogon=false;
+    }else{
+      if (token == '') {
       _islogon = false;
     } else {
       _islogon = true;
     }
+    }
+
     return _islogon;
   }
 }

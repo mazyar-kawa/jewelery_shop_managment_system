@@ -76,6 +76,7 @@ class _CardItemsState extends State<CardItems>
       product = Provider.of<SingleItem>(context, listen: false);
     }
 
+  
     return Consumer<SingleItem>(
       builder: (context, value, child) {
         return GestureDetector(
@@ -205,10 +206,11 @@ class _CardItemsState extends State<CardItems>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    AspectRatio(
-                                        aspectRatio: 1.8,
-                                        child: Image.network(product.img!,
-                                            fit: BoxFit.contain)),
+                                    // AspectRatio(
+                                    //     aspectRatio: 1.8,
+                                    //     child: Image.network(
+                                    //      product.img!,
+                                    //         fit: BoxFit.contain)),
                                     Container(
                                       margin: const EdgeInsets.symmetric(
                                         horizontal: 10,

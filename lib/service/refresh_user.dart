@@ -44,11 +44,16 @@ class RefreshUser with ChangeNotifier {
   }
 
   Future<void> refreshuser({bool update = false, AuthUser? user}) async {
+    
     if (!update) {
       ApiProvider user = await Auth().getUserDetials();
+      if(user.data!=null){
       _currentUser = user.data as AuthUser;
       _favourite=_currentUser!.user!.favoriteNo!;
       _Order=_currentUser!.user!.OrderNo!;
+      }else{
+        
+      }
     } else {
       _currentUser = AuthUser(user: user!.user);
     }

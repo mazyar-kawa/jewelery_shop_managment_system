@@ -7,6 +7,7 @@ import 'package:jewelery_shop_managmentsystem/screens/change_password.dart';
 import 'package:jewelery_shop_managmentsystem/service/api_provider.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/text_field_user_managment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
   TextEditingController? _phone;
   TextEditingController? _address;
   TextEditingController? _email;
-  File? _image;
+  File _image=File('');
   PickedFile? _pickedFile;
   final _picked = ImagePicker();
 
@@ -42,13 +43,13 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
 
   Map<dynamic, dynamic>? error;
 
-  void updateUser(File image ,String name, String username, String email, String phone_no,
+  void updateUser(File image,String name, String username, String email, String phone_no,
       String address) async {
-    
     ApiProvider response =
         await Auth().UpdateUserData(image,name, username, email, phone_no, address);
     if (response.error == null) {
       saveUser(response.data);
+      showSnackBar(context, "Updated!", false);
     } else {
       error = response.error;
     }
@@ -91,7 +92,6 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           centerTitle: true,
           title: Text(
-           
             AppLocalizations.of(context)!.userInformation,
             style: TextStyle(
               fontSize: 20,
@@ -247,10 +247,22 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                               ),
                             ),
                           ),
-                        )
+                        ),
+                        
                       ],
                     ),
                   ),
+                  for (var _error in error?['errors']?['profile_picture'] ?? [])
+                         Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                _error,
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ),
                   Container(
                     child: Column(
                       children: [
@@ -367,8 +379,9 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                   InkWell(
                     onTap: () {
                       if (formkey.currentState!.validate()) {
-                        updateUser(_image!,_name!.text, _username!.text, _email!.text,
+                        updateUser(_image,_name!.text, _username!.text, _email!.text,
                             _phone!.text, _address!.text);
+                            error=null;
                       }
                     },
                     child: Container(

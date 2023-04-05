@@ -75,5 +75,13 @@
     "yourOrders": "طلباتنا",
     "yes": "نعم",
     "yourOrdersisempty": "طلباتك فارغة",
-    "oopsItIsEmpty": "عفوا!.. إنه فارغ"
+    "oopsItIsEmpty": "عفوا!.. إنه فارغ",
+
+    "filters": "مرشحات",
+    "types": "انواع",
+    "carat": "قيراط",
+    "caratTypes": "أنواع القيراط",
+    "size": "حجم",
+    "weight": "ثقل",
+    "filter": "راووق"
 }
