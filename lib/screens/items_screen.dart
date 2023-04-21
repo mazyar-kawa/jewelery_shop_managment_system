@@ -76,7 +76,6 @@ class _ItemsScreenState extends State<ItemsScreen>
     int categoryId = 0,
 
   }) async {
-    // final CategoryId = ModalRoute.of(context)!.settings.arguments as int;
     if (first) {
       await Provider.of<ItemService>(context, listen: false).getItems(
           widget.country_id,
@@ -381,6 +380,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                                         });
                                       },
                                     ),
+                                  
                           prefixIcon: Icon(Icons.search,
                               color: Theme.of(context).primaryColorLight),
                           filled: true,
@@ -391,13 +391,14 @@ class _ItemsScreenState extends State<ItemsScreen>
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
                           border: const OutlineInputBorder(
+
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15.0)),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context).shadowColor,
                                 width: 1.0),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15.0)),
@@ -405,7 +406,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context).shadowColor,
                                 width: 2.0),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15.0)),

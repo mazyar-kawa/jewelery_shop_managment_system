@@ -16,6 +16,7 @@ import 'package:jewelery_shop_managmentsystem/service/language_service.dart';
 
 import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/search_for_items.dart';
 import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:flutter/services.dart';
@@ -77,6 +78,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: ItemBasket()),
         ChangeNotifierProvider.value(value: OrderService()),
         ChangeNotifierProvider.value(value: OrderDetailsModel()),
+        ChangeNotifierProvider.value(value: SearchFoItems()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {

@@ -20,6 +20,10 @@ class HomeItemsService with ChangeNotifier {
 
   List<SingleItem> get mostFavourite => [..._mostFavourite];
 
+  List<SingleItem> _mostSalesItem = [];
+
+  List<SingleItem> get mostSalesItem => [..._mostSalesItem];
+
   List<SingleItem> _randomItems = [];
 
   List<SingleItem> get randomItems => [..._randomItems];
@@ -68,6 +72,7 @@ class HomeItemsService with ChangeNotifier {
       final List<SingleItem> temporaryList = [];
       final List<SingleItem> temporaryList1 = [];
       final List<SingleItem> temporaryList2 = [];
+      final List<SingleItem> temporaryList3 = [];
 
       for (var i = 0; i < data.categories!.length; i++) {
         categories.add(Category(
@@ -88,9 +93,13 @@ class HomeItemsService with ChangeNotifier {
       for (SingleItem item in data.mostFavouriteItems!) {
         temporaryList2.add(item);
       }
+      for (SingleItem item in data.mostSalesItem!) {
+        temporaryList3.add(item);
+      }
       _randomItems = temporaryList;
       _latestItems = temporaryList1;
       _mostFavourite = temporaryList2;
+      _mostSalesItem=temporaryList3;
 
       notifyListeners();
     } catch (e) {
@@ -146,6 +155,14 @@ class HomeItemsService with ChangeNotifier {
         int index = _latestItems.indexWhere((element) => element.id == item_id);
         _latestItems[index].isFavourited = favorite;
         _latestItems[index].inBasket = basket;
+      }
+    }
+
+    for (SingleItem item in _mostSalesItem) {
+      if (item.id == item_id) {
+        int index = _mostSalesItem.indexWhere((element) => element.id == item_id);
+        _mostSalesItem[index].isFavourited = favorite;
+        _mostSalesItem[index].inBasket = basket;
       }
     }
     for (SingleItem item in _mostFavourite) {

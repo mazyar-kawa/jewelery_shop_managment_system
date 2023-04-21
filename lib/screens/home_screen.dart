@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
+import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
+import 'package:jewelery_shop_managmentsystem/service/search_for_items.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/horizantl_list_view_home_screen.dart';
@@ -29,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen>
   int _current = 2;
   int _selectedIndex = 0;
   bool isLoading = false;
-  
+
   TextEditingController searchEditText = TextEditingController();
 
   PageController _pageControllerMobile = PageController();
@@ -185,47 +188,45 @@ class _HomeScreenState extends State<HomeScreen>
                               ],
                             ),
                     ),
-                        
-                        InkWell(
-                          onTap: (){
-                            showSearch(
-                              context: context,
-                              delegate: MySearchDelegate()
-                            );
-                          },
-                          child: Container(
-                            height: 55,
-                            margin: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
-                            decoration: BoxDecoration(
+
+                    InkWell(
+                      onTap: () {
+                       
+                      },
+                      child: Container(
+                          height: 55,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          decoration: BoxDecoration(
                               color: Theme.of(context).secondaryHeaderColor,
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Theme.of(context).shadowColor,
+                              ),
                               boxShadow: [
-                              BoxShadow(
-                                  offset: const Offset(12, 26),
-                                  blurRadius: 50,
-                                  spreadRadius: 0,
-                                  color: Colors.grey.withOpacity(.1)),
-                            ]),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(left: 15),
-                                  child: Icon(Icons.search,
-                                color: Theme.of(context).primaryColorLight),
-                                ),
-                                Container(
+                                BoxShadow(
+                                    offset: const Offset(12, 26),
+                                    blurRadius: 50,
+                                    spreadRadius: 0,
+                                    color: Colors.grey.withOpacity(.1)),
+                              ]),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 15),
+                                child: Icon(Icons.search,
+                                    color: Theme.of(context).primaryColorLight),
+                              ),
+                              Container(
                                   padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: Text('${AppLocalizations.of(context)!.search}...',style: TextStyle(
-                                    color: Colors.grey
-                                  ),)
-                                ),
-                              ],
-                            )
-                          ),
-                        ),
-                        
-                      
-                    
+                                  child: Text(
+                                    '${AppLocalizations.of(context)!.search}...',
+                                    style: TextStyle(color: Colors.grey),
+                                  )),
+                            ],
+                          )),
+                    ),
+
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       physics: BouncingScrollPhysics(),
@@ -239,6 +240,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     ? MainAxisAlignment.center
                                     : MainAxisAlignment.start,
                             children: [
+                              
                               Container(
                                 height: 35,
                                 child: ListView.builder(
@@ -330,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen>
                     // most sale
                     HorizantleListView(
                       title: AppLocalizations.of(context)!.mostSales,
-                      provder: provider.randomItems,
+                      provder: provider.mostSalesItem,
                     ),
                     // most favorite
                     HorizantleListView(
@@ -391,22 +393,5 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   bool get wantKeepAlive => true;
 }
-class MySearchDelegate extends SearchDelegate{
-  @override
-  List<Widget>? buildActions(BuildContext context) =>null;
 
-  @override
-  Widget? buildLeading(BuildContext context) => IconButton(onPressed: (){
-    close(context, null);
-  }, icon: Icon(Icons.arrow_back_ios));
 
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) =>Container();
-
-}

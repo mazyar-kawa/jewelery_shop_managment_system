@@ -30,11 +30,13 @@ class HomeItems {
     this.latestItems,
     this.mostFavouriteItems,
     this.categories,
+    this.mostSalesItem,
   });
 
   List<SingleItem>? randomItems;
   List<SingleItem>? latestItems;
   List<SingleItem>? mostFavouriteItems;
+  List<SingleItem>? mostSalesItem;
   List<Category>? categories;
 
   factory HomeItems.fromJson(Map<String, dynamic> json) => HomeItems(
@@ -44,6 +46,8 @@ class HomeItems {
             json["latestItems"].map((x) => SingleItem.fromJson(x))),
         mostFavouriteItems: List<SingleItem>.from(
             json["mostFavouriteItems"].map((x) => SingleItem.fromJson(x))),
+        mostSalesItem: List<SingleItem>.from(
+            json["mostSaleItems"].map((x) => SingleItem.fromJson(x))),
         categories: List<Category>.from(
             json['categories'].map((x) => Category.fromJson(x))),
       );

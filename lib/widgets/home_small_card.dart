@@ -203,14 +203,14 @@ class _HomeSmallCardState extends State<HomeSmallCard>
                                 ),
                         ],
                       ),
-                      // Expanded(
-                      //   child: Container(
-                      //     child: Image.network(
-                      //       product.img!,
-                      //       height: 100,
-                      //     ),
-                      //   ),
-                      // ),
+                      Expanded(
+                        child: Container(
+                          child: Image.network(
+                           "http://192.168.1.32:8000" + product.img!,
+                            height: 100,
+                          ),
+                        ),
+                      ),
                       Expanded(
                           child: Container(
                         margin:

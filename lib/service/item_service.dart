@@ -9,11 +9,12 @@ import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 class ItemService with ChangeNotifier {
   List<SingleItem> _items = [];
 
+List<SingleItem> get items => [..._items];
   SingleItem _ItemDetails=SingleItem();
 
 SingleItem get ItemDetails => _ItemDetails;
 
-  List<SingleItem> get items => [..._items];
+  
 
   List<SingleItem> _favouriteItems = [];
   List<SingleItem> get favouriteItems => [..._favouriteItems];
@@ -31,7 +32,6 @@ SingleItem get ItemDetails => _ItemDetails;
       String carat='',
       }) async {
     try {
-      print(type);
       String token = await Auth().getToken();
       final response = await http.get(
           Uri.parse(base +

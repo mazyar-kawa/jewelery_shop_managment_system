@@ -206,11 +206,11 @@ class _CardItemsState extends State<CardItems>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    // AspectRatio(
-                                    //     aspectRatio: 1.8,
-                                    //     child: Image.network(
-                                    //      product.img!,
-                                    //         fit: BoxFit.contain)),
+                                    AspectRatio(
+                                        aspectRatio: 1.8,
+                                        child: Image.network(
+                                        "http://192.168.1.32:8000" + product.img!,
+                                            fit: BoxFit.contain)),
                                     Container(
                                       margin: const EdgeInsets.symmetric(
                                         horizontal: 10,

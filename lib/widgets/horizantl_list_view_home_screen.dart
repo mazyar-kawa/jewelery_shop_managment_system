@@ -24,7 +24,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
   PageController _pageControllerMobile = PageController();
   PageController _pageControllerWeb = PageController();
 
-  int _current = 2;
+  int _current = 3;
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _HorizantleListViewState extends State<HorizantleListView> {
             height: MediaQuery.of(context).size.width > websize ? 318 : 350,
             width: double.infinity,
             child: PageView.builder(
-                    itemCount: products.length,
+                    itemCount: 7,
                     onPageChanged: ((value) {
                       setState(() {
                         _current = value;
