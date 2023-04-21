@@ -72,7 +72,7 @@ class _SureItemsCardState extends State<SureItemsCard> {
                     children: [
                       AspectRatio(
                           aspectRatio: 1.2,
-                          child: Image.network(item.img!, fit: BoxFit.contain)),
+                          child: Image.network("http://192.168.1.32:8000" +item.img!, fit: BoxFit.contain)),
                       Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

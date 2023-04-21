@@ -42,7 +42,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeChangeProvider _themeChangeProvider = ThemeChangeProvider();
-  // LanguageService LanguageService = LanguageService();
   LanguageServ LanguageService=LanguageServ();
 
   @override

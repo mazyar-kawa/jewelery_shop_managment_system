@@ -47,12 +47,12 @@ android {
         applicationId "com.example.jewelery_shop_managmentsystem"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-
+//flutter.minSdkVersion
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

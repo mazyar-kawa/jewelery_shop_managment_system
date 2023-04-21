@@ -89,7 +89,7 @@ class _BasketCardItemState extends State<BasketCardItem> {
                   child: Center(
                     child: AspectRatio(
                         aspectRatio: 2,
-                        child: Image.network(item.img!, fit: BoxFit.contain)),
+                        child: Image.network("http://192.168.1.32:8000" +item.img!, fit: BoxFit.contain)),
                   ),
                 )
               ],

@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
+import 'package:jewelery_shop_managmentsystem/screens/search_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
@@ -191,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen>
 
                     InkWell(
                       onTap: () {
-                       
+                       Navigator.push(context, MaterialPageRoute(builder: (_)=>SearchScreen()));
                       },
                       child: Container(
                           height: 55,

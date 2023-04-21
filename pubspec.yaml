@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  avatar_glow: ^2.0.2
   easy_debounce: ^2.0.3
   flutter:
     sdk: flutter
@@ -44,6 +45,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.0.15
   showcaseview: ^2.0.2
+  speech_to_text: ^6.1.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

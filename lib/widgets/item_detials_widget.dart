@@ -58,7 +58,7 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                                     child: AspectRatio(
                                   aspectRatio: 1.0,
                                   child: Image(
-                                    image: NetworkImage(item.img!),
+                                    image: NetworkImage("http://192.168.1.32:8000" +item.img!),
                                     width: 40,
                                   ),
                                 )),
@@ -70,7 +70,7 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                         child: Center(
                             child: AspectRatio(
                           aspectRatio: 0.6,
-                          child: Image(image: NetworkImage(item.img!)),
+                          child: Image(image: NetworkImage("http://192.168.1.32:8000" +item.img!)),
                         )),
                       ),
                     ],

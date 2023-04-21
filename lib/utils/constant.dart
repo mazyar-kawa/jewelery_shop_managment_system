@@ -20,7 +20,6 @@ Color primaryColorDark = Color(0xffFFFFFF);
 
 Color secondColorDark = Color(0xff262626);
 
-
 // Color primaryFadeCardDark = Color(0xFF0099F8);
 // Color seconderFadeCardDark = Color(0xFFFF0000);
 // Color primaryFadeCardDark = Color(0xfffb7185);
@@ -40,14 +39,34 @@ String base = 'http://192.168.1.32:8000/api/';
 void showSnackBar(BuildContext context, message, undon) {
   final snackBar = SnackBar(
     dismissDirection: DismissDirection.startToEnd,
-    clipBehavior: Clip.antiAlias,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    content: Text('${message}'),
-    backgroundColor: undon ? Colors.red : Colors.green,
+    content: Stack(
+      children: [
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: undon ? Colors.red : Colors.green,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Center(child: Text(message,style: TextStyle(
+            fontFamily: 'RobotoB',
+            fontSize: 14
+          ),),),
+        ),
+        Positioned(
+          bottom: 0,
+          child: Container(
+            padding: EdgeInsets.only(left: 10),
+            child: Image.asset('assets/images/gold_bars.png',width: 45,),
+          ),
+        )
+      ],
+    ),
+    backgroundColor: Colors.transparent,
     behavior: SnackBarBehavior.floating,
     duration: Duration(milliseconds: 1000),
-    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-    elevation: 10,
+    elevation: 0,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

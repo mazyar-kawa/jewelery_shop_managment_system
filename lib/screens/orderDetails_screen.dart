@@ -200,7 +200,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             AspectRatio(
                                                 aspectRatio: 1.8,
                                                 child: Image.network(
-                                                    items[index].img!,
+                                                   "http://192.168.1.32:8000" + items[index].img!,
                                                     fit: BoxFit.contain)),
                                             Container(
                                               margin: const EdgeInsets.symmetric(
