@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
@@ -6,14 +8,12 @@ import 'package:jewelery_shop_managmentsystem/model/orderDetails_model.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/ipad_screen_layout.dart';
-import 'package:jewelery_shop_managmentsystem/screens/orderDetails_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/countries_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/language_service.dart';
-
 import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/service/search_for_items.dart';
@@ -23,10 +23,16 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_kurdish_localization/flutter_kurdish_localization.dart';
+import 'package:pusher_beams/pusher_beams.dart';
 
 
-void main() {
+void main() async{
+  
   WidgetsFlutterBinding.ensureInitialized();
+  const instanceID = '76f6b955-cf2b-4c91-9238-083f024760cb';
+  await PusherBeams.instance.start(instanceID);
+  await PusherBeams.instance.setDeviceInterests(['hello']);
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
@@ -42,7 +48,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeChangeProvider _themeChangeProvider = ThemeChangeProvider();
-  LanguageServ LanguageService=LanguageServ();
+  LanguageServ LanguageService = LanguageServ();
 
   @override
   void initState() {
@@ -50,6 +56,7 @@ class _MyAppState extends State<MyApp> {
     changeTheme();
     super.initState();
   }
+
 
   getlanguage() async {
     LanguageService.setLanguage(
@@ -107,22 +114,20 @@ class _MyAppState extends State<MyApp> {
               primaryColorDark: scaffoldbackgroundLight,
             ),
             darkTheme: ThemeData.dark().copyWith(
-              scaffoldBackgroundColor: scaffoldbackgroundDark,
-              buttonColor: scaffoldbackgroundDark,
-              primaryColorLight: primaryColorDark,
-              primaryColor: primaryFadeCardDark,
-              accentColor: seconderFadeCardDark,
-              shadowColor: shadowCardDark,
-              secondaryHeaderColor: secondColorDark,
-              canvasColor: scaffoldbackgroundDark,
-              primaryColorDark: primaryColorDark
-            ),
+                scaffoldBackgroundColor: scaffoldbackgroundDark,
+                buttonColor: scaffoldbackgroundDark,
+                primaryColorLight: primaryColorDark,
+                primaryColor: primaryFadeCardDark,
+                accentColor: seconderFadeCardDark,
+                shadowColor: shadowCardDark,
+                secondaryHeaderColor: secondColorDark,
+                canvasColor: scaffoldbackgroundDark,
+                primaryColorDark: primaryColorDark),
             themeMode: themeChangeProvider.themeMode,
             home: LayoutScreen(
               mobileScreen: MobileScreenLayout(),
               ipadScreen: IpadScreenLayout(),
             ),
-            
           );
         });
       }),

@@ -257,7 +257,7 @@ class _ItemsScreenState extends State<ItemsScreen>
                 ),
                 Container(
                   child: Text(
-                    'There\'s no more Item.',
+                    AppLocalizations.of(context)!.thereIsNoMoreJewel,
                     style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
                         fontSize: 16,

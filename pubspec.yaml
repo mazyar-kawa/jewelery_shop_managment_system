@@ -29,6 +29,8 @@ environment:
 dependencies:
   avatar_glow: ^2.0.2
   easy_debounce: ^2.0.3
+  firebase_core: ^2.10.0
+  firebase_messaging: ^14.4.1
   flutter:
     sdk: flutter
   flutter_kurdish_localization: ^1.0.1
@@ -43,6 +45,7 @@ dependencies:
   lottie: ^1.4.0
   provider: ^6.0.3
   pull_to_refresh: ^2.0.0
+  pusher_beams: ^1.1.1
   shared_preferences: ^2.0.15
   showcaseview: ^2.0.2
   speech_to_text: ^6.1.1

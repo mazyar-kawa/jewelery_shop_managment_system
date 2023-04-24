@@ -77,12 +77,16 @@
     "yes": "بەڵێ",
     "yourOrdersisempty": "داواکاریەکانت بەتاڵە",
     "oopsItIsEmpty": "ببورە!.. ئەم بەشە بەتاڵە",
-
     "filters": "فلتەرەکان",
     "types": "جۆر",
     "carat": "مسقاڵ",
     "caratTypes": "جۆری مسقاڵ",
     "size": "قەبارە",
     "weight": "کێش",
-    "filter": "فلتەر"
+    "filter": "فلتەر",
+    "yourNotificationsIsEmpty": "پەیامەکانت بەتاڵە",
+    "notifications": "پەیامەکان",
+    "thereIsNoMoreJewel": "گەوهەری زیاتر بوونی نییە.",
+    "loading": "چاواڕێ بکە...",
+    "youCanNotSeeYourNotifications": "ناتوانیت پەیامەکانت ببینیت"
 }

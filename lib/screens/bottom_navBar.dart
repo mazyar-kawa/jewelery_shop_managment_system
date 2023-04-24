@@ -13,6 +13,7 @@ import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoadingPage extends StatefulWidget {
   // late bool islogin;
@@ -379,7 +380,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   child: Container(
                     child: Center(
                         child: Text(
-                      "Loading...",
+                          AppLocalizations.of(context)!.loading,
                       style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
                         fontSize: 18,

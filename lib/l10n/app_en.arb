@@ -69,7 +69,7 @@
     "next": "Next",
     "checkOut": "Check out",
     "buyNow": "Buy Now",
-    "thanksForYourOrderPleaseCheckMyOrdersSection": "thank/'s for your order، please check (MyOrders) section",
+    "thanksForYourOrderPleaseCheckMyOrdersSection": "thank you for your order، please check MyOrders section",
     "orderDetails": "Order details",
     "warning": "Warning",
     "areYouSureToCancle": "Are you sure to cancle ?",
@@ -77,12 +77,16 @@
     "yes": "Yes",
     "yourOrdersisempty": "Your Orders is empty",
     "oopsItIsEmpty": "Oops!.. It is empty",
-
     "filters": "Filters",
     "types": "Types",
     "carat": "Carat",
     "caratTypes": "Carat Types",
     "size": "Size",
     "weight": "Weight",
-    "filter": "Filter"
+    "filter": "Filter",
+    "yourNotificationsIsEmpty": "Your Notifications is Empty..!",
+    "notifications": "Notifications",
+    "thereIsNoMoreJewel": "There is no more jewel.",
+    "loading": "Loading...",
+    "youCanNotSeeYourNotifications": "You can not see your Notifications"
 }

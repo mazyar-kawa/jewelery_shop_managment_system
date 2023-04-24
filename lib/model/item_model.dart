@@ -125,7 +125,6 @@ class SingleItem with ChangeNotifier {
     this.weight,
     this.img,
     this.quantity,
-    this.companyId,
     this.categoryId,
     this.countryId,
     this.caratId,
@@ -146,7 +145,6 @@ class SingleItem with ChangeNotifier {
   String? img;
   String? description;
   int? quantity;
-  int? companyId;
   int? categoryId;
   int? countryId;
   int? caratId;
@@ -166,7 +164,6 @@ class SingleItem with ChangeNotifier {
         weight: json["weight"],
         img: json["img"],
         quantity: json["quantity"],
-        companyId: json["company_id"],
         categoryId: json["category_id"],
         countryId: json["country_id"],
         countryName: Country.fromJson(json["country"]).name,

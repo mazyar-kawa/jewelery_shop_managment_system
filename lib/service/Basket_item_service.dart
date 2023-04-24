@@ -86,29 +86,7 @@ class BasketItemService with ChangeNotifier {
           for (ItemBasket item in data.data!){
             temporaryList.add(item);
           }
-          // for (var i = 0; i < data.data!.length; i++) {
-          //   final dataOrganize = data.data![i];
-          //   if (dataOrganize.quantity != 0) {
-          //     temporaryList.add(ItemBasket(
-          //       basketId: dataOrganize.basketId,
-          //       userId: dataOrganize.userId,
-          //       id: dataOrganize.id,
-          //       quantity: dataOrganize.quantity,
-          //       name: dataOrganize.name,
-                
-          //       countryName: dataOrganize.countryName,
-          //       caratMs: dataOrganize.caratMs,
-          //       caratType: dataOrganize.caratType,
-          //       img: dataOrganize.img,
-          //       price: dataOrganize.price,
-          //       weight: dataOrganize.weight,
-          //       inBasket: dataOrganize.inBasket,
-          //     ));
-          //   } 
-          // }
-
           _basket = temporaryList;
-
           countItem();
           notifyListeners();
 
@@ -139,23 +117,6 @@ class BasketItemService with ChangeNotifier {
       for (ItemBasket item in data.data!){
             _basket.add(item);
           }
-      // for (var i = 0; i < data.data!.length; i++) {
-      //   final dataOrganize = data.data![i];
-      //   _basket.add(ItemBasket(
-      //     basketId: dataOrganize.basketId,
-      //     userId: dataOrganize.userId,
-      //     id: dataOrganize.id,
-      //     quantity: dataOrganize.quantity,
-      //     name: dataOrganize.name,
-      //     countryName: dataOrganize.countryName,
-      //     caratMs: dataOrganize.caratMs,
-      //     caratType: dataOrganize.caratType,
-      //     img: dataOrganize.img,
-      //     price: dataOrganize.price,
-      //     weight: dataOrganize.weight,
-      //     inBasket: dataOrganize.inBasket,
-      //   ));
-      // }
       notifyListeners();
     } catch (e) {
       print(e.toString());

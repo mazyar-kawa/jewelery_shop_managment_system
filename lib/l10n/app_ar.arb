@@ -76,12 +76,16 @@
     "yes": "نعم",
     "yourOrdersisempty": "طلباتك فارغة",
     "oopsItIsEmpty": "عفوا!.. إنه فارغ",
-
     "filters": "مرشحات",
     "types": "انواع",
     "carat": "قيراط",
     "caratTypes": "أنواع القيراط",
     "size": "حجم",
     "weight": "ثقل",
-    "filter": "راووق"
+    "filter": "راووق",
+    "yourNotificationsIsEmpty": "إشعاراتك فارغة..!",
+    "notifications": "الاخطارات",
+    "thereIsNoMoreJewel": "لم يعد هناك جوهرة.",
+    "loading": "انتظار...",
+    "youCanNotSeeYourNotifications": "لا يمكنك رؤية الإشعارات الخاصة بك"
 }

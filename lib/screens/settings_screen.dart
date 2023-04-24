@@ -97,6 +97,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     child: Consumer<LanguageServ>(builder:
                                         (context, providerLanguage, child) {
                                       return DropdownButton(
+                                        underline: SizedBox(),
                                         dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                                         value: providerLanguage.currentLanguage,
                                         items: [

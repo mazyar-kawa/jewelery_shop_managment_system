@@ -6,25 +6,25 @@ import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 class SearchItems {
     SearchItems({
         required this.currentPage,
-        required this.data,
-        required this.firstPageUrl,
+    required this.data,
+    required this.firstPageUrl,
+    required this.from,
+    required this.nextPageUrl,
+    required this.path,
+    required this.perPage,
+    required this.prevPageUrl,
+    required this.to,
+  });
 
-        required this.nextPageUrl,
-        required this.path,
-        required this.perPage,
-        this.prevPageUrl,
-        required this.to,
-    });
-
-    int? currentPage;
-    List<SingleItem> data;
-    String? firstPageUrl;
-
-    String? nextPageUrl;
-    String? path;
-    int? perPage;
-    dynamic? prevPageUrl;
-    int to;
+  int? currentPage;
+  List<SingleItem>? data;
+  String? firstPageUrl;
+  int? from;
+  dynamic? nextPageUrl;
+  String path;
+  int? perPage;
+  dynamic prevPageUrl;
+  int? to;
 
     factory SearchItems.fromJson(Map<String, dynamic> json) => SearchItems(
         currentPage: json["current_page"],
@@ -35,5 +35,6 @@ class SearchItems {
         perPage: json["per_page"],
         prevPageUrl: json["prev_page_url"],
         to: json["to"],
+         from: json["to"],
     );
 }

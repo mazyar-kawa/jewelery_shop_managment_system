@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/screens/signin_screen.dart';
 import 'package:jewelery_shop_managmentsystem/screens/sure_Order_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
-import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/basket_card_items.dart';
+import 'package:jewelery_shop_managmentsystem/widgets/unauthentication.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -144,70 +143,7 @@ class _BasketScreenState extends State<BasketScreen> {
             
           ),
           body: !islogin
-              ? Consumer<ThemeChangeProvider>(
-                  builder: (context, provider, chile) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Theme.of(context).primaryColorLight.value ==
-                                4286436348
-                            ? LottieBuilder.asset(
-                                'assets/images/unauthorized_blue.json',
-                                width: 450,
-                              )
-                            : LottieBuilder.asset(
-                                'assets/images/unauthorized_grey.json',
-                                width: 450,
-                              ),
-                      ),
-                      Container(
-                          child: Text(
-                         AppLocalizations.of(context)!.ifYouWantToSeeYourCartPleaseLogin,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorLight,
-                          fontSize: 24,
-                          fontFamily: 'RobotoB',
-                        ),
-                      )),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) => SignIn()));
-                          });
-                        },
-                        child: Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColorLight,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Theme.of(context).shadowColor,
-                                  blurRadius: 3,
-                                  offset: Offset(2, 3),
-                                )
-                              ]),
-                          child: Center(
-                            child: Text(
-                               AppLocalizations.of(context)!.login,
-                              style: TextStyle(
-                                color: Theme.of(context).secondaryHeaderColor,
-                                fontFamily: 'RobotoB',
-                                fontSize: 24,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                })
+              ? UnAuthentication(title: AppLocalizations.of(context)!.ifYouWantToSeeYourCartPleaseLogin,)
               : basket.baskets.length != 0
                   ? SmartRefresher(
                       enablePullDown: true,
@@ -239,7 +175,7 @@ class _BasketScreenState extends State<BasketScreen> {
                               ),
                               Container(
                                 child: Text(
-                                  'There\'s no more Item.',
+                                   AppLocalizations.of(context)!.thereIsNoMoreJewel,
                                   style: TextStyle(
                                       color: Theme.of(context).primaryColorLight,
                                       fontSize: 16,
