@@ -12,6 +12,7 @@ import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:lottie/lottie.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -42,6 +43,8 @@ class _LoadingPageState extends State<LoadingPage> {
       ApiProvider response = await Auth().getUserDetials() as ApiProvider;
       if (response.data != null) {
         user = refreshUser.currentUser;
+        OneSignal.shared.setEmail(email: user.user!.email!);
+        OneSignal.shared.sendTag("email",user.user!.email!);
         islogin = true;
       } else {
         islogin = await Provider.of<Checkuser>(context, listen: false)
@@ -62,7 +65,6 @@ class _LoadingPageState extends State<LoadingPage> {
         });
       });
     });
-
     super.initState();
   }
 
@@ -380,7 +382,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   child: Container(
                     child: Center(
                         child: Text(
-                          AppLocalizations.of(context)!.loading,
+                      AppLocalizations.of(context)!.loading,
                       style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
                         fontSize: 18,

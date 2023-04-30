@@ -1,19 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:jewelery_shop_managmentsystem/model/filter_model.dart';
-import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/user_model.dart';
 import 'package:jewelery_shop_managmentsystem/screens/search_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
-import 'package:jewelery_shop_managmentsystem/service/search_for_items.dart';
 import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/card_items.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/horizantl_list_view_home_screen.dart';
-import 'package:jewelery_shop_managmentsystem/widgets/rounded_search_input.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

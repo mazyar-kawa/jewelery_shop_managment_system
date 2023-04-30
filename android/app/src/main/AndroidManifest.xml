@@ -8,9 +8,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
    <application
-        android:label="jewelery_shop_managmentsystem"
+        android:label="Jewel Quest"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.onesignal.NotificationServiceExtension"
+     android:value="com.onesignal.example.NotificationServiceExtension" />
+       
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,6 +33,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <!-- <action android:name="com.onesignal.NotificationExtender"/> -->
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
@@ -37,5 +41,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
     </application>
+
 </manifest>

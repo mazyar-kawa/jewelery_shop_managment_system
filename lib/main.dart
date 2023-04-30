@@ -1,5 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
@@ -8,6 +6,7 @@ import 'package:jewelery_shop_managmentsystem/model/orderDetails_model.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/ipad_screen_layout.dart';
+import 'package:jewelery_shop_managmentsystem/screens/notfication_screen.dart';
 import 'package:jewelery_shop_managmentsystem/service/Basket_item_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/countries_service.dart';
@@ -23,15 +22,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_kurdish_localization/flutter_kurdish_localization.dart';
-import 'package:pusher_beams/pusher_beams.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-
-void main() async{
-  
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const instanceID = '76f6b955-cf2b-4c91-9238-083f024760cb';
-  await PusherBeams.instance.start(instanceID);
-  await PusherBeams.instance.setDeviceInterests(['hello']);
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -54,9 +48,33 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     getlanguage();
     changeTheme();
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+    OneSignal.shared.setAppId("27238722-d531-4cb0-b104-48ca384936e9");
+
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      print("Accepted permission: $accepted");
+    });
+
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
+      event.complete(event.notification);
+    });
+    OneSignal.shared.setNotificationOpenedHandler((result) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => NotficationScreen()));
+    });
+
+    OneSignal.shared
+        .setPermissionObserver((OSPermissionStateChanges changes) {});
+
+    OneSignal.shared
+        .setSubscriptionObserver((OSSubscriptionStateChanges changes) {});
+
+    OneSignal.shared.setEmailSubscriptionObserver(
+        (OSEmailSubscriptionStateChanges emailChanges) {});
     super.initState();
   }
-
 
   getlanguage() async {
     LanguageService.setLanguage(
