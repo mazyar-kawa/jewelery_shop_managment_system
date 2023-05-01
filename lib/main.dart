@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jewelery_shop_managmentsystem/model/basket_model.dart';
 import 'package:jewelery_shop_managmentsystem/model/item_model.dart';
+import 'package:jewelery_shop_managmentsystem/model/notification.dart';
 import 'package:jewelery_shop_managmentsystem/model/orderDetails_model.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/mobile_screen_layout.dart';
 import 'package:jewelery_shop_managmentsystem/responsive/responsive_layout.dart';
@@ -13,6 +14,7 @@ import 'package:jewelery_shop_managmentsystem/service/countries_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/home_items_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/item_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/language_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/notifications_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/order.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/service/search_for_items.dart';
@@ -61,6 +63,7 @@ class _MyAppState extends State<MyApp> {
       event.complete(event.notification);
     });
     OneSignal.shared.setNotificationOpenedHandler((result) {
+ 
       Navigator.push(
           context, MaterialPageRoute(builder: (_) => NotficationScreen()));
     });
@@ -71,9 +74,9 @@ class _MyAppState extends State<MyApp> {
     OneSignal.shared
         .setSubscriptionObserver((OSSubscriptionStateChanges changes) {});
 
-    OneSignal.shared.setEmailSubscriptionObserver(
-        (OSEmailSubscriptionStateChanges emailChanges) {});
+   
     super.initState();
+
   }
 
   getlanguage() async {
@@ -103,6 +106,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: OrderService()),
         ChangeNotifierProvider.value(value: OrderDetailsModel()),
         ChangeNotifierProvider.value(value: SearchFoItems()),
+        ChangeNotifierProvider.value(value: NotificationsService()),
       ],
       child: Consumer<ThemeChangeProvider>(
           builder: (context, themeChangeProvider, child) {

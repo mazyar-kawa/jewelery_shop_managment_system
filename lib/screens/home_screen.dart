@@ -142,16 +142,16 @@ class _HomeScreenState extends State<HomeScreen>
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      getTiem(),
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'RobotoR',
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .primaryColorLight
-                                              .withOpacity(0.5)),
-                                    ),
+                                    // Text(
+                                    //   getTiem(),
+                                    //   style: TextStyle(
+                                    //       fontSize: 20,
+                                    //       fontFamily: 'RobotoR',
+                                    //       fontWeight: FontWeight.bold,
+                                    //       color: Theme.of(context)
+                                    //           .primaryColorLight
+                                    //           .withOpacity(0.5)),
+                                    // ),
                                     islogin
                                         ? Text(
                                             '${user.username}',

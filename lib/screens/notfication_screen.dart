@@ -1,29 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:jewelery_shop_managmentsystem/model/notification.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
+import 'package:jewelery_shop_managmentsystem/service/notifications_service.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/unauthentication.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class NotficationScreen extends StatelessWidget {
-  List<Notifications> notfiy = [
-    Notifications(
-        title: "Complited",
-        body: "your order #.53 is complited",
-        status: false,
-        date: "1Mo"),
-    Notifications(
-        title: "Accepted",
-        body: "your order #.54 is accepted",
-        status: true,
-        date: "1d")
-  ];
+class NotficationScreen extends StatefulWidget {
+  @override
+  State<NotficationScreen> createState() => _NotficationScreenState();
+}
 
+class _NotficationScreenState extends State<NotficationScreen> {
+  Future? notifications;
+  bool isload=false;
+
+@override
+  void initState() {
+  notifications= fetchNotify();
+    super.initState();
+  }
+ 
+ 
+fetchNotify() async {
+  await Future.delayed(
+      Duration(milliseconds: 150),
+      () async{
+          await Provider.of<NotificationsService>(context, listen: false).getNotification();
+      },
+    ).then((value){
+      setState(() {
+        isload=true;
+      });
+    });
+  
+  }
   @override
   Widget build(BuildContext context) {
+    final notfiy =Provider.of<NotificationsService>(context).notify;
     final islogin = Provider.of<Checkuser>(context).islogin;
-
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Scaffold(
@@ -32,7 +47,7 @@ class NotficationScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             centerTitle: true,
             title: Text(
-               AppLocalizations.of(context)!.notifications,
+              AppLocalizations.of(context)!.notifications,
               style: TextStyle(
                 fontSize: 20,
                 fontFamily: 'RobotoB',
@@ -42,9 +57,14 @@ class NotficationScreen extends StatelessWidget {
           ),
           body: !islogin
               ? UnAuthentication(
-                  title:  AppLocalizations.of(context)!.thereIsNoMoreJewel,
+                  title: AppLocalizations.of(context)!.thereIsNoMoreJewel,
                 )
-              : notfiy.length == 0
+              : !isload?Container(
+                    child: Center(
+                      child: Lottie.asset('assets/images/loader_daimond.json',
+                          width: 200),
+                    ),
+                  ) :notfiy.length == 0
                   ? Container(
                       height: 500,
                       width: double.infinity,
@@ -53,7 +73,8 @@ class NotficationScreen extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                               AppLocalizations.of(context)!.yourNotificationsIsEmpty,
+                              AppLocalizations.of(context)!
+                                  .yourNotificationsIsEmpty,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'RobotoB',
@@ -72,7 +93,11 @@ class NotficationScreen extends StatelessWidget {
                       ),
                     )
                   : Container(
-                      child: ListView.builder(
+                      child: FutureBuilder(
+                        future: notifications,
+                        builder: (context, snapshot) {
+                          if(snapshot.connectionState==ConnectionState.done){
+                            return ListView.builder(
                         itemCount: notfiy.length,
                         itemBuilder: (context, index) {
                           return Container(
@@ -81,11 +106,7 @@ class NotficationScreen extends StatelessWidget {
                                 horizontal: 20, vertical: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              color: notfiy[index].status!
-                                  ? Theme.of(context)
-                                      .secondaryHeaderColor
-                                      .withOpacity(0.8)
-                                  : Theme.of(context).secondaryHeaderColor,
+                              color: Theme.of(context).secondaryHeaderColor,
                               boxShadow: [
                                 BoxShadow(
                                     color: Theme.of(context).shadowColor,
@@ -104,15 +125,14 @@ class NotficationScreen extends StatelessWidget {
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 10),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(1000),
+                                        borderRadius:
+                                            BorderRadius.circular(1000),
                                         color:
                                             Theme.of(context).primaryColorLight,
                                       ),
                                       child: Center(
                                           child: Icon(
-                                        notfiy[index].status!
-                                            ? Icons.mark_email_read_rounded
-                                            : Icons.mail,
+                                        Icons.mail,
                                         color: Theme.of(context)
                                             .scaffoldBackgroundColor,
                                       )),
@@ -125,7 +145,7 @@ class NotficationScreen extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           Container(
-                                            child: Text(notfiy[index].title!,
+                                            child: Text('${notfiy[index].title}',
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColorLight,
@@ -134,13 +154,13 @@ class NotficationScreen extends StatelessWidget {
                                                 )),
                                           ),
                                           Container(
-                                            child: Text(notfiy[index].body!,
+                                            child: Text('${notfiy[index].body}',
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColorLight
                                                       .withOpacity(0.5),
                                                   fontFamily: 'RobotoM',
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                 )),
                                           )
                                         ],
@@ -150,7 +170,7 @@ class NotficationScreen extends StatelessWidget {
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(right: 10),
-                                  child: Text(notfiy[index].date!,
+                                  child: Text('${timeAgo(notfiy[index].createdAt!)}',
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .primaryColorLight
@@ -163,12 +183,49 @@ class NotficationScreen extends StatelessWidget {
                             ),
                           );
                         },
-                      ),
+                      );
+                          }else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return Container(
+                    child: Center(
+                      child: Lottie.asset('assets/images/loader_daimond.json',
+                          width: 200),
+                    ),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+                        },
+                      )
                     )),
     );
   }
+  String timeAgo(DateTime date) {
+  final now = DateTime.now();
+  final difference = now.difference(date);
+
+  if (difference.inDays >= 365) {
+    // Display in years
+    final years = (difference.inDays / 365).floor();
+    return '$years ${years == 1 ? 'y' : 'y'} ago';
+  } else if (difference.inDays >= 30) {
+    // Display in months
+    final months = (difference.inDays / 30).floor();
+    return '$months ${months == 1 ? 'mo' : 'mo'} ago';
+  } else if (difference.inDays >= 1) {
+    // Display in days
+    return '${difference.inDays} ${difference.inDays == 1 ? 'd' : 'd'} ago';
+  } else if (difference.inHours >= 1) {
+    // Display in hours
+    return '${difference.inHours} ${difference.inHours == 1 ? 'h' : 'h'} ago';
+  } else if (difference.inMinutes >= 1) {
+    // Display in minutes
+    return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'm' : 'm'} ago';
+  } else {
+    // Display in seconds
+    return '${difference.inSeconds} ${difference.inSeconds == 1 ? 's' : 's'} ago';
+  }
 }
-/*
+}
 
-
-*/

@@ -12,6 +12,7 @@ import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/settings_card.dart';
 import 'package:lottie/lottie.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -22,7 +23,8 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin {
+class _ProfileScreenState extends State<ProfileScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -58,11 +60,11 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                       MediaQuery.of(context).size.width * 0.12,
                                   backgroundImage: user.profilePicture != null
                                       ? NetworkImage(
-                                         "http://192.168.1.32:8000"+user.profilePicture,
+                                          "http://192.168.1.32:8000" +
+                                              user.profilePicture,
                                         )
                                       : NetworkImage(
-                                          'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')
-                                          ),
+                                          'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg')),
                             )
                           ],
                         ),
@@ -122,16 +124,17 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                   child: Column(
                                     children: [
                                       Text(
-                                        '${value.favorite<9?'0${value.favorite}': value.favorite}',
+                                        '${value.favorite < 9 ? '0${value.favorite}' : value.favorite}',
                                         style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColorLight,
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
                                           fontFamily: "RobotoB",
                                           fontSize: 18,
                                         ),
                                       ),
                                       Text(
-                                        AppLocalizations.of(context)!.favourites,
+                                        AppLocalizations.of(context)!
+                                            .favourites,
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .primaryColorLight,
@@ -162,10 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                   child: Column(
                                     children: [
                                       Text(
-                                        '${value.Order<9?'0${value.Order}': value.Order}',
+                                        '${value.Order < 9 ? '0${value.Order}' : value.Order}',
                                         style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColorLight,
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
                                           fontFamily: "RobotoB",
                                           fontSize: 18,
                                         ),
@@ -191,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                         child: Column(
                           children: [
                             ProfileCards(
-                                title:  AppLocalizations.of(context)!.settings,
+                                title: AppLocalizations.of(context)!.settings,
                                 image: "settings.svg",
                                 onPressed: () {
                                   Navigator.push(
@@ -201,7 +204,8 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                               SettingScreen()));
                                 }),
                             ProfileCards(
-                                title: AppLocalizations.of(context)!.userInformation,
+                                title: AppLocalizations.of(context)!
+                                    .userInformation,
                                 image: "user.svg",
                                 onPressed: () {
                                   Navigator.push(
@@ -241,6 +245,7 @@ class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveCl
                                 image: "logout.svg",
                                 onPressed: () {
                                   Auth().logOut();
+                                  OneSignal.shared.deleteTag("email");
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

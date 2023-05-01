@@ -112,11 +112,7 @@ class _CategoryPageState extends State<CategoryPage>
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.pushNamed(
-                                  //   context,
-                                  //   '/items',
-                                  //   arguments: category[index].id,
-                                  // );
+                            
 
                                   Navigator.push(
                                       context,

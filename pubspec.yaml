@@ -29,6 +29,8 @@ environment:
 dependencies:
   avatar_glow: ^2.0.2
   easy_debounce: ^2.0.3
+  firebase_core: ^2.10.0
+  firebase_messaging: ^14.4.1
   flutter:
     sdk: flutter
   flutter_kurdish_localization: ^1.0.1
@@ -51,6 +53,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.

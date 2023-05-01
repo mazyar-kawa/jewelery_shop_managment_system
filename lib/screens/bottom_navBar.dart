@@ -43,7 +43,7 @@ class _LoadingPageState extends State<LoadingPage> {
       ApiProvider response = await Auth().getUserDetials() as ApiProvider;
       if (response.data != null) {
         user = refreshUser.currentUser;
-        OneSignal.shared.setEmail(email: user.user!.email!);
+        // OneSignal.shared.setEmail(email: user.user!.email!);
         OneSignal.shared.sendTag("email",user.user!.email!);
         islogin = true;
       } else {

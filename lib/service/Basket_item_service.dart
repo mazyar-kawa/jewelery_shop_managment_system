@@ -45,8 +45,6 @@ class BasketItemService with ChangeNotifier {
         quantity: items.quantity,
         name: items.name,
         countryName: items.countryName,
-        // caratMs: items.caratMs,
-        // caratType: items.caratType,
         img: items.img,
         price: items.price,
         weight: items.weight));
