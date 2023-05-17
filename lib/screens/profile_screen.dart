@@ -10,11 +10,13 @@ import 'package:jewelery_shop_managmentsystem/screens/user_managment.dart';
 import 'package:jewelery_shop_managmentsystem/service/auth_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/refresh_user.dart';
 import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
+import 'package:jewelery_shop_managmentsystem/utils/constant.dart';
 import 'package:jewelery_shop_managmentsystem/widgets/settings_card.dart';
 import 'package:lottie/lottie.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -238,7 +240,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ? ProfileCards(
                                     title: AppLocalizations.of(context)!.admin,
                                     image: "user-group-solid.svg",
-                                    onPressed: () {})
+                                    onPressed: () async {
+                                      const url = '192.168.1.32:5173/';
+                                      if (await canLaunch(url)) {
+                                        await launch(url);
+                                      } else {
+                                        showSnackBar(context,
+                                            'Could not launch $url', true);
+                                      }
+                                    })
                                 : Container(),
                             ProfileCards(
                                 title: AppLocalizations.of(context)!.logOut,

@@ -14,7 +14,7 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen>{
-  
+
   bool check=false;
   @override
   Widget build(BuildContext context) {

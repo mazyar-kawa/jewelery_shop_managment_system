@@ -33,7 +33,6 @@ dependencies:
   firebase_messaging: ^14.4.1
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.18.6
   flutter_kurdish_localization: ^1.0.1
   flutter_localizations:
     sdk: flutter
@@ -49,6 +48,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.0.15
   speech_to_text: ^6.1.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_lints: ^2.0.0
