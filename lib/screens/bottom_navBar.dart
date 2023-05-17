@@ -44,7 +44,7 @@ class _LoadingPageState extends State<LoadingPage> {
       if (response.data != null) {
         user = refreshUser.currentUser;
         // OneSignal.shared.setEmail(email: user.user!.email!);
-        OneSignal.shared.sendTag("email",user.user!.email!);
+        OneSignal.shared.sendTag("email", user.user!.email!);
         islogin = true;
       } else {
         islogin = await Provider.of<Checkuser>(context, listen: false)

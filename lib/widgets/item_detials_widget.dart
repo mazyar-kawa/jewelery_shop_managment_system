@@ -38,9 +38,9 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                           children: List.generate(3, (index) {
                             return InkWell(
                               splashColor: Theme.of(context).primaryColorLight,
-                              onTap: (){
+                              onTap: () {
                                 setState(() {
-                                  current=index;
+                                  current = index;
                                 });
                               },
                               child: Container(
@@ -48,7 +48,9 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                                 height: 80,
                                 width: 80,
                                 decoration: BoxDecoration(
-                                  color: current==index?Colors.grey.withOpacity(0.4):Colors.white,
+                                  color: current == index
+                                      ? Colors.grey.withOpacity(0.4)
+                                      : Colors.white,
                                   border: Border.all(
                                     color: Colors.black,
                                   ),
@@ -58,7 +60,8 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                                     child: AspectRatio(
                                   aspectRatio: 1.0,
                                   child: Image(
-                                    image: NetworkImage("http://192.168.1.32:8000" +item.img!),
+                                    image:  NetworkImage(
+                                      item.itemPictures!.isNotEmpty?  "http://192.168.1.32:8000" + item.itemPictures![index].image:"http://192.168.1.32:8000" + item.img!),
                                     width: 40,
                                   ),
                                 )),
@@ -70,7 +73,9 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                         child: Center(
                             child: AspectRatio(
                           aspectRatio: 0.6,
-                          child: Image(image: NetworkImage("http://192.168.1.32:8000" +item.img!)),
+                          child: Image(
+                              image: NetworkImage(
+                                  item.itemPictures!.isNotEmpty?  "http://192.168.1.32:8000" + item.itemPictures![current].image:"http://192.168.1.32:8000" + item.img!)),
                         )),
                       ),
                     ],
@@ -82,8 +87,8 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   color: Theme.of(context).buttonColor,
                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,22 +110,21 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                                 ),
                               ),
                               Container(
-                        child: Text(
-                          item.countryName!,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'RobotoM',
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                                child: Text(
+                                  item.countryName!,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'RobotoM',
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           islogin
                               ? Container(
                                   height: 30,
                                   width: 30,
-                                  
                                   child: Center(
                                     child: InkWell(
                                         onTap: () async {
@@ -155,138 +159,145 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
                                       horizontal: 10, vertical: 10),
                                   height: 30,
                                   width: 30,
-                                  
                                 ),
                         ],
                       ),
-                      
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconTitle(context, 'assets/images/ruler.svg',item.size! ==0?'NaN':item.size!.toString()),
-                            IconTitle(context, 'assets/images/balance.svg',item.weight!.toString()+"g"),
+                            IconTitle(
+                                context,
+                                'assets/images/ruler.svg',
+                                item.size! == 0
+                                    ? 'NaN'
+                                    : item.size!.toString()),
+                            IconTitle(context, 'assets/images/balance.svg',
+                                item.weight!.toString() + "g"),
                             Container(
-                                      padding: const EdgeInsets.all(5),
-                                      height: 28,
-                                      decoration: BoxDecoration(
-                                        color: item.caratType == 'gold'
-                                            ? Color(0xffFFD700).withOpacity(0.1)
-                                            : Color(0xffC0C0C0)
-                                                .withOpacity(0.1),
-                                         borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '${item.caratType!} ${item.caratMs!}',
-                                          style: TextStyle(
-                                            color: item.caratType == 'gold'
-                                                ? Color(0xffFFD700)
-                                                : Color(0xFFA3A3A3),
-                                            fontFamily: 'RobotoM',
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                              padding: const EdgeInsets.all(5),
+                              height: 28,
+                              decoration: BoxDecoration(
+                                color: item.caratType == 'gold'
+                                    ? Color(0xffFFD700).withOpacity(0.1)
+                                    : Color(0xffC0C0C0).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${item.caratType!} ${item.caratMs!}',
+                                  style: TextStyle(
+                                    color: item.caratType == 'gold'
+                                        ? Color(0xffFFD700)
+                                        : Color(0xFFA3A3A3),
+                                    fontFamily: 'RobotoM',
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
                       Container(
                         child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                                child: Text(
-                                  'Description',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'RobotoB',
-                                    fontSize: 24,
-                                  ),
+                              child: Text(
+                                'Description',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'RobotoB',
+                                  fontSize: 24,
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(top: 5, bottom: 5),
-                                child: Text(
-                                  item.description!,
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color:Colors.white,
-                                    fontFamily: 'RobotoB',
-                                    fontSize: 14,
-                                  ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 5, bottom: 5),
+                              child: Text(
+                                item.description!,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'RobotoB',
+                                  fontSize: 14,
                                 ),
                               ),
-                        
+                            ),
                           ],
                         ),
                       ),
-                    widget.ishiddin?Container() :Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                           
-                             Container(
+                      widget.ishiddin
+                          ? Container()
+                          : Container(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
                                     child: Text(
                                       '\$${item.price!.round()}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color:Colors.white,
+                                        color: Colors.white,
                                         fontFamily: 'RobotoB',
                                         fontSize: 20,
                                       ),
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: ()async{
+                                    onTap: () async {
                                       if (islogin) {
-                                  ApiProvider response =
-                                      await service.basketAndUnbasketItems(
-                                          item.id!, context);
-                                  if (response.data != null) {
-                                    showSnackBar(
-                                        context,
-                                        response.data['message'],
-                                        response.data['message']
-                                                .contains("Added")
-                                            ? false
-                                            : true);
-                                  }
-                                } else {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => SignIn()));
-                                }
+                                        ApiProvider response = await service
+                                            .basketAndUnbasketItems(
+                                                item.id!, context);
+                                        if (response.data != null) {
+                                          showSnackBar(
+                                              context,
+                                              response.data['message'],
+                                              response.data['message']
+                                                      .contains("Added")
+                                                  ? false
+                                                  : true);
+                                        }
+                                      } else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => SignIn()));
+                                      }
                                     },
                                     child: Container(
                                       height: 50,
                                       width: 300,
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10)
-                                      ),
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       child: Center(
                                         child: Text(
-                                      item.inBasket! ?  AppLocalizations.of(context)!.added :  AppLocalizations.of(context)!.addtocart,
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .buttonColor,
-                                        fontFamily: 'RobotoM',
-                                        fontSize: 18,
-                                      ),
-                                    ),
+                                          item.inBasket!
+                                              ? AppLocalizations.of(context)!
+                                                  .added
+                                              : AppLocalizations.of(context)!
+                                                  .addtocart,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).buttonColor,
+                                            fontFamily: 'RobotoM',
+                                            fontSize: 18,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                              
-                          ],
-                        ),
-                      )
+                                ],
+                              ),
+                            )
                     ],
                   ),
                 )),
@@ -296,27 +307,27 @@ class _ItemDetialsWidgetState extends State<ItemDetialsWidget> {
     });
   }
 
-  Column IconTitle(BuildContext context,String image,String title) {
+  Column IconTitle(BuildContext context, String image, String title) {
     return Column(
-                            children: [
-                              Container(
-                                child: SvgPicture.asset(
-                                    image,
-                                    color:Colors.white,
-                                       width: 22,
-                                        ),
-                              ),
-                              Container(
-                                child: Text(
-                                  title,
-                                  style: TextStyle(
-                                    color:Colors.white,
-                                    fontFamily: 'RobotoM',
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
+      children: [
+        Container(
+          child: SvgPicture.asset(
+            image,
+            color: Colors.white,
+            width: 22,
+          ),
+        ),
+        Container(
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'RobotoM',
+              fontSize: 18,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

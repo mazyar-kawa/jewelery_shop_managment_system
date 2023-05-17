@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const websize = 600;
-// 7dd3fc    sky
+
 Color scaffoldbackgroundLight = Color(0xffFFFFFF);
 Color primaryColorLight = Color(0xff455A64);
 
@@ -20,17 +20,8 @@ Color primaryColorDark = Color(0xffFFFFFF);
 
 Color secondColorDark = Color(0xff262626);
 
-// Color primaryFadeCardDark = Color(0xFF0099F8);
-// Color seconderFadeCardDark = Color(0xFFFF0000);
-// Color primaryFadeCardDark = Color(0xfffb7185);
-// Color seconderFadeCardDark = Color(0xff38bdf8);
 Color primaryFadeCardDark = Color(0xff262626);
 Color seconderFadeCardDark = Color(0xff262626);
-
-// Color primaryFadeCardDark = Color(0xfff43f5e);
-// Color seconderFadeCardDark = Color(0xffF5F5DC);
-
-//3B3B3B
 
 Color shadowCardDark = Color.fromARGB(255, 19, 19, 19);
 
@@ -49,16 +40,21 @@ void showSnackBar(BuildContext context, message, undon) {
           ),
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Center(child: Text(message,style: TextStyle(
-            fontFamily: 'RobotoB',
-            fontSize: 14
-          ),),),
+          child: Center(
+            child: Text(
+              message,
+              style: TextStyle(fontFamily: 'RobotoB', fontSize: 14),
+            ),
+          ),
         ),
         Positioned(
           bottom: 0,
           child: Container(
             padding: EdgeInsets.only(left: 10),
-            child: Image.asset('assets/images/gold_bars.png',width: 45,),
+            child: Image.asset(
+              'assets/images/gold_bars.png',
+              width: 45,
+            ),
           ),
         )
       ],

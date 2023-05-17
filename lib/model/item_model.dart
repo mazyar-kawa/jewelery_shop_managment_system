@@ -135,7 +135,7 @@ class SingleItem with ChangeNotifier {
     this.caratMs,
     this.countryName,
     this.description,
-    // this.itemPictures
+    this.itemPictures
   });
 
   int? id;
@@ -154,8 +154,9 @@ class SingleItem with ChangeNotifier {
   String? caratType;
   String? caratMs;
   String? countryName;
+  List<ItemPicture>? itemPictures;
 
-  // List<Country>? itemPictures;
+ 
 
   factory SingleItem.fromJson(Map<String, dynamic> json) => SingleItem(
         id: json["id"],
@@ -174,7 +175,7 @@ class SingleItem with ChangeNotifier {
         description: json["description"],
         caratType: Carat.fromJson(json["carat"]).type,
         caratMs: Carat.fromJson(json["carat"]).carat,
-        // itemPictures: List<Country>.from(json["item_pictures"].map((x) => Country.fromJson(x))),
+        itemPictures: List<ItemPicture>.from(json["item_pictures"].map((x) => ItemPicture.fromJson(x))),
       );
 
   Future<ApiProvider> FavouriteAndUnfavouriteItem(
@@ -323,6 +324,59 @@ class SingleItem with ChangeNotifier {
   }
 }
 
+
+class ItemPicture {
+    int id;
+    String image;
+    DateTime createdAt;
+    DateTime updatedAt;
+    Pivot pivot;
+
+    ItemPicture({
+        required this.id,
+        required this.image,
+        required this.createdAt,
+        required this.updatedAt,
+        required this.pivot,
+    });
+
+    factory ItemPicture.fromJson(Map<String, dynamic> json) => ItemPicture(
+        id: json["id"],
+        image: json["image"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        pivot: Pivot.fromJson(json["pivot"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "image": image,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "pivot": pivot.toJson(),
+    };
+}
+
+class Pivot {
+    int itemId;
+    int imageId;
+
+    Pivot({
+        required this.itemId,
+        required this.imageId,
+    });
+
+    factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
+        itemId: json["item_id"],
+        imageId: json["image_id"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "item_id": itemId,
+        "image_id": imageId,
+    };
+}
+
 enum Type { GOLD, SILVER , LIRA }
 
 final typeValues =
@@ -355,6 +409,9 @@ class Country {
         itemId: json["item_id"],
       );
 }
+
+
+
 
 enum Name { ITALIAN, IRAQI, FRENCH, PERSIAN, TURKISH, DUBAI }
 

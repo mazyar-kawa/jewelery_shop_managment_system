@@ -112,7 +112,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: Text(
-                                  "${order.status![0].toUpperCase()+order.status.toString().substring(1)}",
+                                  "${order.status![0].toUpperCase() + order.status.toString().substring(1)}",
                                   // "${order.status}",
                                   style: TextStyle(
                                     color: order.status == 'requested'
@@ -177,9 +177,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       width: MediaQuery.of(context).size.width *
                                           0.35,
                                       decoration: BoxDecoration(
-                                          color:
-                                              Theme.of(context).primaryColorDark,
-                                          borderRadius: BorderRadius.circular(15),
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.grey,
@@ -200,10 +201,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             AspectRatio(
                                                 aspectRatio: 1.8,
                                                 child: Image.network(
-                                                   "http://192.168.1.32:8000" + items[index].img!,
+                                                    "http://192.168.1.32:8000" +
+                                                        items[index].img!,
                                                     fit: BoxFit.contain)),
                                             Container(
-                                              margin: const EdgeInsets.symmetric(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 10,
                                               ),
                                               padding: const EdgeInsets.all(5),
@@ -222,11 +225,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 child: Text(
                                                   '${items[index].caratType!} ${items[index].caratMs!}',
                                                   style: TextStyle(
-                                                    color:
-                                                        items[index].caratType ==
-                                                                'gold'
-                                                            ? Color(0xffFFD700)
-                                                            : Color(0xFFA3A3A3),
+                                                    color: items[index]
+                                                                .caratType ==
+                                                            'gold'
+                                                        ? Color(0xffFFD700)
+                                                        : Color(0xFFA3A3A3),
                                                     fontFamily: 'RobotoM',
                                                     fontSize: 14,
                                                   ),

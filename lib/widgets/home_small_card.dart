@@ -206,7 +206,7 @@ class _HomeSmallCardState extends State<HomeSmallCard>
                       Expanded(
                         child: Container(
                           child: Image.network(
-                           "http://192.168.1.32:8000" + product.img!,
+                            "http://192.168.1.32:8000" + product.img!,
                             height: 100,
                           ),
                         ),
@@ -332,7 +332,10 @@ class _HomeSmallCardState extends State<HomeSmallCard>
                                 ),
                                 Container(
                                   child: Text(
-                                    product.inBasket! ? AppLocalizations.of(context)!.added :  AppLocalizations.of(context)!.addtocart,
+                                    product.inBasket!
+                                        ? AppLocalizations.of(context)!.added
+                                        : AppLocalizations.of(context)!
+                                            .addtocart,
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .secondaryHeaderColor,

@@ -24,7 +24,8 @@ class _SureItemsCardState extends State<SureItemsCard> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ItemDetails(item_id: item.id!,ishiddin: true),
+                builder: (context) =>
+                    ItemDetails(item_id: item.id!, ishiddin: true),
               ));
         },
         child: Slidable(
@@ -56,7 +57,7 @@ class _SureItemsCardState extends State<SureItemsCard> {
             height: MediaQuery.of(context).size.height * 0.12,
             decoration: BoxDecoration(
                 color: Theme.of(context).secondaryHeaderColor,
-                 borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(5),
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).shadowColor,
@@ -72,7 +73,9 @@ class _SureItemsCardState extends State<SureItemsCard> {
                     children: [
                       AspectRatio(
                           aspectRatio: 1.2,
-                          child: Image.network("http://192.168.1.32:8000" +item.img!, fit: BoxFit.contain)),
+                          child: Image.network(
+                              "http://192.168.1.32:8000" + item.img!,
+                              fit: BoxFit.contain)),
                       Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

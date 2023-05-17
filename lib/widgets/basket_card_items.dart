@@ -89,7 +89,9 @@ class _BasketCardItemState extends State<BasketCardItem> {
                   child: Center(
                     child: AspectRatio(
                         aspectRatio: 2,
-                        child: Image.network("http://192.168.1.32:8000" +item.img!, fit: BoxFit.contain)),
+                        child: Image.network(
+                            "http://192.168.1.32:8000" + item.img!,
+                            fit: BoxFit.contain)),
                   ),
                 )
               ],
@@ -148,20 +150,20 @@ class _BasketCardItemState extends State<BasketCardItem> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: 5),
+                            padding: EdgeInsets.symmetric(vertical: 5),
                             child: Row(children: [
-                          Icon(FontAwesome5.balance_scale,
-                              color: Theme.of(context).primaryColorLight,
-                              size: 15),
-                          Text(
-                            '  ${item.weight!}g',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColorLight,
-                              fontFamily: 'RobotoM',
-                              fontSize: 16,
-                            ),
-                          ),
-                        ])),
+                              Icon(FontAwesome5.balance_scale,
+                                  color: Theme.of(context).primaryColorLight,
+                                  size: 15),
+                              Text(
+                                '  ${item.weight!}g',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: 'RobotoM',
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ])),
                       ],
                     ),
                   ),

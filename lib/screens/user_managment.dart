@@ -27,7 +27,7 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
   TextEditingController? _phone;
   TextEditingController? _address;
   TextEditingController? _email;
-  File _image=File('');
+  File _image = File('');
   PickedFile? _pickedFile;
   final _picked = ImagePicker();
 
@@ -36,17 +36,16 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
     if (_pickedFile != null) {
       setState(() {
         _image = File(_pickedFile!.path);
-        
       });
     }
   }
 
   Map<dynamic, dynamic>? error;
 
-  void updateUser(File image,String name, String username, String email, String phone_no,
-      String address) async {
-    ApiProvider response =
-        await Auth().UpdateUserData(image,name, username, email, phone_no, address);
+  void updateUser(File image, String name, String username, String email,
+      String phone_no, String address) async {
+    ApiProvider response = await Auth()
+        .UpdateUserData(image, name, username, email, phone_no, address);
     if (response.error == null) {
       saveUser(response.data);
       showSnackBar(context, "Updated!", false);
@@ -142,7 +141,10 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                                   radius: 64,
                                   backgroundImage: user.user!.profilePicture !=
                                           null
-                                      ? NetworkImage("http://192.168.1.32:8000"+user.user!.profilePicture,)
+                                      ? NetworkImage(
+                                          "http://192.168.1.32:8000" +
+                                              user.user!.profilePicture,
+                                        )
                                       : NetworkImage(
                                           'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
                                 ),
@@ -248,21 +250,20 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                             ),
                           ),
                         ),
-                        
                       ],
                     ),
                   ),
                   for (var _error in error?['errors']?['profile_picture'] ?? [])
-                         Container(
-                            margin: EdgeInsets.symmetric(horizontal: 20),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                _error,
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          _error,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ),
                   Container(
                     child: Column(
                       children: [
@@ -367,7 +368,8 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                             )
                           ]),
                       child: Center(
-                        child: Text(AppLocalizations.of(context)!.changePassword,
+                        child: Text(
+                            AppLocalizations.of(context)!.changePassword,
                             style: TextStyle(
                               color: Theme.of(context).scaffoldBackgroundColor,
                               fontSize: 20,
@@ -379,9 +381,9 @@ class _UserManagmentScreenState extends State<UserManagmentScreen> {
                   InkWell(
                     onTap: () {
                       if (formkey.currentState!.validate()) {
-                        updateUser(_image,_name!.text, _username!.text, _email!.text,
-                            _phone!.text, _address!.text);
-                            error=null;
+                        updateUser(_image, _name!.text, _username!.text,
+                            _email!.text, _phone!.text, _address!.text);
+                        error = null;
                       }
                     },
                     child: Container(

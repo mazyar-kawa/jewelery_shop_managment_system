@@ -3,8 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jewelery_shop_managmentsystem/service/language_service.dart';
 import 'package:jewelery_shop_managmentsystem/service/theme_change_provider.dart';
-
 import 'package:provider/provider.dart';
+
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -13,7 +13,9 @@ class SettingScreen extends StatefulWidget {
   State<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
+class _SettingScreenState extends State<SettingScreen>{
+  
+  bool check=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -249,8 +251,13 @@ class _SettingScreenState extends State<SettingScreen> {
                 subtitle: Text(AppLocalizations.of(context)!
                     .ifYouCheckThisBoxYouWillBeLogoutOnceYouClosedTheApp),
                 trailing: Checkbox(
-                  onChanged: (value) {},
-                  value: true,
+                  onChanged: (value) {
+                    setState(() {
+                      check=!check;
+                     
+                    });
+                  },
+                  value: check,
                 ),
               ),
             ),

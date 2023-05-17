@@ -142,16 +142,16 @@ class _HomeScreenState extends State<HomeScreen>
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Text(
-                                    //   getTiem(),
-                                    //   style: TextStyle(
-                                    //       fontSize: 20,
-                                    //       fontFamily: 'RobotoR',
-                                    //       fontWeight: FontWeight.bold,
-                                    //       color: Theme.of(context)
-                                    //           .primaryColorLight
-                                    //           .withOpacity(0.5)),
-                                    // ),
+                                    Text(
+                                      getTiem(),
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'RobotoR',
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .primaryColorLight
+                                              .withOpacity(0.5)),
+                                    ),
                                     islogin
                                         ? Text(
                                             '${user.username}',
@@ -187,7 +187,8 @@ class _HomeScreenState extends State<HomeScreen>
 
                     InkWell(
                       onTap: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (_)=>SearchScreen()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => SearchScreen()));
                       },
                       child: Container(
                           height: 55,
@@ -236,7 +237,6 @@ class _HomeScreenState extends State<HomeScreen>
                                     ? MainAxisAlignment.center
                                     : MainAxisAlignment.start,
                             children: [
-                              
                               Container(
                                 height: 35,
                                 child: ListView.builder(
@@ -389,5 +389,3 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   bool get wantKeepAlive => true;
 }
-
-

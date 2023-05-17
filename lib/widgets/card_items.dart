@@ -76,7 +76,6 @@ class _CardItemsState extends State<CardItems>
       product = Provider.of<SingleItem>(context, listen: false);
     }
 
-  
     return Consumer<SingleItem>(
       builder: (context, value, child) {
         return GestureDetector(
@@ -148,7 +147,8 @@ class _CardItemsState extends State<CardItems>
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
                                               .scaffoldBackgroundColor,
-                                           borderRadius: BorderRadius.circular(10000),
+                                          borderRadius:
+                                              BorderRadius.circular(10000),
                                           boxShadow: [
                                             BoxShadow(
                                               color:
@@ -196,7 +196,8 @@ class _CardItemsState extends State<CardItems>
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
                                               .secondaryHeaderColor,
-                                          borderRadius: BorderRadius.circular(10000),
+                                          borderRadius:
+                                              BorderRadius.circular(10000),
                                         ),
                                       ),
                               ),
@@ -209,7 +210,8 @@ class _CardItemsState extends State<CardItems>
                                     AspectRatio(
                                         aspectRatio: 1.8,
                                         child: Image.network(
-                                        "http://192.168.1.32:8000" + product.img!,
+                                            "http://192.168.1.32:8000" +
+                                                product.img!,
                                             fit: BoxFit.contain)),
                                     Container(
                                       margin: const EdgeInsets.symmetric(
@@ -222,7 +224,7 @@ class _CardItemsState extends State<CardItems>
                                             ? Color(0xffFFD700).withOpacity(0.1)
                                             : Color(0xffC0C0C0)
                                                 .withOpacity(0.1),
-                                         borderRadius: BorderRadius.circular(5),
+                                        borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Center(
                                         child: Text(
@@ -246,7 +248,7 @@ class _CardItemsState extends State<CardItems>
                         flex: 3,
                         child: Container(
                           decoration: BoxDecoration(
-                             borderRadius: BorderRadius.only(
+                            borderRadius: BorderRadius.only(
                               topRight: Radius.circular(15),
                               bottomRight: Radius.circular(15),
                             ),
@@ -355,7 +357,7 @@ class _CardItemsState extends State<CardItems>
                                       height: 35,
                                       width: 35,
                                       decoration: BoxDecoration(
-                                         borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                         color:
                                             Theme.of(context).primaryColorLight,
                                       ),

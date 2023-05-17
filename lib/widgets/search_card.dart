@@ -11,8 +11,6 @@ class SearchCard extends StatefulWidget {
 }
 
 class _SearchCardState extends State<SearchCard> {
- 
-
   @override
   Widget build(BuildContext context) {
     final item = Provider.of<SingleItem>(context);
@@ -24,9 +22,7 @@ class _SearchCardState extends State<SearchCard> {
               builder: (context) => ItemDetails(
                 item_id: item.id!,
               ),
-              
             ));
-            
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
